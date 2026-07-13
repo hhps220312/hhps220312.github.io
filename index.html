@@ -25,14 +25,15 @@
       background-attachment: fixed;
       background-repeat: no-repeat;
 
-      /* 画面全体で左側中央付近に配置するための設定 */
+      /* 画面の左側・少し上寄りに配置するための設定 */
       min-height: 100vh;
       display: flex;
       justify-content: flex-start; /* 左端に寄せる */
-      align-items: center;         /* 上下は中央 */
+      align-items: flex-start;     /* 上寄せに変更 */
+      padding-top: 100px;          /* 上からの位置（時計やボタンが始まる高さ） */
     }
 
-    /* ボタンのデザインに合わせた「はじめポータル」タイトル */
+    /* 白っぽい半透明に戻した「はじめポータル」タイトル */
     .portal-title {
       position: absolute;
       top: 20px;
@@ -40,19 +41,19 @@
       font-size: 20px;
       font-weight: bold;
       color: #000000;
-      background: #6bb6ff; /* ボタンと同じ爽やかな青 */
+      background: rgba(255, 255, 255, 0.85); /* 白っぽい半透明に戻しました */
       padding: 8px 16px;
       border: 2px solid #000;
       border-radius: 5px;
       margin: 0;
-      box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15); /* ボタンの立体感に合わせたシャドウ */
+      box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15); /* 立体感は維持 */
     }
 
-    /* メインのコンテンツコンテナ（横幅を約3分の1にし、開始点をさらに左へ） */
+    /* メインのコンテンツコンテナ（気持ち少し大きく：280px） */
     .main-container {
       width: 100%;
-      max-width: 250px; /* 横幅を元の約3分の1にスリム化 */
-      margin-left: 3%;   /* 開始点をさらに左端に寄せる（3%） */
+      max-width: 280px; /* 250pxから気持ち大きめの280pxに変更 */
+      margin-left: 3%;   /* 左端の開始点はキープ */
       display: flex;
       flex-direction: column;
       gap: 20px; /* 時計とボタンの間隔 */
@@ -62,24 +63,24 @@
     .clock-container {
       border: 2px solid #333;
       border-radius: 8px;
-      padding: 10px 8px; /* 横幅が狭くなったのでパディングを微調整 */
+      padding: 10px 12px;
       background-color: #fff;
       display: flex;
       justify-content: center;
       width: 100%;
       box-sizing: border-box;
       align-items: baseline;
-      gap: 4px;
+      gap: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .date-time {
-      font-size: 14px; /* 横幅に合わせて文字サイズを少しコンパクトに */
+      font-size: 16px; /* 気持ち少し大きく */
       font-weight: bold;
       color: #333;
       white-space: nowrap;
     }
     .seconds {
-      font-size: 11px;
+      font-size: 12px; /* 気持ち少し大きく */
       color: #666;
       font-weight: normal;
       white-space: nowrap;
@@ -89,7 +90,7 @@
     .button-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: 10px;
+      column-gap: 12px;
       row-gap: 25px;
       width: 100%;
       box-sizing: border-box;
@@ -106,11 +107,11 @@
       align-items: center;
       margin: 0 auto;
       width: 100%; 
-      padding: 8px 5px; /* 横幅が狭くなったので左右の余白を小さく */
+      padding: 10px 8px;
       color: #000000;
       transition: 0.3s ease-in-out;
       font-weight: 600;
-      font-size: 12px; /* 横幅に合わせて文字サイズを少しコンパクトに */
+      font-size: 13px; /* 気持ち少し大きく */
       border: 2px solid #000;
       z-index: 1;
       border-radius: 5px;
@@ -143,17 +144,17 @@
       height: 100%;
       content: '';
       transition: all .3s;
-      transform: translate3d(0,0.30rem,-1rem); /* 飛び出す影の幅も少し控えめに微調整 */
+      transform: translate3d(0,0.35rem,-1rem);
       border: 2px solid #000;
       border-radius: inherit;
       background: #2b7fde;
-      box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%);
+      box-shadow: 0 0.35rem 0 0 rgb(0 0 0 / 20%);
       z-index: -2;
     }
     .button_solid016 a i {
       position: absolute;
-      right: 4px; /* 矢印の位置を少し内側に */
-      font-size: 10px;
+      right: 5px;
+      font-size: 11px;
     }
     .button_solid016 a:hover {
       transform: translate3d(0,0.15rem,-1rem);
@@ -168,7 +169,7 @@
       body {
         justify-content: center;
         align-items: flex-start;
-        padding-top: 80px;
+        padding-top: 90px;
       }
       .main-container {
         margin-left: 0;
