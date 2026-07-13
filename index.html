@@ -55,7 +55,7 @@
       display: flex;
       width: 100%;
       margin-left: 3%;             /* 全体の開始点を左端に寄せる */
-      gap: 15%;                    /* 完璧と言っていただいたボタンとの間隔を維持 */
+      gap: 15%;                    /* ボタンとカレンダーの間隔（お友達の写真用） */
       align-items: flex-start;     /* 上のラインを揃える */
     }
 
@@ -69,53 +69,105 @@
       gap: 20px;
     }
 
-    /* 右側のカレンダーコンテナ（右に伸ばしつつ、下部の余白を意識） */
+    /* 右側のコンテナ（カレンダーと打刻ボタンを含む） */
     .right-container {
       flex-grow: 1;                
-      max-width: 680px;            /* 550pxから680pxに広げて右へ伸ばしました */
+      max-width: 680px;            /* 右側に伸ばしたサイズを維持 */
+      display: flex;
+      flex-direction: column;
+      gap: 15px;                   /* カレンダーと打刻ボタンの間の隙間 */
+      margin-bottom: 40px;         
+    }
+
+    /* カレンダー自体の外枠デザイン */
+    .calendar-box {
       background: rgba(255, 255, 255, 0.9); 
       padding: 10px;
       border: 2px solid #000;
       border-radius: 8px;
       box-shadow: 0 6px 0px rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
-      margin-bottom: 40px;         /* カレンダーの直下にも余白を追加 */
+      width: 100%;
     }
 
-    /* iframe（カレンダー本体）の縦幅を短く調整 */
+    /* iframe（カレンダー本体）の縦幅 */
     .calendar-responsive {
       width: 100%;
-      height: 480px;               /* 550pxから480pxに短くしてすっきりさせました */
+      height: 480px;               
     }
 
-    /* --- 時計のスタイル --- */
-    .clock-container {
-      border: 2px solid #333;
-      border-radius: 8px;
-      padding: 10px 12px;
-      background-color: #fff;
+    /* --- 打刻ボタンエリアのスタイル --- */
+    .btn-container {
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;   /* 右寄せにする設定 */
+      align-items: center;
+      gap: 12px;                   /* ボタン同士の間隔 */
+      padding: 10px 0;
       width: 100%;
       box-sizing: border-box;
-      align-items: baseline;
-      gap: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .date-time {
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
+    
+    .action-btn {
+      background: #6bb6ff;
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 16px; 
+      color: #000000; 
+      transition: 0.3s ease-in-out;
+      font-weight: 600;
+      font-size: 14px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1;
+      box-sizing: border-box;
       white-space: nowrap;
     }
-    .seconds {
-      font-size: 12px;
-      color: #666;
-      font-weight: normal;
-      white-space: nowrap;
+    .action-btn:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: -2px; 
+      left: -2px;
+      z-index: -1;
+      border: 2px solid #000;
+      border-radius: 5px;
+      background: #e1f3ff;
+      background-image:
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0),
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+      background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
+      background-size: 30px 30px;
+    }
+    .action-btn:after {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 100%;
+      height: 100%;
+      content: '';
+      transition: all .3s;
+      transform: translate3d(0, 0.3rem, -1rem);
+      border: 2px solid #000;
+      border-radius: inherit;
+      background: #2b7fde;
+      box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%);
+      z-index: -2;
+    }
+    .action-btn:hover {
+      transform: translate3d(0, 0.15rem, -1rem);
+    }
+    .action-btn:hover:after {
+      transform: translate3d(0, 0.15rem, -1rem);
+      box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
     }
 
-    /* --- ボタンのスタイル --- */
+    /* --- 左側リンクボタンのスタイル --- */
     .button-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -193,6 +245,33 @@
       box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
     }
 
+    /* --- 時計のスタイル --- */
+    .clock-container {
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+      align-items: baseline;
+      gap: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .date-time {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+    }
+    .seconds {
+      font-size: 12px;
+      color: #666;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
     /* スマホ・タブレット表示用の微調整（縦並びにする） */
     @media (max-width: 1024px) {
       body {
@@ -212,8 +291,20 @@
       .right-container {
         width: 100%;
       }
+      .btn-container {
+        justify-content: center; /* 画面が狭いときはボタンを中央寄せに */
+      }
     }
   </style>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw_-V9SlwCDibw7KEwNOpcNgfxIr0yydQZHFofet31fNlenf6yf2EIlip9GMOUa_bEqmg/exec";
+
+    function recordWake() { fetch(GAS_URL + "?action=wake"); }
+    function recordSleep() { fetch(GAS_URL + "?action=sleep"); }
+    function recordGoSchool() { fetch(GAS_URL + "?action=goSchool"); }
+    function recordLeaveSchool() { fetch(GAS_URL + "?action=leaveSchool"); }
+  </script>
 </head>
 <body>
 
@@ -262,7 +353,16 @@
     </div>
 
     <div class="right-container">
-      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&showCalendars=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" class="calendar-responsive" style="border:0;" frameborder="0" scrolling="no"></iframe>
+      <div class="calendar-box">
+        <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&showCalendars=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5YjRhOWM4YjY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" class="calendar-responsive" style="border:0;" frameborder="0" scrolling="no"></iframe>
+      </div>
+
+      <div class="btn-container">
+        <button class="action-btn" onclick="recordWake()">起床</button>
+        <button class="action-btn" onclick="recordSleep()">就寝</button>
+        <button class="action-btn" onclick="recordGoSchool()">登校</button>
+        <button class="action-btn" onclick="recordLeaveSchool()">下校</button>
+      </div>
     </div>
 
   </div>
