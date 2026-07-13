@@ -1,25 +1,246 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>はじめポータル</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>はじめポータル</title>
 
-    <link rel="icon" href="icon.jpg" type="image/jpeg">
+  <link rel="icon" href="icon.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="icon.jpg">
 
-    <link rel="apple-touch-icon" href="icon.jpg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <style>
+    /* 共通設定 & 背景画像 */
+    body {
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      
+      /* 背景画像の設定 */
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+
+      /* 画面全体で中央付近に配置するための設定 */
+      min-height: 100vh;
+      display: flex;
+      justify-content: flex-start; /* 左側に寄せる */
+      align-items: center;         /* 上下は中央 */
+    }
+
+    /* 左上のタイトル */
+    .portal-title {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      background-color: rgba(255, 255, 255, 0.8); /* 背景が暗くても見えるように白背景を薄く敷く */
+      padding: 5px 15px;
+      border-radius: 5px;
+      margin: 0;
+    }
+
+    /* メインのコンテンツコンテナ（上中下の中ら辺の左上側） */
+    .main-container {
+      width: 100%;
+      max-width: 450px; /* ポータルの横幅（好みに合わせて調整してください） */
+      margin-left: 10%;  /* 左すぎず右すぎず、画面の左寄りに配置 */
+      display: flex;
+      flex-direction: column;
+      gap: 25px; /* 時計とボタンの間隔 */
+    }
+
+    /* --- 時計のスタイル --- */
+    .clock-container {
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 10px 15px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+      align-items: baseline;
+      gap: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .date-time {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+    }
+    .seconds {
+      font-size: 13px;
+      color: #666;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
+    /* --- ボタンのスタイル --- */
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 12px;
+      row-gap: 30px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .button_solid016 {
+      width: 100%;
+    }
+    .button_solid016 a {
+      background: #6bb6ff;
+      border-radius: 3px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      width: 100%; 
+      padding: 10px 15px;
+      color: #000000;
+      transition: 0.3s ease-in-out;
+      font-weight: 600;
+      font-size: 14px;
+      border: 2px solid #000;
+      z-index: 1;
+      border-radius: 5px;
+      text-decoration: none;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+    .button_solid016 a:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: -1;
+      border: 2px solid #000;
+      border-radius: 5px;
+      background: #e1f3ff;
+      background-image:
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0),
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+      background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
+      background-size: 30px 30px;
+    }
+    .button_solid016 a:after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      content: '';
+      transition: all .3s;
+      transform: translate3d(0,0.40rem,-1rem);
+      border: 2px solid #000;
+      border-radius: inherit;
+      background: #2b7fde;
+      box-shadow: 0 0.4rem 0 0 rgb(0 0 0 / 20%);
+      z-index: -2;
+    }
+    .button_solid016 a i {
+      position: absolute;
+      right: 8px;
+    }
+    .button_solid016 a:hover {
+      transform: translate3d(0,0.2rem,-1rem);
+    }
+    .button_solid016 a:hover:after {
+      transform: translate3d(0,0.2rem,-1rem);
+      box-shadow: 0 0.2rem 0 0 rgb(0 0 0 / 20%);
+    }
+
+    /* スマホ表示用の微調整 */
+    @media (max-width: 600px) {
+      body {
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 80px;
+      }
+      .main-container {
+        margin-left: 0;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>はじめポータル</h1>
-    </header>
+  <h1 class="portal-title">はじめポータル</h1>
 
-    <main>
-        <p>「はじめポータル」へようこそ！</p>
-        <p>このページをiOSのSafariでお気に入りに登録すると、指定したアイコンが表示されます。</p>
-    </main>
+  <div class="main-container">
+    
+    <div class="clock-container">
+      <div id="clock" class="date-time">----年--月--日 --:--</div>
+      <div id="seconds" class="seconds">--秒</div>
+    </div>
+
+    <div class="button-grid">
+      <div class="button_solid016">
+        <a href="https://sites.google.com/view/hajime0312" target="_blank">リロード<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://github.com/login" target="_blank">Github<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://calendar.google.com/calendar" target="_blank">カレンダー<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DR7OMMtYlocZCwAh2lVlWiD1i0_Q7xDp30WXJ4mWj9ho%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DrGz8BS9WaOC41A913bhuB6cCK5nBgzDh" target="_blank">LINE公式<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://gemini.google.com/app" target="_blank">Gemini<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://www.instagram.com/?hl=ja" target="_blank">Instagram<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://www.youtube.com/" target="_blank">YouTube<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://learn.studysapuri.jp/ja/login" target="_blank">スタサプ<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://hajime-study.github.io/target1900/" target="_blank">英単語<i class="fas fa-angle-right"></i></a>
+      </div>
+      <div class="button_solid016">
+        <a href="https://classroom.google.com/w/ODU1MzQ1NDI1NzE1/t/all" target="_blank">提出物リスト<i class="fas fa-angle-right"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      
+      const dateTimeString = `${year}年${month}月${date}日 ${hours}:${minutes}`;
+      const secondsString = `${seconds}秒`;
+      
+      document.getElementById('clock').textContent = dateTimeString;
+      document.getElementById('seconds').textContent = secondsString;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 
 </body>
 </html>
