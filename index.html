@@ -31,6 +31,7 @@
       justify-content: flex-start; /* 左端から配置 */
       align-items: flex-start;     /* 上寄せ */
       padding-top: 100px;          /* 上からの位置（コンテンツが始まる高さ） */
+      padding-bottom: 60px;        /* 下の方にゆったりとした余白を確保 */
     }
 
     /* 白ベース＆黒枠立体の「はじめポータル」タイトル */
@@ -54,36 +55,37 @@
       display: flex;
       width: 100%;
       margin-left: 3%;             /* 全体の開始点を左端に寄せる */
-      gap: 15%;                    /* 中央の写真が見えるよう、余白を15%に大幅拡大 */
+      gap: 15%;                    /* 完璧と言っていただいたボタンとの間隔を維持 */
       align-items: flex-start;     /* 上のラインを揃える */
     }
 
     /* 左側のコンテンツコンテナ（時計とボタン） */
     .left-container {
       width: 100%;
-      max-width: 280px;            /* 幅は前回のサイズをキープ */
-      flex-shrink: 0;              /* カレンダーに潰されないように固定 */
+      max-width: 280px;            
+      flex-shrink: 0;              
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    /* 右側のカレンダーコンテナ（小さめに変更） */
+    /* 右側のカレンダーコンテナ（右に伸ばしつつ、下部の余白を意識） */
     .right-container {
       flex-grow: 1;                
-      max-width: 550px;            /* 写真を隠さないよう、幅を550pxにコンパクト化 */
-      background: rgba(255, 255, 255, 0.9); /* カレンダーの裏に透け防止の白背景 */
+      max-width: 680px;            /* 550pxから680pxに広げて右へ伸ばしました */
+      background: rgba(255, 255, 255, 0.9); 
       padding: 10px;
       border: 2px solid #000;
       border-radius: 8px;
       box-shadow: 0 6px 0px rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
+      margin-bottom: 40px;         /* カレンダーの直下にも余白を追加 */
     }
 
-    /* iframe（カレンダー本体）のレスポンシブ対応用 */
+    /* iframe（カレンダー本体）の縦幅を短く調整 */
     .calendar-responsive {
       width: 100%;
-      height: 550px;               /* 横幅に合わせて縦幅も少しコンパクトに調整 */
+      height: 480px;               /* 550pxから480pxに短くしてすっきりさせました */
     }
 
     /* --- 時計のスタイル --- */
