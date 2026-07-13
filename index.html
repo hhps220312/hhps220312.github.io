@@ -54,7 +54,7 @@
       display: flex;
       width: 100%;
       margin-left: 3%;             /* 全体の開始点を左端に寄せる */
-      gap: 5%;                     /* 左のメニューと右のカレンダーの間の余白 */
+      gap: 15%;                    /* 中央の写真が見えるよう、余白を15%に大幅拡大 */
       align-items: flex-start;     /* 上のラインを揃える */
     }
 
@@ -68,10 +68,10 @@
       gap: 20px;
     }
 
-    /* 右側のカレンダーコンテナ */
+    /* 右側のカレンダーコンテナ（小さめに変更） */
     .right-container {
-      flex-grow: 1;                /* 残りの横幅をいっぱいに使う */
-      max-width: 900px;            /* カレンダーが広がりすぎないように最大幅を設定 */
+      flex-grow: 1;                
+      max-width: 550px;            /* 写真を隠さないよう、幅を550pxにコンパクト化 */
       background: rgba(255, 255, 255, 0.9); /* カレンダーの裏に透け防止の白背景 */
       padding: 10px;
       border: 2px solid #000;
@@ -83,7 +83,7 @@
     /* iframe（カレンダー本体）のレスポンシブ対応用 */
     .calendar-responsive {
       width: 100%;
-      height: 600px;
+      height: 550px;               /* 横幅に合わせて縦幅も少しコンパクトに調整 */
     }
 
     /* --- 時計のスタイル --- */
@@ -191,8 +191,8 @@
       box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
     }
 
-    /* スマホ表示用の微調整（縦並びにする） */
-    @media (max-width: 900px) {
+    /* スマホ・タブレット表示用の微調整（縦並びにする） */
+    @media (max-width: 1024px) {
       body {
         justify-content: center;
         align-items: flex-start;
