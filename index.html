@@ -25,15 +25,15 @@
       background-attachment: fixed;
       background-repeat: no-repeat;
 
-      /* 画面の左側・少し上寄りに配置するための設定 */
+      /* 画面を左右に分割するための親コンテナ設定 */
       min-height: 100vh;
       display: flex;
-      justify-content: flex-start; /* 左端に寄せる */
-      align-items: flex-start;     /* 上寄せに変更 */
-      padding-top: 100px;          /* 上からの位置（時計やボタンが始まる高さ） */
+      justify-content: flex-start; /* 左端から配置 */
+      align-items: flex-start;     /* 上寄せ */
+      padding-top: 100px;          /* 上からの位置（コンテンツが始まる高さ） */
     }
 
-    /* 白っぽい半透明に戻した「はじめポータル」タイトル */
+    /* 白ベース＆黒枠立体の「はじめポータル」タイトル */
     .portal-title {
       position: absolute;
       top: 20px;
@@ -41,22 +41,49 @@
       font-size: 20px;
       font-weight: bold;
       color: #000000;
-      background: rgba(255, 255, 255, 0.85); /* 白っぽい半透明に戻しました */
+      background: rgba(255, 255, 255, 0.85);
       padding: 8px 16px;
       border: 2px solid #000;
       border-radius: 5px;
       margin: 0;
-      box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15); /* 立体感は維持 */
+      box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
     }
 
-    /* メインのコンテンツコンテナ（気持ち少し大きく：280px） */
-    .main-container {
+    /* 左右のコンテンツを包むメインコンテナ */
+    .flex-wrapper {
+      display: flex;
       width: 100%;
-      max-width: 280px; /* 250pxから気持ち大きめの280pxに変更 */
-      margin-left: 3%;   /* 左端の開始点はキープ */
+      margin-left: 3%;             /* 全体の開始点を左端に寄せる */
+      gap: 5%;                     /* 左のメニューと右のカレンダーの間の余白 */
+      align-items: flex-start;     /* 上のラインを揃える */
+    }
+
+    /* 左側のコンテンツコンテナ（時計とボタン） */
+    .left-container {
+      width: 100%;
+      max-width: 280px;            /* 幅は前回のサイズをキープ */
+      flex-shrink: 0;              /* カレンダーに潰されないように固定 */
       display: flex;
       flex-direction: column;
-      gap: 20px; /* 時計とボタンの間隔 */
+      gap: 20px;
+    }
+
+    /* 右側のカレンダーコンテナ */
+    .right-container {
+      flex-grow: 1;                /* 残りの横幅をいっぱいに使う */
+      max-width: 900px;            /* カレンダーが広がりすぎないように最大幅を設定 */
+      background: rgba(255, 255, 255, 0.9); /* カレンダーの裏に透け防止の白背景 */
+      padding: 10px;
+      border: 2px solid #000;
+      border-radius: 8px;
+      box-shadow: 0 6px 0px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    /* iframe（カレンダー本体）のレスポンシブ対応用 */
+    .calendar-responsive {
+      width: 100%;
+      height: 600px;
     }
 
     /* --- 時計のスタイル --- */
@@ -74,13 +101,13 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .date-time {
-      font-size: 16px; /* 気持ち少し大きく */
+      font-size: 16px;
       font-weight: bold;
       color: #333;
       white-space: nowrap;
     }
     .seconds {
-      font-size: 12px; /* 気持ち少し大きく */
+      font-size: 12px;
       color: #666;
       font-weight: normal;
       white-space: nowrap;
@@ -111,7 +138,7 @@
       color: #000000;
       transition: 0.3s ease-in-out;
       font-weight: 600;
-      font-size: 13px; /* 気持ち少し大きく */
+      font-size: 13px;
       border: 2px solid #000;
       z-index: 1;
       border-radius: 5px;
@@ -164,15 +191,24 @@
       box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
     }
 
-    /* スマホ表示用の微調整 */
-    @media (max-width: 600px) {
+    /* スマホ表示用の微調整（縦並びにする） */
+    @media (max-width: 900px) {
       body {
         justify-content: center;
         align-items: flex-start;
         padding-top: 90px;
       }
-      .main-container {
+      .flex-wrapper {
+        flex-direction: column;
+        align-items: center;
         margin-left: 0;
+        gap: 40px;
+      }
+      .left-container {
+        max-width: 280px;
+      }
+      .right-container {
+        width: 100%;
       }
     }
   </style>
@@ -181,44 +217,50 @@
 
   <h1 class="portal-title">はじめポータル</h1>
 
-  <div class="main-container">
+  <div class="flex-wrapper">
     
-    <div class="clock-container">
-      <div id="clock" class="date-time">----年--月--日 --:--</div>
-      <div id="seconds" class="seconds">--秒</div>
+    <div class="left-container">
+      <div class="clock-container">
+        <div id="clock" class="date-time">----年--月--日 --:--</div>
+        <div id="seconds" class="seconds">--秒</div>
+      </div>
+
+      <div class="button-grid">
+        <div class="button_solid016">
+          <a href="">リロード<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://github.com/login" target="_blank">Github<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://calendar.google.com/calendar" target="_blank">カレンダー<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DR7OMMtYlocZCwAh2lVlWiD1i0_Q7xDp30WXJ4mWj9ho%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DrGz8BS9WaOC41A913bhuB6cCK5nBgzDh" target="_blank">LINE公式<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://gemini.google.com/app" target="_blank">Gemini<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://www.instagram.com/?hl=ja" target="_blank">Instagram<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://www.youtube.com/" target="_blank">YouTube<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://learn.studysapuri.jp/ja/login" target="_blank">スタサプ<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://hajime-study.github.io/target1900/" target="_blank">英単語<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://classroom.google.com/w/ODU1MzQ1NDI1NzE1/t/all" target="_blank">提出物リスト<i class="fas fa-angle-right"></i></a>
+        </div>
+      </div>
     </div>
 
-    <div class="button-grid">
-      <div class="button_solid016">
-        <a href="https://sites.google.com/view/hajime0312" target="_blank">リロード<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://github.com/login" target="_blank">Github<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://calendar.google.com/calendar" target="_blank">カレンダー<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DR7OMMtYlocZCwAh2lVlWiD1i0_Q7xDp30WXJ4mWj9ho%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DrGz8BS9WaOC41A913bhuB6cCK5nBgzDh" target="_blank">LINE公式<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://gemini.google.com/app" target="_blank">Gemini<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://www.instagram.com/?hl=ja" target="_blank">Instagram<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://www.youtube.com/" target="_blank">YouTube<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://learn.studysapuri.jp/ja/login" target="_blank">スタサプ<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://hajime-study.github.io/target1900/" target="_blank">英単語<i class="fas fa-angle-right"></i></a>
-      </div>
-      <div class="button_solid016">
-        <a href="https://classroom.google.com/w/ODU1MzQ1NDI1NzE1/t/all" target="_blank">提出物リスト<i class="fas fa-angle-right"></i></a>
-      </div>
+    <div class="right-container">
+      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&showCalendars=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" class="calendar-responsive" style="border:0;" frameborder="0" scrolling="no"></iframe>
     </div>
 
   </div>
