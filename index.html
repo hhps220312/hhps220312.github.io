@@ -55,7 +55,7 @@
       display: flex;
       width: 100%;
       margin-left: 3%;             /* 全体の開始点を左端に寄せる */
-      gap: 15%;                    /* ボタンとカレンダーの間隔（お友達の写真用） */
+      gap: 15%;                    /* ボタンとカレンダーの間隔 */
       align-items: flex-start;     /* 上のラインを揃える */
     }
 
@@ -75,7 +75,7 @@
       max-width: 680px;            /* 右側に伸ばしたサイズを維持 */
       display: flex;
       flex-direction: column;
-      gap: 15px;                   /* カレンダーと打刻ボタンの間の隙間 */
+      gap: 15px;                   /* カレンダーと下部ボタンの間の隙間 */
       margin-bottom: 40px;         
     }
 
@@ -96,19 +96,34 @@
       height: 480px;               /* 前回の短め（480px）の縦幅をキープ */
     }
 
-    /* --- 打刻ボタンエリアのスタイル --- */
-    .btn-container {
+    /* --- カレンダー下部のボタングループ（左右に配置） --- */
+    .bottom-controls {
       display: flex;
-      justify-content: flex-end;   /* 右寄せにする設定 */
+      justify-content: space-between; /* 左側にログイン系、右側に打刻系 */
       align-items: center;
-      gap: 12px;                   /* ボタン同士の間隔 */
-      padding: 10px 0;
       width: 100%;
-      box-sizing: border-box;
+      padding: 10px 0;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    /* 左下のログイン・ログアウトコンテナ */
+    .auth-buttons {
+      display: flex;
+      gap: 12px;
     }
     
+    /* 右下の打刻ボタンコンテナ */
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    /* --- アクションボタン（起床など - 黄色に変更） --- */
     .action-btn {
-      background: #6bb6ff;
+      background: #fde047; /* 黄色ベース */
       position: relative;
       display: inline-flex;
       justify-content: center;
@@ -135,12 +150,12 @@
       z-index: -1;
       border: 2px solid #000;
       border-radius: 5px;
-      background: #e1f3ff;
+      background: #fef9c3;
       background-image:
-      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
-      linear-gradient(45deg, transparent 75%, #c8e4ff 0),
-      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
-      linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+      linear-gradient(45deg, #fef08a 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #fef08a 0),
+      linear-gradient(45deg, #fef08a 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #fef08a 0);
       background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
       background-size: 30px 30px;
     }
@@ -155,7 +170,7 @@
       transform: translate3d(0, 0.3rem, -1rem);
       border: 2px solid #000;
       border-radius: inherit;
-      background: #2b7fde;
+      background: #eab308; /* 濃い黄色（影部分） */
       box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%);
       z-index: -2;
     }
@@ -170,7 +185,7 @@
     /* --- 左側リンクボタンのスタイル --- */
     .button-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr; /* 均等に2列 */
       column-gap: 12px;
       row-gap: 25px;
       width: 100%;
@@ -179,8 +194,12 @@
     .button_solid016 {
       width: 100%;
     }
+    /* ログイン・ログアウトボタン用の横幅指定（左ボタンと同じ幅感にする） */
+    .auth-buttons .button_solid016 {
+      width: 134px; 
+    }
     .button_solid016 a {
-      background: #6bb6ff;
+      background: #6bb6ff; /* 青（デフォルト） */
       border-radius: 3px;
       position: relative;
       display: flex;
@@ -188,7 +207,8 @@
       align-items: center;
       margin: 0 auto;
       width: 100%; 
-      padding: 10px 8px;
+      height: 42px; /* 高さを固定してサイズがばらつくのを防止 */
+      padding: 0 8px; /* 上下はheightで制御するのでpaddingは左右のみ */
       color: #000000;
       transition: 0.3s ease-in-out;
       font-weight: 600;
@@ -245,6 +265,30 @@
       box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
     }
 
+    /* 緑のボタン（ログイン） */
+    .button_solid016.btn-green a { background: #86efac; }
+    .button_solid016.btn-green a:before {
+      background: #dcfce7;
+      background-image:
+      linear-gradient(45deg, #bbf7d0 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #bbf7d0 0),
+      linear-gradient(45deg, #bbf7d0 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #bbf7d0 0);
+    }
+    .button_solid016.btn-green a:after { background: #22c55e; }
+
+    /* 赤のボタン（ログアウト） */
+    .button_solid016.btn-red a { background: #fca5a5; }
+    .button_solid016.btn-red a:before {
+      background: #fee2e2;
+      background-image:
+      linear-gradient(45deg, #fecaca 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #fecaca 0),
+      linear-gradient(45deg, #fecaca 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #fecaca 0);
+    }
+    .button_solid016.btn-red a:after { background: #ef4444; }
+
     /* --- 時計のスタイル --- */
     .clock-container {
       border: 2px solid #333;
@@ -291,7 +335,7 @@
       .right-container {
         width: 100%;
       }
-      .btn-container {
+      .bottom-controls {
         justify-content: center; /* 画面が狭いときはボタンを中央寄せに */
       }
     }
@@ -318,18 +362,13 @@
         <div id="seconds" class="seconds">--秒</div>
       </div>
 
+      <!-- ログイン・ログアウトはカレンダー下へ移動 -->
       <div class="button-grid">
         <div class="button_solid016">
           <a href="">リロード<i class="fas fa-angle-right"></i></a>
         </div>
         <div class="button_solid016">
           <a href="https://database-gilt.vercel.app/" target="_blank">データベース<i class="fas fa-angle-right"></i></a>
-        </div>
-        <div class="button_solid016">
-          <a href="https://accounts.google.com/v3/signin/identifier?authuser=0&continue=https://myaccount.google.com/?pli%3D1&dsh=S-635098599:1786517646601416&ec=GAlAwAE&hl=ja&flowName=GlifWebSignIn&flowEntry=AddSession" target="_blank">ログイン<i class="fas fa-angle-right"></i></a>
-        </div>
-        <div class="button_solid016">
-          <a href="https://accounts.google.com/logout" target="_blank">ログアウト<i class="fas fa-angle-right"></i></a>
         </div>
         <div class="button_solid016">
           <a href="https://github.com/login" target="_blank">Github<i class="fas fa-angle-right"></i></a>
@@ -372,11 +411,23 @@
         <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&showCalendars=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" class="calendar-responsive" style="border:0;" frameborder="0" scrolling="no"></iframe>
       </div>
 
-      <div class="btn-container">
-        <button class="action-btn" onclick="recordWake()">起床</button>
-        <button class="action-btn" onclick="recordSleep()">就寝</button>
-        <button class="action-btn" onclick="recordGoSchool()">登校</button>
-        <button class="action-btn" onclick="recordLeaveSchool()">下校</button>
+      <!-- カレンダー下部にログイン・ログアウトと打刻ボタンを左右に配置 -->
+      <div class="bottom-controls">
+        <div class="auth-buttons">
+          <div class="button_solid016 btn-green">
+            <a href="https://accounts.google.com/v3/signin/identifier?authuser=0&continue=https://myaccount.google.com/?pli%3D1&dsh=S-635098599:1786517646601416&ec=GAlAwAE&hl=ja&flowName=GlifWebSignIn&flowEntry=AddSession" target="_blank">ログイン<i class="fas fa-angle-right"></i></a>
+          </div>
+          <div class="button_solid016 btn-red">
+            <a href="https://accounts.google.com/logout" target="_blank">ログアウト<i class="fas fa-angle-right"></i></a>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="action-btn" onclick="recordWake()">起床</button>
+          <button class="action-btn" onclick="recordSleep()">就寝</button>
+          <button class="action-btn" onclick="recordGoSchool()">登校</button>
+          <button class="action-btn" onclick="recordLeaveSchool()">下校</button>
+        </div>
       </div>
     </div>
 
