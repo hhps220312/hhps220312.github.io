@@ -4,627 +4,394 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>はじめポータル</title>
+
   <link rel="icon" href="icon.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="icon.jpg">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <style>
-    /* 共通・ベース設定 */
-    :root {
-      --primary-color: #003067;
-      --bg-color: #f5f7fa;
-      --tab-bg: #e1f3ff;
-      --dora-blue: #0096D6;
-      --dora-red: #E3001B;
-    }
+    /* 共通設定 & 背景画像 */
     body {
-      margin: 0; padding: 0; box-sizing: border-box;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
       font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-      background-image: url('background.jpg'); /* トップ用背景 */
-      background-size: cover; background-position: center; background-attachment: fixed;
-      height: 100vh; display: flex; flex-direction: column;
+      
+      /* 背景画像の設定 */
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+
+      /* 画面を左右に分割するための親コンテナ設定 */
+      min-height: 100vh;
+      display: flex;
+      justify-content: flex-start; /* 左端から配置 */
+      align-items: flex-start;     /* 上寄せ */
+      padding-top: 100px;          /* 上からの位置（コンテンツが始まる高さ） */
+      padding-bottom: 60px;        /* 下の方にゆったりとした余白を確保 */
     }
 
-    /* アプリ全体 */
-    #app-screen { display: flex; flex-direction: column; height: 100vh; }
-
-    /* ヘッダー＆タブ */
-    .site-header {
-      padding: 10px 20px; background: rgba(255, 255, 255, 0.9);
-      border-bottom: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 100;
+    /* 白ベース＆黒枠立体の「はじめポータル」タイトル */
+    .portal-title {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #000000;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 8px 16px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      margin: 0;
+      box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
     }
-    .portal-title { margin: 0; font-size: 18px; font-weight: bold; color: #000; }
+
+    /* 左右のコンテンツを包むメインコンテナ */
+    .flex-wrapper {
+      display: flex;
+      width: 100%;
+      margin-left: 3%;             /* 全体の開始点を左端に寄せる */
+      gap: 15%;                    /* ボタンとカレンダーの間隔（お友達の写真用） */
+      align-items: flex-start;     /* 上のラインを揃える */
+    }
+
+    /* 左側のコンテンツコンテナ（時計とボタン） */
+    .left-container {
+      width: 100%;
+      max-width: 280px;            
+      flex-shrink: 0;              
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 右側のコンテナ（カレンダーと打刻ボタンを含む） */
+    .right-container {
+      flex-grow: 1;                
+      max-width: 680px;            /* 右側に伸ばしたサイズを維持 */
+      display: flex;
+      flex-direction: column;
+      gap: 15px;                   /* カレンダーと打刻ボタンの間の隙間 */
+      margin-bottom: 40px;         
+    }
+
+    /* カレンダー自体の外枠デザイン */
+    .calendar-box {
+      background: rgba(255, 255, 255, 0.9); 
+      padding: 10px;
+      border: 2px solid #000;
+      border-radius: 8px;
+      box-shadow: 0 6px 0px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    /* iframe（カレンダー本体）の縦幅 */
+    .calendar-responsive {
+      width: 100%;
+      height: 480px;               /* 前回の短め（480px）の縦幅をキープ */
+    }
+
+    /* --- 打刻ボタンエリアのスタイル --- */
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;   /* 右寄せにする設定 */
+      align-items: center;
+      gap: 12px;                   /* ボタン同士の間隔 */
+      padding: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
     
-    .tab-nav {
-      display: flex; background: rgba(255, 255, 255, 0.95); border-bottom: 2px solid #ccc;
-      padding: 0 10px; overflow-x: auto; white-space: nowrap; z-index: 90;
+    .action-btn {
+      background: #6bb6ff;
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 16px; 
+      color: #000000; 
+      transition: 0.3s ease-in-out;
+      font-weight: 600;
+      font-size: 14px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1;
+      box-sizing: border-box;
+      white-space: nowrap;
     }
-    .tab-btn {
-      background: none; border: none; padding: 12px 15px; font-size: 14px; font-weight: bold;
-      color: #666; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.3s;
-    }
-    .tab-btn:hover { color: var(--primary-color); background: var(--tab-bg); }
-    .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
-
-    /* メインコンテナ群 */
-    .app-container {
-      display: none; padding: 20px; flex: 1; overflow-y: auto; gap: 20px;
-    }
-    .app-container.active { display: flex; }
-    
-    @media (max-width: 800px) {
-      .app-container.active { flex-direction: column; }
-    }
-
-    /* 各パネルスタイル */
-    .panel-section {
-      background: rgba(255, 255, 255, 0.95); padding: 15px; border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid #333; margin-bottom: 15px;
-    }
-    .panel-section h3 {
-      margin-top: 0; font-size: 15px; color: var(--primary-color);
-      border-bottom: 2px solid #e1f3ff; padding-bottom: 5px;
-    }
-    
-    /* フォーム部品 */
-    .input-group { margin-bottom: 10px; }
-    .input-group label { display: block; font-size: 12px; margin-bottom: 3px; font-weight: bold; }
-    .input-control {
-      width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
-      font-size: 14px; box-sizing: border-box; font-family: inherit;
-    }
-
-    /* ボタンデザイン */
-    .button_solid016 {
-      appearance: none; background: #6bb6ff; position: relative; display: inline-flex;
-      justify-content: center; align-items: center; padding: 10px 15px; width: 100%;
-      color: #000; transition: 0.3s ease-in-out; font-weight: 600; border: 2px solid #000;
-      border-radius: 5px; cursor: pointer; font-size: 13px; box-sizing: border-box;
-      text-decoration: none; z-index: 1;
-    }
-    .button_solid016:before {
-      content: ""; width: 100%; height: 100%; position: absolute; top: -2px; left: -2px; z-index: -1;
-      border: 2px solid #000; border-radius: 5px; background: #e1f3ff;
-      background-image: linear-gradient(45deg, #c8e4ff 25%, transparent 0), linear-gradient(45deg, transparent 75%, #c8e4ff 0), linear-gradient(45deg, #c8e4ff 25%, transparent 0), linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+    .action-btn:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: -2px; 
+      left: -2px;
+      z-index: -1;
+      border: 2px solid #000;
+      border-radius: 5px;
+      background: #e1f3ff;
+      background-image:
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0),
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+      background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
       background-size: 30px 30px;
     }
-    .button_solid016:after {
-      position: absolute; top: -2px; left: -2px; width: 100%; height: 100%; content: '';
-      transition: all .3s; transform: translate3d(0, 0.3rem, -1rem);
-      border: 2px solid #000; border-radius: inherit; background: #2b7fde;
-      box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%); z-index: -2;
+    .action-btn:after {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 100%;
+      height: 100%;
+      content: '';
+      transition: all .3s;
+      transform: translate3d(0, 0.3rem, -1rem);
+      border: 2px solid #000;
+      border-radius: inherit;
+      background: #2b7fde;
+      box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%);
+      z-index: -2;
     }
-    .button_solid016:hover { transform: translate3d(0, 0.15rem, -1rem); }
-    .button_solid016:hover:after { transform: translate3d(0, 0.15rem, -1rem); box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%); }
-    
-    .btn-danger { background: #ff8e8e; }
-    .btn-danger:before { background: #ffe3e3; }
-    .btn-danger:after { background: #de2b2b; }
-    .btn-success { background: #81c784; }
-    .btn-success:before { background: #d0efd2; }
-    .btn-success:after { background: #55a65a; }
-
-    /* プログレスバー */
-    .progress-bar-container {
-      width: 100%; height: 12px; background: #e1e8ed; border-radius: 6px; overflow: hidden; margin-top: 5px; border: 1px solid #ccc;
+    .action-btn:hover {
+      transform: translate3d(0, 0.15rem, -1rem);
     }
-    .progress-bar-fill { height: 100%; background: #6bb6ff; width: 0%; transition: width 0.5s ease; }
-
-    /* リストアイテム */
-    .list-item {
-      padding: 10px; border-bottom: 1px dashed #ccc; display: flex; flex-direction: column; gap: 5px;
+    .action-btn:hover:after {
+      transform: translate3d(0, 0.15rem, -1rem);
+      box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
     }
-    .list-item:last-child { border-bottom: none; }
-    .badge { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #333; color:#fff; }
-    .expired { background: #ffebee; border-left: 4px solid var(--dora-red); }
 
-    /* ポータル用レイアウト */
-    .portal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .clock-container { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 15px; background:#fff; padding:10px; border:2px solid #333; border-radius:8px;}
+    /* --- 左側リンクボタンのスタイル --- */
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 12px;
+      row-gap: 25px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .button_solid016 {
+      width: 100%;
+    }
+    .button_solid016 a {
+      background: #6bb6ff;
+      border-radius: 3px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      width: 100%; 
+      padding: 10px 8px;
+      color: #000000;
+      transition: 0.3s ease-in-out;
+      font-weight: 600;
+      font-size: 13px;
+      border: 2px solid #000;
+      z-index: 1;
+      border-radius: 5px;
+      text-decoration: none;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+    .button_solid016 a:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: -1;
+      border: 2px solid #000;
+      border-radius: 5px;
+      background: #e1f3ff;
+      background-image:
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0),
+      linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+      linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+      background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
+      background-size: 30px 30px;
+    }
+    .button_solid016 a:after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      content: '';
+      transition: all .3s;
+      transform: translate3d(0,0.35rem,-1rem);
+      border: 2px solid #000;
+      border-radius: inherit;
+      background: #2b7fde;
+      box-shadow: 0 0.35rem 0 0 rgb(0 0 0 / 20%);
+      z-index: -2;
+    }
+    .button_solid016 a i {
+      position: absolute;
+      right: 5px;
+      font-size: 11px;
+    }
+    .button_solid016 a:hover {
+      transform: translate3d(0,0.15rem,-1rem);
+    }
+    .button_solid016 a:hover:after {
+      transform: translate3d(0,0.15rem,-1rem);
+      box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
+    }
+
+    /* --- 時計のスタイル --- */
+    .clock-container {
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+      align-items: baseline;
+      gap: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .date-time {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+    }
+    .seconds {
+      font-size: 12px;
+      color: #666;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
+    /* スマホ・タブレット表示用の微調整（縦並びにする） */
+    @media (max-width: 1024px) {
+      body {
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 90px;
+      }
+      .flex-wrapper {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 0;
+        gap: 40px;
+      }
+      .left-container {
+        max-width: 280px;
+      }
+      .right-container {
+        width: 100%;
+      }
+      .btn-container {
+        justify-content: center; /* 画面が狭いときはボタンを中央寄せに */
+      }
+    }
   </style>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw_-V9SlwCDibw7KEwNOpcNgfxIr0yydQZHFofet31fNlenf6yf2EIlip9GMOUa_bEqmg/exec";
+
+    function recordWake() { fetch(GAS_URL + "?action=wake"); }
+    function recordSleep() { fetch(GAS_URL + "?action=sleep"); }
+    function recordGoSchool() { fetch(GAS_URL + "?action=goSchool"); }
+    function recordLeaveSchool() { fetch(GAS_URL + "?action=leaveSchool"); }
+  </script>
 </head>
 <body>
 
-  <!-- アプリ本体 -->
-  <div id="app-screen">
-    <header class="site-header">
-      <h1 class="portal-title">はじめポータル</h1>
-    </header>
+  <h1 class="portal-title">はじめポータル</h1>
 
-    <div class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('portal')">リンク・打刻</button>
-      <button class="tab-btn" onclick="switchTab('study')">学習記録・日記</button>
-      <button class="tab-btn" onclick="switchTab('tasks')">提出物リスト</button>
-      <button class="tab-btn" onclick="switchTab('money')">お金の管理</button>
-    </div>
-
-    <!-- ================= 1. ポータル（リンク・打刻） ================= -->
-    <div class="app-container active" id="tab-portal" style="flex-direction: row; align-items: flex-start;">
-      <!-- 左側 -->
-      <div style="flex: 0 0 280px;">
-        <div class="clock-container" id="clock">----/--/-- --:--:--</div>
-        <div class="panel-section">
-          <div class="portal-grid">
-            <a href="#" class="button_solid016" onclick="location.reload()">リロード</a>
-            <a href="https://github.com/login" target="_blank" class="button_solid016">Github</a>
-            <a href="https://calendar.google.com/calendar" target="_blank" class="button_solid016">カレンダー</a>
-            <a href="https://gemini.google.com/app" target="_blank" class="button_solid016">Gemini</a>
-            <a href="https://learn.studysapuri.jp/ja/login" target="_blank" class="button_solid016">スタサプ</a>
-            <a href="https://hajime-study.github.io/target1900/" target="_blank" class="button_solid016">英単語</a>
-            <a href="https://classroom.google.com/w/ODU1MzQ1NDI1NzE1/t/all" target="_blank" class="button_solid016">Classroom</a>
-            <a href="https://admax.shinobi.jp/" target="_blank" class="button_solid016" style="background:#ffeb3b;">忍者AdMax</a>
-          </div>
-        </div>
-      </div>
-      <!-- 右側 -->
-      <div style="flex: 1;">
-        <div class="panel-section" style="padding:0; overflow:hidden;">
-          <iframe src="https://calendar.google.com/calendar/embed?height=400&wkst=2&ctz=Asia%2FTokyo&showTitle=0&showPrint=0&mode=WEEK" style="border: 0; width: 100%; height: 400px;" frameborder="0" scrolling="no"></iframe>
-        </div>
-        <div class="panel-section" style="display: flex; gap: 10px; justify-content: flex-end;">
-          <button class="button_solid016" style="width: auto;" onclick="recordTime('wake')">起床</button>
-          <button class="button_solid016" style="width: auto;" onclick="recordTime('sleep')">就寝</button>
-          <button class="button_solid016" style="width: auto;" onclick="recordTime('goSchool')">登校</button>
-          <button class="button_solid016" style="width: auto;" onclick="recordTime('leaveSchool')">下校</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= 2. 学習記録・日記 ================= -->
-    <div class="app-container" id="tab-study">
-      <div style="flex:1;">
-        <div class="panel-section">
-          <h3>📅 日付選択 & 打刻記録</h3>
-          <input type="date" id="record-date" class="input-control" onchange="loadDailyRecord()">
-          <div style="display:flex; gap:15px; margin-top:10px; font-weight:bold; font-size:14px; background:#f8fafc; padding:10px; border-radius:5px;" id="time-stamps-display">
-            <!-- ここに打刻時間が表示される -->
-          </div>
-        </div>
-
-        <div class="panel-section">
-          <h3>📝 学習記録を追加</h3>
-          <div class="portal-grid">
-            <div class="input-group"><label>教科</label><input type="text" id="study-subject" class="input-control" placeholder="例: 英語"></div>
-            <div class="input-group"><label>内容</label><input type="text" id="study-content" class="input-control" placeholder="例: 英単語"></div>
-            <div class="input-group"><label>教材</label><input type="text" id="study-material" class="input-control" placeholder="例: ターゲット1900"></div>
-            <div class="input-group"><label>ページ数</label><input type="text" id="study-page" class="input-control" placeholder="例: p13〜18"></div>
-            <div class="input-group"><label>時間(分)</label><input type="number" id="study-time" class="input-control" placeholder="例: 30"></div>
-          </div>
-          <button class="button_solid016 btn-success" onclick="addStudyRecord()">記録する</button>
-        </div>
-
-        <div class="panel-section">
-          <h3>📖 1日の振り返り（日記）</h3>
-          <textarea id="diary-text" class="input-control" rows="4" placeholder="今日はどんな1日でしたか？"></textarea>
-          <button class="button_solid016" style="margin-top:5px;" onclick="saveDiary()">日記を保存</button>
-        </div>
+  <div class="flex-wrapper">
+    
+    <div class="left-container">
+      <div class="clock-container">
+        <div id="clock" class="date-time">----年--月--日 --:--</div>
+        <div id="seconds" class="seconds">--秒</div>
       </div>
 
-      <div style="flex:1;">
-        <div class="panel-section">
-          <h3>📚 この日の学習リスト</h3>
-          <div id="study-list"></div>
+      <div class="button-grid">
+        <div class="button_solid016">
+          <a href="">リロード<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://github.com/login" target="_blank">Github<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://calendar.google.com/calendar" target="_blank">カレンダー<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DR7OMMtYlocZCwAh2lVlWiD1i0_Q7xDp30WXJ4mWj9ho%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DrGz8BS9WaOC41A913bhuB6cCK5nBgzDh" target="_blank">LINE公式<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://gemini.google.com/app" target="_blank">Gemini<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://www.instagram.com/?hl=ja" target="_blank">Instagram<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://www.youtube.com/" target="_blank">YouTube<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://learn.studysapuri.jp/ja/login" target="_blank">スタサプ<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://hajime-study.github.io/target1900/" target="_blank">英単語<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://www.jorudan.co.jp/?utm_source=google&utm_medium=organic" target="_blank">ジョルダン<i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="button_solid016">
+          <a href="https://classroom.google.com/w/ODU1MzQ1NDI1NzE1/t/all" target="_blank">提出物リスト<i class="fas fa-angle-right"></i></a>
         </div>
       </div>
     </div>
 
-    <!-- ================= 3. 提出物リスト ================= -->
-    <div class="app-container" id="tab-tasks">
-      <div style="flex:1;">
-        <div class="panel-section">
-          <h3>➕ 提出物を追加</h3>
-          <div class="input-group"><label>教科</label><input type="text" id="task-subject" class="input-control" placeholder="例: 数学"></div>
-          <div class="input-group"><label>内容</label><input type="text" id="task-title" class="input-control" placeholder="例: ワーク p20-30"></div>
-          <div class="input-group"><label>期限</label><input type="date" id="task-deadline" class="input-control"></div>
-          <button class="button_solid016 btn-success" onclick="addTask()">追加する</button>
-        </div>
-        
-        <div class="panel-section">
-          <h3>📊 全体の進捗状況</h3>
-          <div class="progress-bar-container"><div class="progress-bar-fill" id="task-progress"></div></div>
-          <div id="task-progress-text" style="font-size:12px; font-weight:bold; text-align:right; margin-top:5px;">0% (0 / 0)</div>
-        </div>
+    <div class="right-container">
+      <div class="calendar-box">
+        <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&showCalendars=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" class="calendar-responsive" style="border:0;" frameborder="0" scrolling="no"></iframe>
       </div>
-      
-      <div style="flex:2;">
-        <div class="panel-section">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3>📋 提出物一覧</h3>
-            <label style="font-size:12px; font-weight:bold; cursor:pointer;">
-              <input type="checkbox" id="show-completed-tasks" onchange="loadTasks()"> 完了済みも表示
-            </label>
-          </div>
-          <div id="tasks-list"></div>
-        </div>
+
+      <div class="btn-container">
+        <button class="action-btn" onclick="recordWake()">起床</button>
+        <button class="action-btn" onclick="recordSleep()">就寝</button>
+        <button class="action-btn" onclick="recordGoSchool()">登校</button>
+        <button class="action-btn" onclick="recordLeaveSchool()">下校</button>
       </div>
     </div>
 
-    <!-- ================= 4. お金の管理 ================= -->
-    <div class="app-container" id="tab-money">
-      <div style="flex:1;">
-        <div class="panel-section">
-          <h3>💰 支払い方法と残高</h3>
-          <div id="wallet-balances" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-weight:bold; font-size:16px;">
-            <!-- 残高がここに表示されます -->
-          </div>
-        </div>
-
-        <div class="panel-section">
-          <h3>💸 支出・収入を記録</h3>
-          <div class="input-group">
-            <label>何に？ (用途)</label>
-            <input type="text" id="money-title" class="input-control" placeholder="例: 昼食">
-          </div>
-          
-          <label style="font-size:12px; font-weight:bold;">支払い内訳 (複数組み合わせて使えます)</label>
-          <div id="money-details-container" style="background:#f8fafc; padding:10px; border:1px solid #ccc; border-radius:4px; margin-bottom:10px;">
-            <!-- jsで支払い元行を追加 -->
-          </div>
-          <button class="button_solid016" style="margin-bottom:10px; background:#e1f3ff;" onclick="addMoneyDetailRow()">＋ 支払い元を追加</button>
-
-          <div style="display:flex; gap:10px;">
-            <button class="button_solid016 btn-danger" onclick="saveTransaction('expense')">支出として記録</button>
-            <button class="button_solid016 btn-success" onclick="saveTransaction('income')">収入として記録</button>
-          </div>
-        </div>
-      </div>
-      
-      <div style="flex:1;">
-        <div class="panel-section">
-          <h3>🧾 最近の履歴</h3>
-          <div id="money-history-list"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- JavaScript (ローカルストレージでデータ保存) -->
   <script>
-    // ===== データの保存・読み込みの仕組み =====
-    const STORAGE_KEY = 'hajime_portal_data';
-    const DEFAULT_WALLETS = ["財布(現金)", "PayPay", "銀行口座", "Suica"];
-
-    // データを取得する関数
-    function getAppData() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      if (data) {
-        return JSON.parse(data);
-      }
-      // 初めて開いた時の空データ
-      return {
-        daily_records: {},
-        tasks: [],
-        wallets: { balances: { "財布(現金)": 0, "PayPay": 0, "銀行口座": 0, "Suica": 0 } },
-        transactions: []
-      };
+    function updateClock() {
+      const now = new Date();
+      
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      
+      const dateTimeString = `${year}年${month}月${date}日 ${hours}:${minutes}`;
+      const secondsString = `${seconds}秒`;
+      
+      document.getElementById('clock').textContent = dateTimeString;
+      document.getElementById('seconds').textContent = secondsString;
     }
 
-    // データを保存する関数
-    function saveAppData(data) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
-
-    // ランダムなIDを作る関数（タスクや履歴の管理用）
-    function generateId() {
-      return Math.random().toString(36).substr(2, 9);
-    }
-
-
-    // ===== 初期化処理 =====
-    window.onload = function() {
-      startClock();
-      // 日付の初期値を今日にセット
-      const today = new Date();
-      const yyyymmdd = today.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" }).replaceAll("/", "-");
-      document.getElementById('record-date').value = yyyymmdd;
-      
-      loadDailyRecord();
-      loadTasks();
-      initMoney();
-    };
-
-    // 時計の更新
-    function startClock() {
-      setInterval(() => {
-        const now = new Date();
-        const y = now.getFullYear(); const m = String(now.getMonth()+1).padStart(2,'0'); const d = String(now.getDate()).padStart(2,'0');
-        const h = String(now.getHours()).padStart(2,'0'); const min = String(now.getMinutes()).padStart(2,'0'); const s = String(now.getSeconds()).padStart(2,'0');
-        document.getElementById('clock').textContent = `${y}/${m}/${d} ${h}:${min}:${s}`;
-      }, 1000);
-    }
-
-    // タブ切り替え関数
-    window.switchTab = function(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.app-container').forEach(panel => panel.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-      document.getElementById('tab-' + tabId).classList.add('active');
-    };
-
-
-    // ===== 1. 打刻機能 =====
-    window.recordTime = function(type) {
-      const targetDate = document.getElementById('record-date').value || new Date().toISOString().split('T')[0];
-      const nowTime = new Date().toLocaleTimeString("ja-JP", {hour:'2-digit', minute:'2-digit'});
-      
-      const appData = getAppData();
-      if(!appData.daily_records[targetDate]) {
-        appData.daily_records[targetDate] = { timestamps: {}, diary: "", studies: [] };
-      }
-      
-      appData.daily_records[targetDate].timestamps[type] = nowTime;
-      saveAppData(appData);
-      
-      alert("打刻しました！: " + nowTime);
-      loadDailyRecord();
-    };
-
-    // ===== 2. 学習記録・日記 =====
-    window.loadDailyRecord = function() {
-      const targetDate = document.getElementById('record-date').value;
-      const appData = getAppData();
-      const record = appData.daily_records[targetDate] || { timestamps: {}, diary: "", studies: [] };
-      
-      const ts = record.timestamps;
-      document.getElementById('time-stamps-display').innerHTML = `
-        <div>起床: ${ts.wake || '--:--'}</div>
-        <div>就寝: ${ts.sleep || '--:--'}</div>
-        <div>登校: ${ts.goSchool || '--:--'}</div>
-        <div>下校: ${ts.leaveSchool || '--:--'}</div>
-      `;
-      
-      document.getElementById('diary-text').value = record.diary;
-      
-      // 勉強リスト描画
-      const studyList = document.getElementById('study-list');
-      studyList.innerHTML = "";
-      if(record.studies.length === 0) {
-        studyList.innerHTML = "<p style='font-size:12px; color:#999;'>まだ記録がありません</p>";
-      } else {
-        record.studies.forEach(s => {
-          studyList.innerHTML += `
-            <div class="list-item">
-              <div style="font-weight:bold;">
-                <span class="badge" style="background:var(--primary-color)">${s.subject}</span> ${s.content}
-              </div>
-              <div style="font-size:12px; color:#666;">
-                教材: ${s.material} | ${s.page} | ⏳ ${s.time}分
-              </div>
-            </div>
-          `;
-        });
-      }
-    };
-
-    window.addStudyRecord = function() {
-      const subject = document.getElementById('study-subject').value;
-      const content = document.getElementById('study-content').value;
-      if(!subject || !content) return alert("教科と内容は必須です");
-      
-      const targetDate = document.getElementById('record-date').value;
-      const appData = getAppData();
-      if(!appData.daily_records[targetDate]) {
-        appData.daily_records[targetDate] = { timestamps: {}, diary: "", studies: [] };
-      }
-      
-      appData.daily_records[targetDate].studies.push({
-        subject: subject, content: content,
-        material: document.getElementById('study-material').value,
-        page: document.getElementById('study-page').value,
-        time: document.getElementById('study-time').value
-      });
-      
-      saveAppData(appData);
-      
-      document.getElementById('study-subject').value = ""; document.getElementById('study-content').value = "";
-      document.getElementById('study-material').value = ""; document.getElementById('study-page').value = ""; document.getElementById('study-time').value = "";
-      loadDailyRecord();
-    };
-
-    window.saveDiary = function() {
-      const text = document.getElementById('diary-text').value;
-      const targetDate = document.getElementById('record-date').value;
-      
-      const appData = getAppData();
-      if(!appData.daily_records[targetDate]) {
-        appData.daily_records[targetDate] = { timestamps: {}, diary: "", studies: [] };
-      }
-      appData.daily_records[targetDate].diary = text;
-      saveAppData(appData);
-      
-      alert("日記を保存しました！");
-    };
-
-    // ===== 3. 提出物リスト =====
-    window.addTask = function() {
-      const sub = document.getElementById('task-subject').value;
-      const title = document.getElementById('task-title').value;
-      const deadline = document.getElementById('task-deadline').value;
-      if(!sub || !title || !deadline) return alert("全て入力してください");
-
-      const appData = getAppData();
-      appData.tasks.push({
-        id: generateId(),
-        subject: sub, title: title, deadline: deadline,
-        isCompleted: false, createdAt: Date.now()
-      });
-      saveAppData(appData);
-
-      document.getElementById('task-subject').value = ""; document.getElementById('task-title').value = "";
-      loadTasks();
-    };
-
-    window.loadTasks = function() {
-      const showCompleted = document.getElementById('show-completed-tasks').checked;
-      const appData = getAppData();
-      
-      // 期限が近い順に並び替え
-      appData.tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
-      
-      const listEl = document.getElementById('tasks-list');
-      listEl.innerHTML = "";
-      let total = appData.tasks.length;
-      let completedCount = 0;
-      const todayStr = new Date().toISOString().split('T')[0];
-
-      appData.tasks.forEach(t => {
-        if(t.isCompleted) completedCount++;
-        if(t.isCompleted && !showCompleted) return; // 完了済みを隠す設定ならスキップ
-        
-        const isExpired = (!t.isCompleted && t.deadline < todayStr);
-        const expiredClass = isExpired ? "expired" : "";
-        const warnIcon = isExpired ? `<i class="fas fa-exclamation-triangle" style="color:red;"></i>` : "";
-
-        listEl.innerHTML += `
-          <div class="list-item ${expiredClass}" style="opacity: ${t.isCompleted ? 0.5 : 1};">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <span class="badge" style="background: ${t.isCompleted ? '#999' : 'var(--dora-blue)'}">${t.subject}</span>
-                <span style="font-weight:bold; text-decoration: ${t.isCompleted ? 'line-through' : 'none'};">${t.title}</span>
-              </div>
-              <div style="font-size:12px; font-weight:bold; color:#666;">
-                ${warnIcon} 期限: ${t.deadline}
-              </div>
-            </div>
-            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:5px;">
-              ${!t.isCompleted ? `<button class="button_solid016 btn-success" style="width:auto; padding:4px 8px; font-size:11px;" onclick="toggleTask('${t.id}', true)">完了する</button>` 
-                               : `<button class="button_solid016" style="width:auto; padding:4px 8px; font-size:11px;" onclick="toggleTask('${t.id}', false)">未完了に戻す</button>`}
-              <button class="button_solid016 btn-danger" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteTask('${t.id}')">削除</button>
-            </div>
-          </div>
-        `;
-      });
-      
-      // 進捗バー更新
-      const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
-      document.getElementById('task-progress').style.width = percent + "%";
-      document.getElementById('task-progress-text').innerText = `${percent}% (${completedCount} / ${total} 完了)`;
-    };
-
-    window.toggleTask = function(id, status) {
-      const appData = getAppData();
-      const task = appData.tasks.find(t => t.id === id);
-      if(task) task.isCompleted = status;
-      saveAppData(appData);
-      loadTasks();
-    };
-
-    window.deleteTask = function(id) {
-      if(confirm("本当に削除しますか？")) {
-        const appData = getAppData();
-        appData.tasks = appData.tasks.filter(t => t.id !== id);
-        saveAppData(appData);
-        loadTasks();
-      }
-    };
-
-
-    // ===== 4. お金の管理 =====
-    function initMoney() {
-      const appData = getAppData();
-      const balances = appData.wallets.balances;
-      
-      const balEl = document.getElementById('wallet-balances');
-      balEl.innerHTML = "";
-      Object.keys(balances).forEach(w => {
-        balEl.innerHTML += `<div style="background:#fff; padding:10px; border:2px solid #333; border-radius:5px; text-align:center;">
-                              <div style="font-size:12px; color:#666;">${w}</div>
-                              <div style="color:var(--primary-color);">¥${balances[w].toLocaleString()}</div>
-                            </div>`;
-      });
-      
-      document.getElementById('money-details-container').innerHTML = "";
-      addMoneyDetailRow();
-      loadMoneyHistory();
-    }
-
-    window.addMoneyDetailRow = function() {
-      const container = document.getElementById('money-details-container');
-      const row = document.createElement('div');
-      row.className = "money-detail-row";
-      row.style.display = "flex"; row.style.gap = "5px"; row.style.marginBottom = "5px";
-      
-      let selectHtml = `<select class="input-control wallet-select" style="flex:1;">`;
-      DEFAULT_WALLETS.forEach(w => selectHtml += `<option value="${w}">${w}</option>`);
-      selectHtml += `</select>`;
-      
-      row.innerHTML = `
-        ${selectHtml}
-        <input type="number" class="input-control amount-input" placeholder="金額" style="flex:1;">
-        <button class="button_solid016 btn-danger" style="width:40px; padding:0;" onclick="this.parentElement.remove()">×</button>
-      `;
-      container.appendChild(row);
-    };
-
-    window.saveTransaction = function(type) { // 'expense' (支出) or 'income' (収入)
-      const title = document.getElementById('money-title').value;
-      if(!title) return alert("用途を入力してください");
-      
-      const rows = document.querySelectorAll('.money-detail-row');
-      let details = []; let totalAmt = 0;
-      rows.forEach(r => {
-        const wallet = r.querySelector('.wallet-select').value;
-        const amount = parseInt(r.querySelector('.amount-input').value) || 0;
-        if(amount > 0) {
-          details.push({ wallet: wallet, amount: amount });
-          totalAmt += amount;
-        }
-      });
-      if(details.length === 0) return alert("金額を入力してください");
-      
-      const appData = getAppData();
-      
-      // 履歴に追加
-      appData.transactions.unshift({ // 配列の先頭に追加
-        id: generateId(), title: title, type: type, totalAmount: totalAmt, details: details,
-        date: new Date().toISOString()
-      });
-      
-      // 残高を更新
-      details.forEach(d => {
-        if(type === 'expense') appData.wallets.balances[d.wallet] -= d.amount;
-        if(type === 'income') appData.wallets.balances[d.wallet] += d.amount;
-      });
-      
-      saveAppData(appData);
-      
-      document.getElementById('money-title').value = "";
-      initMoney(); // 再描画
-      alert(type === 'expense' ? "支出を記録しました" : "収入を記録しました");
-    };
-
-    window.loadMoneyHistory = function() {
-      const appData = getAppData();
-      const listEl = document.getElementById('money-history-list');
-      listEl.innerHTML = "";
-      
-      if(appData.transactions.length === 0) {
-        listEl.innerHTML = "<p style='font-size:12px; color:#999;'>まだ履歴がありません</p>";
-        return;
-      }
-
-      appData.transactions.forEach(d => {
-        const isExp = d.type === 'expense';
-        const color = isExp ? 'var(--dora-red)' : 'var(--dora-blue)';
-        const sign = isExp ? '-' : '+';
-        
-        let detailText = d.details.map(det => `${det.wallet}: ¥${det.amount.toLocaleString()}`).join(" / ");
-        const dObj = new Date(d.date);
-        const dateStr = `${dObj.getMonth()+1}/${dObj.getDate()} ${String(dObj.getHours()).padStart(2,'0')}:${String(dObj.getMinutes()).padStart(2,'0')}`;
-
-        listEl.innerHTML += `
-          <div class="list-item">
-            <div style="display:flex; justify-content:space-between; font-weight:bold;">
-              <span>${d.title}</span>
-              <span style="color:${color};">${sign}¥${d.totalAmount.toLocaleString()}</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:#666; margin-top:5px;">
-              <span>内訳: ${detailText}</span>
-              <span>${dateStr}</span>
-            </div>
-          </div>
-        `;
-      });
-    };
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
+
 </body>
 </html>
