@@ -1,0 +1,328 @@
+/* 共通設定 & 背景画像 */
+body {
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  
+  /* 背景画像の設定 */
+  background-image: url('background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+
+  /* 画面を左右に分割するための親コンテナ設定 */
+  min-height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 100px;
+  padding-bottom: 60px;
+}
+
+/* 白ベース＆黒枠立体の「はじめポータル」タイトル */
+.portal-title {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 8px 16px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  margin: 0;
+  box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
+}
+
+/* 左右のコンテンツを包むメインコンテナ */
+.flex-wrapper {
+  display: flex;
+  width: 100%;
+  margin-left: 3%;
+  gap: 15%;
+  align-items: flex-start;
+}
+
+/* 左側のコンテンツコンテナ（時計とボタン） */
+.left-container {
+  width: 100%;
+  max-width: 280px;            
+  flex-shrink: 0;              
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 右側のコンテナ（カレンダーと打刻ボタンを含む） */
+.right-container {
+  flex-grow: 1;                
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* ボタン群とカレンダーの間の隙間 */
+  margin-bottom: 40px;         
+}
+
+/* カレンダー自体の外枠デザイン */
+.calendar-box {
+  background: rgba(255, 255, 255, 0.9); 
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  box-shadow: 0 6px 0px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* iframe（カレンダー本体）の縦幅 */
+.calendar-responsive {
+  width: 100%;
+  height: 480px;
+}
+
+/* --- カレンダー上部のボタングループ（左右に配置） --- */
+.top-controls {
+  display: flex;
+  justify-content: space-between; /* 左側にログイン系、右側に打刻系 */
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* 左上のログイン・ログアウトコンテナ */
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* 右上の打刻ボタンコンテナ */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+/* --- アクションボタン（起床など - 黄色） --- */
+.action-btn {
+  background: #fde047;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px; 
+  color: #000000; 
+  transition: 0.3s ease-in-out;
+  font-weight: 600;
+  font-size: 14px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+.action-btn:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -2px; 
+  left: -2px;
+  z-index: -1;
+  border: 2px solid #000;
+  border-radius: 5px;
+  background: #fef9c3;
+  background-image:
+  linear-gradient(45deg, #fef08a 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #fef08a 0),
+  linear-gradient(45deg, #fef08a 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #fef08a 0);
+  background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
+  background-size: 30px 30px;
+}
+.action-btn:after {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 100%;
+  height: 100%;
+  content: '';
+  transition: all .3s;
+  transform: translate3d(0, 0.3rem, -1rem);
+  border: 2px solid #000;
+  border-radius: inherit;
+  background: #eab308;
+  box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%);
+  z-index: -2;
+}
+.action-btn:hover {
+  transform: translate3d(0, 0.15rem, -1rem);
+}
+.action-btn:hover:after {
+  transform: translate3d(0, 0.15rem, -1rem);
+  box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
+}
+
+/* --- 左側リンクボタンのスタイル --- */
+.button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+  row-gap: 25px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.button_solid016 {
+  width: 100%;
+}
+/* ログイン・ログアウトボタン用の横幅指定 */
+.auth-buttons .button_solid016 {
+  width: 134px; 
+}
+.button_solid016 a {
+  background: #6bb6ff;
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%; 
+  height: 42px;
+  padding: 0 8px;
+  color: #000000;
+  transition: 0.3s ease-in-out;
+  font-weight: 600;
+  font-size: 13px;
+  border: 2px solid #000;
+  z-index: 1;
+  border-radius: 5px;
+  text-decoration: none;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+.button_solid016 a:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  border: 2px solid #000;
+  border-radius: 5px;
+  background: #e1f3ff;
+  background-image:
+  linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #c8e4ff 0),
+  linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+  background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
+  background-size: 30px 30px;
+}
+.button_solid016 a:after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  transition: all .3s;
+  transform: translate3d(0,0.35rem,-1rem);
+  border: 2px solid #000;
+  border-radius: inherit;
+  background: #2b7fde;
+  box-shadow: 0 0.35rem 0 0 rgb(0 0 0 / 20%);
+  z-index: -2;
+}
+.button_solid016 a i {
+  position: absolute;
+  right: 5px;
+  font-size: 11px;
+}
+.button_solid016 a:hover {
+  transform: translate3d(0,0.15rem,-1rem);
+}
+.button_solid016 a:hover:after {
+  transform: translate3d(0,0.15rem,-1rem);
+  box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
+}
+
+/* 緑のボタン（ログイン） */
+.button_solid016.btn-green a { background: #86efac; }
+.button_solid016.btn-green a:before {
+  background: #dcfce7;
+  background-image:
+  linear-gradient(45deg, #bbf7d0 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #bbf7d0 0),
+  linear-gradient(45deg, #bbf7d0 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #bbf7d0 0);
+}
+.button_solid016.btn-green a:after { background: #22c55e; }
+
+/* 赤のボタン（ログアウト） */
+.button_solid016.btn-red a { background: #fca5a5; }
+.button_solid016.btn-red a:before {
+  background: #fee2e2;
+  background-image:
+  linear-gradient(45deg, #fecaca 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #fecaca 0),
+  linear-gradient(45deg, #fecaca 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #fecaca 0);
+}
+.button_solid016.btn-red a:after { background: #ef4444; }
+
+/* --- 時計のスタイル --- */
+.clock-container {
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: baseline;
+  gap: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.date-time {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+}
+.seconds {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+/* スマホ・タブレット表示用の微調整 */
+@media (max-width: 1024px) {
+  body {
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 90px;
+  }
+  .flex-wrapper {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    gap: 40px;
+  }
+  .left-container {
+    max-width: 280px;
+  }
+  .right-container {
+    width: 100%;
+  }
+  .top-controls {
+    justify-content: center;
+  }
+}
