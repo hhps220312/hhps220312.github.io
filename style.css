@@ -66,6 +66,16 @@ body {
   margin-bottom: 40px;         
 }
 
+/* カレンダー右上の管理ページボタンコンテナ */
+.admin-button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+.admin-btn {
+  width: 180px; /* 文字数に合わせて幅を調整 */
+}
+
 /* カレンダー自体の外枠デザイン */
 .calendar-box {
   background: rgba(255, 255, 255, 0.9); 
@@ -275,6 +285,19 @@ body {
   linear-gradient(45deg, transparent 75%, #fecaca 0);
 }
 .button_solid016.btn-red a:after { background: #ef4444; }
+
+/* 紫のボタン（管理ページ） */
+.button_solid016.btn-purple a { background: #d8b4fe; }
+.button_solid016.btn-purple a:before {
+  background: #f3e8ff;
+  background-image:
+  linear-gradient(45deg, #e9d5ff 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #e9d5ff 0),
+  linear-gradient(45deg, #e9d5ff 25%, transparent 0),
+  linear-gradient(45deg, transparent 75%, #e9d5ff 0);
+}
+.button_solid016.btn-purple a:after { background: #a855f7; }
+
 
 /* --- 時計のスタイル --- */
 .clock-container {
