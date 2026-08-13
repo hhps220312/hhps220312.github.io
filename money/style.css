@@ -1,0 +1,139 @@
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.summary-box, .form-box, .history-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.total-amount {
+  font-size: 2em;
+  font-weight: bold;
+  color: #e74c3c;
+  margin: 0;
+}
+
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.service-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  flex: 1 1 calc(50% - 10px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.service-card h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+}
+
+.service-card .details {
+  font-size: 0.85em;
+  color: #666;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  font-size: 0.9em;
+}
+
+/* ＝＝＝ 以下、教えてくれたボタンのデザインそのまま ＝＝＝ */
+/* solid016 */
+.button_solid016 a {
+    background: #6bb6ff;
+    border-radius: 3px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 240px;
+    padding: 10px 25px;
+    color: #003067;
+    transition: 0.3s ease-in-out;
+    font-weight: 600;
+    border: 2px solid #000;
+    z-index: 1;
+    border-radius: 5px;
+    text-decoration: none; /* 下線消しを追加 */
+}
+.button_solid016 a:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    border: 2px solid #000;
+    border-radius: 5px;
+    background: #e1f3ff;
+    background-image:
+    linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+    linear-gradient(45deg, transparent 75%, #c8e4ff 0),
+    linear-gradient(45deg, #c8e4ff 25%, transparent 0),
+    linear-gradient(45deg, transparent 75%, #c8e4ff 0);
+    background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
+    background-size: 30px 30px;
+}
+.button_solid016 a:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    -webkit-transform: translate3d(0,0.40rem,-1rem);
+    transform: translate3d(0,0.40rem,-1rem);
+    border: 2px solid #000;
+    border-radius: inherit;
+    background: #2b7fde;
+    -webkit-box-shadow: 0 0.6rem 0 0 rgb(0 0 0 / 20%);
+    box-shadow: 0 0.4rem 0 0 rgb(0 0 0 / 20%);
+    z-index: -2;
+}
+.button_solid016 a i {
+    position: absolute;
+    right: 9px;
+}
+.button_solid016 a:hover {
+    transform: translate3d(0,0.2rem,-1rem);
+}
+.button_solid016 a:hover:after {
+    transform: translate3d(0,0.2rem,-1rem);
+    box-shadow: 0 0.2rem 0 0 rgb(0 0 0 / 20%);
+}
