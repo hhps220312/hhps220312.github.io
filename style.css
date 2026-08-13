@@ -69,11 +69,21 @@ body {
 /* カレンダー右上の管理ページボタンコンテナ */
 .admin-button-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* ここで右寄せ */
   width: 100%;
 }
 .admin-btn {
-  width: 180px; /* 文字数に合わせて幅を調整 */
+  width: auto; /* 固定幅をやめて文字数に合わせる */
+}
+.admin-btn a {
+  width: auto; /* aタグも文字数に合わせる */
+  padding: 0 24px; /* ボタン内の左右の余白を少し広めにとる */
+}
+.admin-btn a i {
+  /* アイコンの位置を微調整 */
+  position: relative;
+  right: -5px;
+  margin-left: 5px;
 }
 
 /* カレンダー自体の外枠デザイン */
