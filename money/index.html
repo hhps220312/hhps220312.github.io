@@ -1,60 +1,267 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Secret Wallet</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- ボタンのアイコン用にFontAwesomeを読み込み -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三井はじ友銀行 - マイ・プライベート・バンク</title>
+    <style>
+        :root {
+            --primary-color: #006633; /* 三井住友銀行風のグリーン */
+            --secondary-color: #f7f7f7;
+            --text-color: #333;
+            --secret-color: #ccffcc; /* 隠し要素用 */
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+            background-color: var(--secondary-color);
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        /* ヘッダー */
+        header {
+            background-color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo::before {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #a3d555; /* ロゴのブロック色 */
+            margin-right: 10px;
+            transform: skewX(-20deg);
+        }
+
+        header .secret-mode {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* メイン */
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        /* 残高表示 */
+        .balance-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .balance-container h2 {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+        }
+
+        .balance {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .secret-label {
+            font-size: 12px;
+            color: #888;
+            background-color: var(--secret-color);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        /* 取引履歴 */
+        .history-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .history-container h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .date {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .memo {
+            font-weight: bold;
+        }
+
+        .amount {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .amount.deposit {
+            color: #008800; /* 入金 */
+        }
+
+        .amount.withdrawal {
+            color: #cc0000; /* 出金 */
+        }
+
+        /* 入力フォーム */
+        .input-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .input-container h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.8;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🤫 My Secret Wallet</h1>
-    
-    <div class="summary-box">
-      <h2>総資産額（切り捨て）</h2>
-      <p id="total-yen" class="total-amount">0円</p>
+
+<header>
+    <div class="logo">三井はじ友銀行</div>
+    <div class="secret-mode">監視モード：解除中</div>
+</header>
+
+<main>
+    <h1>秘密の高校生ダッシュボード<br>「マイ・プライベート・バンク」</h1>
+
+    <div class="balance-container">
+        <h2>現在の隠し残高</h2>
+        <div class="balance">¥45,300</div>
+        <span class="secret-label">（お母さんには内緒です）</span>
     </div>
 
-    <!-- 各サービスの詳細一覧 -->
-    <div id="service-list" class="service-list">
-      <!-- ここにJSで各サービスの金額が追加されます -->
+    <div class="history-container">
+        <h3>最近の秘密の取引</h3>
+        <ul class="transaction-list">
+            <li class="transaction-item">
+                <span class="date">10/26</span>
+                <span class="memo">TikTok Lite ポイント交換</span>
+                <span class="amount deposit">+¥1,200</span>
+            </li>
+            <li class="transaction-item">
+                <span class="date">10/25</span>
+                <span class="memo">おじいちゃん現金（PayPayチャージ）</span>
+                <span class="amount deposit">+¥10,000</span>
+            </li>
+            <li class="transaction-item">
+                <span class="date">10/24</span>
+                <span class="memo">親に内緒の買い物</span>
+                <span class="amount withdrawal">-¥1,850</span>
+            </li>
+        </ul>
     </div>
 
-    <!-- 登録フォーム -->
-    <div class="form-box">
-      <h2>取引を記録する</h2>
-      <select id="service-select">
-        <option value="現金">現金</option>
-        <option value="PayPay">PayPay</option>
-        <option value="楽天PAY">楽天PAY</option>
-        <option value="TikTok-Lite">TikTok-Lite</option>
-        <option value="ポイム">ポイム</option>
-        <option value="トリマ">トリマ</option>
-        <option value="マクロミル">マクロミル</option>
-        <option value="レシチャレ">レシチャレ</option>
-        <option value="Uvoice">Uvoice</option>
-      </select>
-      
-      <input type="number" id="point-input" placeholder="ポイント数 (マイナスも可)">
-      <input type="text" id="memo-input" placeholder="メモ (例: TikTokからPayPayへ交換)">
-      
-      <!-- 教えてもらった最高なデザインのボタン -->
-      <div class="button_solid016" style="margin-top: 20px;">
-        <a href="#" onclick="addTransaction(); return false;">
-          登録する<i class="fas fa-angle-right fa-position-right"></i>
-        </a>
-      </div>
+    <div class="input-container">
+        <h3>新しい秘密の取引を入力</h3>
+        <form>
+            <div class="form-group">
+                <label>日付</label>
+                <input type="date" value="2023-10-26">
+            </div>
+            <div class="form-group">
+                <label>種類</label>
+                <select>
+                    <option value="deposit">入金</option>
+                    <option value="withdrawal">出金</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>金額</label>
+                <input type="number" placeholder="金額を入力">
+            </div>
+            <div class="form-group">
+                <label>メモ (例: TikTokLite)</label>
+                <input type="text" placeholder="親バレ防止用メモ">
+            </div>
+            <button type="submit" class="submit-btn">秘密の取引を記録</button>
+        </form>
     </div>
-    
-    <!-- 履歴一覧 -->
-    <div class="history-box">
-      <h2>取引履歴</h2>
-      <ul id="history-list"></ul>
-    </div>
-  </div>
 
-  <script src="script.js"></script>
+</main>
+
 </body>
 </html>
