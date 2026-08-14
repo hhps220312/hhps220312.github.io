@@ -3,265 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三井はじ友銀行 - マイ・プライベート・バンク</title>
-    <style>
-        :root {
-            --primary-color: #006633; /* 三井住友銀行風のグリーン */
-            --secondary-color: #f7f7f7;
-            --text-color: #333;
-            --secret-color: #ccffcc; /* 隠し要素用 */
-        }
-
-        body {
-            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-            background-color: var(--secondary-color);
-            margin: 0;
-            color: var(--text-color);
-        }
-
-        /* ヘッダー */
-        header {
-            background-color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        header .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-        }
-
-        header .logo::before {
-            content: "";
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: #a3d555; /* ロゴのブロック色 */
-            margin-right: 10px;
-            transform: skewX(-20deg);
-        }
-
-        header .secret-mode {
-            font-size: 12px;
-            color: #888;
-        }
-
-        /* メイン */
-        main {
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            font-size: 20px;
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 30px;
-        }
-
-        /* 残高表示 */
-        .balance-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .balance-container h2 {
-            font-size: 16px;
-            margin: 0 0 10px 0;
-            color: var(--primary-color);
-        }
-
-        .balance {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .secret-label {
-            font-size: 12px;
-            color: #888;
-            background-color: var(--secret-color);
-            padding: 2px 5px;
-            border-radius: 4px;
-        }
-
-        /* 取引履歴 */
-        .history-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .history-container h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .transaction-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding: 10px 0;
-        }
-
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-
-        .date {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .memo {
-            font-weight: bold;
-        }
-
-        .amount {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .amount.deposit {
-            color: #008800; /* 入金 */
-        }
-
-        .amount.withdrawal {
-            color: #cc0000; /* 出金 */
-        }
-
-        /* 入力フォーム */
-        .input-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .input-container h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input, .form-group select {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            width: 100%;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .submit-btn:hover {
-            opacity: 0.8;
-        }
-
-    </style>
+    <title>三井はじ友銀行</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-    <div class="logo">三井はじ友銀行</div>
-    <div class="secret-mode">監視モード：解除中</div>
-</header>
+    <!-- ヘッダー -->
+    <header>
+        <div class="logo">三井はじ友銀行</div>
+        <!-- 別窓で開いている前提なので window.close() を実行 -->
+        <a href="#" class="close-btn" onclick="window.close(); return false;">トップページに戻る</a>
+    </header>
 
-<main>
-    <h1>秘密の高校生ダッシュボード<br>「マイ・プライベート・バンク」</h1>
+    <main>
+        <!-- 口座残高エリア -->
+        <section class="total-balance-section">
+            <h2>口座残高： <span id="total-balance-amount">0</span> 円</h2>
+            <div class="account-grid" id="account-grid">
+                <!-- JavaScriptで口座一覧を出力します -->
+            </div>
+        </section>
 
-    <div class="balance-container">
-        <h2>現在の隠し残高</h2>
-        <div class="balance">¥45,300</div>
-        <span class="secret-label">（お母さんには内緒です）</span>
+        <!-- メインコンテンツ（左：履歴、右：入力） -->
+        <div class="content-wrapper">
+            <!-- 左側：取引履歴 -->
+            <section class="history-section">
+                <div class="history-header">
+                    <h2>取引履歴</h2>
+                    <select id="history-month-select"></select>
+                </div>
+                <div class="history-card">
+                    <h3 id="history-current-month-display">2026年8月</h3>
+                    <div class="history-list-container">
+                        <table class="history-table" id="history-table">
+                            <!-- JavaScriptで履歴を出力します -->
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右側：取引登録 -->
+            <section class="form-section">
+                <div class="toggle-buttons">
+                    <button type="button" id="btn-deposit" class="type-btn active">お預入れ</button>
+                    <button type="button" id="btn-withdraw" class="type-btn">お引出し</button>
+                </div>
+                <div class="form-card">
+                    <form id="transaction-form">
+                        <div class="form-group">
+                            <label>お日にち</label>
+                            <div class="date-selects">
+                                <select id="input-year"></select> 年
+                                <select id="input-month"></select> 月
+                                <select id="input-day"></select> 日
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>口座</label>
+                            <select id="input-account"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>金額</label>
+                            <div class="amount-input-wrapper">
+                                <input type="number" id="input-amount" required>
+                                <span id="unit-label">円</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>内容</label>
+                            <textarea id="input-memo" rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">登録する</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- モーダル（詳細表示用） -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <h3 id="modal-title">口座名</h3>
+            <div class="modal-body">
+                <p>現在のポイント数: <strong id="modal-pts">0 Pt</strong></p>
+                <p>正確な円換算: <strong id="modal-yen">0.000 円</strong></p>
+            </div>
+            <p class="modal-hint">※枠外をタップして閉じる</p>
+        </div>
     </div>
 
-    <div class="history-container">
-        <h3>最近の秘密の取引</h3>
-        <ul class="transaction-list">
-            <li class="transaction-item">
-                <span class="date">10/26</span>
-                <span class="memo">TikTok Lite ポイント交換</span>
-                <span class="amount deposit">+¥1,200</span>
-            </li>
-            <li class="transaction-item">
-                <span class="date">10/25</span>
-                <span class="memo">おじいちゃん現金（PayPayチャージ）</span>
-                <span class="amount deposit">+¥10,000</span>
-            </li>
-            <li class="transaction-item">
-                <span class="date">10/24</span>
-                <span class="memo">親に内緒の買い物</span>
-                <span class="amount withdrawal">-¥1,850</span>
-            </li>
-        </ul>
-    </div>
-
-    <div class="input-container">
-        <h3>新しい秘密の取引を入力</h3>
-        <form>
-            <div class="form-group">
-                <label>日付</label>
-                <input type="date" value="2023-10-26">
-            </div>
-            <div class="form-group">
-                <label>種類</label>
-                <select>
-                    <option value="deposit">入金</option>
-                    <option value="withdrawal">出金</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>金額</label>
-                <input type="number" placeholder="金額を入力">
-            </div>
-            <div class="form-group">
-                <label>メモ (例: TikTokLite)</label>
-                <input type="text" placeholder="親バレ防止用メモ">
-            </div>
-            <button type="submit" class="submit-btn">秘密の取引を記録</button>
-        </form>
-    </div>
-
-</main>
-
+    <script src="script.js"></script>
 </body>
 </html>
