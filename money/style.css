@@ -1,139 +1,322 @@
+/* ベース設定 */
+:root {
+    --primary-green: #005638; /* 三井住友風の濃い緑 */
+    --light-green: #d1e7dd; /* アクティブボタン用 */
+    --bg-color: #f5f7f5;
+    --border-color: #005638;
+}
+
 body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f4f7f6;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: #333;
 }
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
+/* ヘッダー */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #fff;
+    border-bottom: 3px solid var(--primary-green);
 }
 
-.summary-box, .form-box, .history-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-green);
+    display: flex;
+    align-items: center;
 }
 
-.total-amount {
-  font-size: 2em;
-  font-weight: bold;
-  color: #e74c3c;
-  margin: 0;
+.logo::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #8cc63f;
+    margin-right: 10px;
+    transform: skewX(-20deg);
 }
 
-.service-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+.close-btn {
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+}
+.close-btn:hover {
+    text-decoration: underline;
 }
 
-.service-card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  flex: 1 1 calc(50% - 10px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* メインコンテンツ枠 */
+main {
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.service-card h3 {
-  margin: 0 0 5px 0;
-  font-size: 1.1em;
+/* 口座残高エリア */
+.total-balance-section h2 {
+    color: var(--primary-green);
+    margin-bottom: 15px;
+    font-size: 22px;
 }
 
-.service-card .details {
-  font-size: 0.85em;
-  color: #666;
+.account-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+.account-card {
+    background: #fff;
+    border: 2px solid var(--primary-green);
+    border-radius: 8px;
+    width: 110px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.1s;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.account-card:hover {
+    transform: translateY(-2px);
 }
 
-li {
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
-  font-size: 0.9em;
+.account-name {
+    background-color: var(--primary-green);
+    color: #fff;
+    font-size: 12px;
+    padding: 5px 0;
+    font-weight: bold;
 }
 
-/* ＝＝＝ 以下、教えてくれたボタンのデザインそのまま ＝＝＝ */
-/* solid016 */
-.button_solid016 a {
-    background: #6bb6ff;
-    border-radius: 3px;
-    position: relative;
+.account-amount {
+    padding: 10px 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 2カラムレイアウト */
+.content-wrapper {
+    display: flex;
+    gap: 30px;
+}
+
+.history-section {
+    flex: 2;
+}
+
+.form-section {
+    flex: 1;
+}
+
+/* 取引履歴エリア */
+.history-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.history-header h2 {
+    color: var(--primary-green);
+    font-size: 20px;
+}
+
+.history-header select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.history-card {
+    background: #fff;
+    border: 2px solid var(--primary-green);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.history-card h3 {
+    background-color: var(--primary-green);
+    color: #fff;
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.history-list-container {
+    padding: 10px 15px;
+    min-height: 300px;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table td {
+    padding: 10px 5px;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    width: 60px;
+}
+.badge-deposit { background-color: var(--primary-green); }
+.badge-withdraw { background-color: var(--primary-green); } /* デザイン上同じ色 */
+
+/* 取引登録エリア */
+.toggle-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid var(--primary-green);
+    transition: all 0.2s;
+}
+
+/* 押されている状態（影なし・薄い色） */
+.type-btn.active {
+    background-color: var(--light-green);
+    color: #000;
+    box-shadow: none;
+}
+
+/* 押されていない状態（影あり・濃い色） */
+.type-btn:not(.active) {
+    background-color: var(--primary-green);
+    color: #fff;
+    box-shadow: 0 4px 0 #003322; /* 下部の影 */
+}
+.type-btn:not(.active):active {
+    box-shadow: 0 0 0 #003322;
+    transform: translateY(4px);
+}
+
+.form-card {
+    background: #fff;
+    border: 2px solid var(--primary-green);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--primary-green);
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.date-selects select,
+.form-group select,
+.form-group input,
+.form-group textarea {
+    padding: 8px;
+    border: 1px solid var(--primary-green);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group select { width: 100%; }
+.form-group textarea { width: 95%; resize: vertical; }
+
+.date-selects select {
+    width: auto;
+}
+
+.amount-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.amount-input-wrapper input {
+    flex: 1;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-green);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* モーダル */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
-    max-width: 240px;
-    padding: 10px 25px;
-    color: #003067;
-    transition: 0.3s ease-in-out;
-    font-weight: 600;
-    border: 2px solid #000;
-    z-index: 1;
-    border-radius: 5px;
-    text-decoration: none; /* 下線消しを追加 */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
 }
-.button_solid016 a:before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: -1;
-    border: 2px solid #000;
-    border-radius: 5px;
-    background: #e1f3ff;
-    background-image:
-    linear-gradient(45deg, #c8e4ff 25%, transparent 0),
-    linear-gradient(45deg, transparent 75%, #c8e4ff 0),
-    linear-gradient(45deg, #c8e4ff 25%, transparent 0),
-    linear-gradient(45deg, transparent 75%, #c8e4ff 0);
-    background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
-    background-size: 30px 30px;
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
 }
-.button_solid016 a:after {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    content: '';
-    -webkit-transition: all .3s;
-    transition: all .3s;
-    -webkit-transform: translate3d(0,0.40rem,-1rem);
-    transform: translate3d(0,0.40rem,-1rem);
-    border: 2px solid #000;
-    border-radius: inherit;
-    background: #2b7fde;
-    -webkit-box-shadow: 0 0.6rem 0 0 rgb(0 0 0 / 20%);
-    box-shadow: 0 0.4rem 0 0 rgb(0 0 0 / 20%);
-    z-index: -2;
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-.button_solid016 a i {
-    position: absolute;
-    right: 9px;
+
+.modal-content h3 {
+    color: var(--primary-green);
+    margin-top: 0;
+    border-bottom: 2px solid var(--light-green);
+    padding-bottom: 10px;
 }
-.button_solid016 a:hover {
-    transform: translate3d(0,0.2rem,-1rem);
+
+.modal-body {
+    font-size: 18px;
+    margin: 20px 0;
 }
-.button_solid016 a:hover:after {
-    transform: translate3d(0,0.2rem,-1rem);
-    box-shadow: 0 0.2rem 0 0 rgb(0 0 0 / 20%);
+
+.modal-hint {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 0;
 }
