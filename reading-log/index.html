@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Reading Log</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>My Reading Log</h1>
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="著者名やタイトルで検索...">
+        <button id="search-btn">検索</button>
+      </div>
+    </div>
+  </header>
 
+  <main>
+    <!-- タブ切り替え -->
+    <div class="tabs">
+      <button class="tab-btn active" data-target="book-list-section">本棚</button>
+      <button class="tab-btn" data-target="add-book-section">＋ 新しく登録</button>
+    </div>
+
+    <!-- 本棚（一覧表示）セクション -->
+    <section id="book-list-section" class="tab-content active">
+      <div class="filter-group">
+        <label><input type="radio" name="status-filter" value="all" checked> すべて</label>
+        <label><input type="radio" name="status-filter" value="read"> 読んだ/読書中</label>
+        <label><input type="radio" name="status-filter" value="wish"> 欲しい本</label>
+      </div>
+      <div id="books-container" class="book-grid">
+        <!-- ここにJavaScriptで本が追加されます -->
+      </div>
+    </section>
+
+    <!-- 登録フォームセクション -->
+    <section id="add-book-section" class="tab-content">
+      <form id="add-book-form">
+        <h2>本の情報を登録</h2>
+        
+        <div class="form-group">
+          <label>ステータス</label>
+          <div class="radio-group">
+            <label><input type="radio" name="book-status" value="read" checked> 読んだ/読書中</label>
+            <label><input type="radio" name="book-status" value="wish"> 欲しい本</label>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="half">
+            <label for="title">タイトル *</label>
+            <input type="text" id="title" required>
+          </div>
+          <div class="half">
+            <label for="cover-url">表紙画像のURL</label>
+            <input type="url" id="cover-url" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>関係者 (著者・絵・訳など) *</label>
+          <div id="contributors-container">
+            <div class="contributor-row">
+              <input type="text" class="contributor-role" value="著者" readonly>
+              <input type="text" class="contributor-name" placeholder="名前" required>
+            </div>
+          </div>
+          <button type="button" id="add-contributor-btn" class="secondary-btn">＋ 関係者を追加</button>
+        </div>
+
+        <div class="form-group">
+          <label for="summary">あらすじ</label>
+          <textarea id="summary" rows="3"></textarea>
+        </div>
+
+        <fieldset>
+          <legend>入手の記録</legend>
+          <div class="form-group row">
+            <div class="third">
+              <label for="acq-type">入手方法</label>
+              <select id="acq-type">
+                <option value="買った">買った</option>
+                <option value="借りた">借りた</option>
+                <option value="もらった">もらった</option>
+                <option value="未入手">まだ入手していない</option>
+              </select>
+            </div>
+            <div class="third">
+              <label for="acq-place">場所 (店名や借りた場所)</label>
+              <input type="text" id="acq-place">
+            </div>
+            <div class="third">
+              <label for="acq-date">入手した日</label>
+              <input type="date" id="acq-date">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="reading-record-fieldset">
+          <legend>読書の記録</legend>
+          <div class="form-group row">
+            <div class="half">
+              <label for="start-date">読み始めた日</label>
+              <input type="date" id="start-date">
+            </div>
+            <div class="half">
+              <label for="end-date">読み終わった日</label>
+              <input type="date" id="end-date">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>途中の記録・感想</label>
+            <div id="progress-container"></div>
+            <button type="button" id="add-progress-btn" class="secondary-btn">＋ 途中の記録を追加</button>
+          </div>
+
+          <div class="form-group">
+            <label for="final-review">最終的な感想</label>
+            <textarea id="final-review" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>評価</label>
+            <div class="star-rating">
+              <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+              <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+              <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+              <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+              <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+          </div>
+        </fieldset>
+
+        <button type="submit" id="submit-btn" class="primary-btn">登録する</button>
+      </form>
+    </section>
+
+    <!-- カレンダーモーダル -->
+    <div id="calendar-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>読書カレンダー・詳細</h2>
+        <div id="modal-book-details"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
