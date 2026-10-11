@@ -1,361 +1,382 @@
-/* 共通設定 & 背景画像 */
-body {
-  margin: 0;
-  padding: 20px;
+:root {
+  --bg-color: #f4f5f7;
+  --panel-bg: #ffffff;
+  --text-main: #2d3748;
+  --text-sub: #718096;
+  --accent-color: #4299e1;
+  --accent-hover: #3182ce;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  --radius: 20px;
+}
+
+* {
   box-sizing: border-box;
-  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-  
-  /* 背景画像の設定 */
-  background-image: url('background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-
-  /* 画面を左右に分割するための親コンテナ設定 */
-  min-height: 100vh;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding-top: 100px;
-  padding-bottom: 60px;
-}
-
-/* 白ベース＆黒枠立体の「はじめポータル」タイトル */
-.portal-title {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #000000;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 8px 16px;
-  border: 2px solid #000;
-  border-radius: 5px;
   margin: 0;
-  box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
+  padding: 0;
 }
 
-/* 左右のコンテンツを包むメインコンテナ */
-.flex-wrapper {
-  display: flex;
-  width: 100%;
-  margin-left: 3%;
-  gap: 15%;
-  align-items: flex-start;
+body {
+  font-family: 'Noto Sans JP', 'Outfit', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.6;
+  padding: 20px;
 }
 
-/* 左側のコンテンツコンテナ（時計とボタン） */
-.left-container {
-  width: 100%;
-  max-width: 280px;            
-  flex-shrink: 0;              
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  padding: 0 10px;
+}
+
+.title-area h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 2.5rem;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #2b6cb0, #4299e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-auth {
+  padding: 6px 16px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.login {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.logout {
+  background-color: #fed7d7;
+  color: #c53030;
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+}
+
+.clock-area {
+  text-align: right;
+}
+
+.time {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.seconds {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  color: var(--text-sub);
+  font-weight: 600;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(180px, auto);
   gap: 20px;
 }
 
-/* 右側のコンテナ（カレンダーと打刻ボタンを含む） */
-.right-container {
-  flex-grow: 1;                
-  max-width: 680px;
+.panel {
+  background: var(--panel-bg);
+  border-radius: var(--radius);
+  padding: 25px;
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 15px; /* ボタン群とカレンダーの間の隙間 */
-  margin-bottom: 40px;         
 }
 
-/* カレンダー右上の管理ページボタンコンテナ */
-.admin-button-container {
-  display: flex;
-  justify-content: flex-end; /* ここで右寄せ */
-  width: 100%;
+.panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: var(--text-sub);
+  border-bottom: 2px solid #edf2f7;
+  padding-bottom: 10px;
 }
-.admin-btn {
-  width: auto; /* 固定幅をやめて文字数に合わせる */
+
+.timecard-panel {
+  grid-column: span 4;
 }
-.admin-btn a {
-  width: auto; /* aタグも文字数に合わせる */
-  padding: 0 24px; /* ボタン内の左右の余白を少し広めにとる */
+
+.transit-panel {
+  grid-column: span 4;
 }
-.admin-btn a i {
-  /* アイコンの位置を微調整 */
+
+.photo-panel {
+  grid-column: span 4;
+  grid-row: span 2;
+  padding: 0;
+  overflow: hidden;
   position: relative;
-  right: -5px;
-  margin-left: 5px;
 }
 
-/* カレンダー自体の外枠デザイン */
-.calendar-box {
-  background: rgba(255, 255, 255, 0.9); 
-  padding: 10px;
-  border: 2px solid #000;
-  border-radius: 8px;
-  box-shadow: 0 6px 0px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+.todo-panel {
+  grid-column: span 8;
+  grid-row: span 2;
+}
+
+.calendar-panel {
+  grid-column: span 4;
+  grid-row: span 2;
+  padding: 15px;
+}
+
+.links-panel {
+  grid-column: span 12;
+}
+
+.timecard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  height: 100%;
+}
+
+.card-btn {
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.2s;
+  color: white;
+}
+
+.card-btn:active {
+  transform: scale(0.95);
+}
+
+.wake { background: linear-gradient(135deg, #f6d365, #fda085); }
+.sleep { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+.go-school { background: linear-gradient(135deg, #84fab0, #8fd3f4); }
+.leave-school { background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #333;}
+
+.slider-container {
   width: 100%;
-}
-
-/* iframe（カレンダー本体）の縦幅 */
-.calendar-responsive {
-  width: 100%;
-  height: 480px;
-}
-
-/* --- カレンダー上部のボタングループ（左右に配置） --- */
-.top-controls {
+  height: 100%;
+  position: relative;
+  background-color: #1a202c;
   display: flex;
-  justify-content: space-between; /* 左側にログイン系、右側に打刻系 */
   align-items: center;
+  justify-content: center;
+}
+
+#slide-img {
   width: 100%;
-  padding: 10px 0;
-  flex-wrap: wrap;
+  height: 100%;
+  object-fit: contain;
+  aspect-ratio: 3/2;
+}
+
+.slide-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slide-nav:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.prev { left: 15px; }
+.next { right: 15px; }
+
+.transit-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.transit-controls select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-family: inherit;
+}
+
+.transit-btn {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.transit-result {
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.route-badge {
+  display: inline-block;
+  background: #48bb78;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.todo-input-area {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.todo-input-area input, .todo-input-area select {
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+#todo-task { flex: 2; }
+#todo-date { flex: 1; }
+#todo-subject { flex: 1; }
+
+.add-btn {
+  padding: 10px 20px;
+  background: var(--text-main);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.todo-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.todo-date-group {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.date-header {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #2b6cb0;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 5px;
+}
+
+.todo-item {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-left: 4px solid var(--accent-color);
+}
+
+.todo-subject-tag {
+  font-size: 0.75rem;
+  background: #edf2f7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  align-self: flex-start;
+  color: #4a5568;
+}
+
+.todo-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.todo-delete {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: #e53e3e;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 15px;
 }
 
-/* 左上のログイン・ログアウトコンテナ */
-.auth-buttons {
+.link-item {
   display: flex;
-  gap: 12px;
-}
-
-/* 右上の打刻ボタンコンテナ */
-.action-buttons {
-  display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 12px;
-}
-
-/* --- アクションボタン（起床など - 黄色） --- */
-.action-btn {
-  background: #fde047;
-  position: relative;
-  display: inline-flex;
   justify-content: center;
-  align-items: center;
-  padding: 8px 16px; 
-  color: #000000; 
-  transition: 0.3s ease-in-out;
-  font-weight: 600;
-  font-size: 14px;
-  border: 2px solid #000;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 1;
-  box-sizing: border-box;
-  white-space: nowrap;
-}
-.action-btn:before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: -2px; 
-  left: -2px;
-  z-index: -1;
-  border: 2px solid #000;
-  border-radius: 5px;
-  background: #fef9c3;
-  background-image:
-  linear-gradient(45deg, #fef08a 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #fef08a 0),
-  linear-gradient(45deg, #fef08a 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #fef08a 0);
-  background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
-  background-size: 30px 30px;
-}
-.action-btn:after {
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  width: 100%;
-  height: 100%;
-  content: '';
-  transition: all .3s;
-  transform: translate3d(0, 0.3rem, -1rem);
-  border: 2px solid #000;
-  border-radius: inherit;
-  background: #eab308;
-  box-shadow: 0 0.3rem 0 0 rgb(0 0 0 / 20%);
-  z-index: -2;
-}
-.action-btn:hover {
-  transform: translate3d(0, 0.15rem, -1rem);
-}
-.action-btn:hover:after {
-  transform: translate3d(0, 0.15rem, -1rem);
-  box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
-}
-
-/* --- 左側リンクボタンのスタイル --- */
-.button-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 12px;
-  row-gap: 25px;
-  width: 100%;
-  box-sizing: border-box;
-}
-.button_solid016 {
-  width: 100%;
-}
-/* ログイン・ログアウトボタン用の横幅指定 */
-.auth-buttons .button_solid016 {
-  width: 134px; 
-}
-.button_solid016 a {
-  background: #6bb6ff;
-  border-radius: 3px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  width: 100%; 
-  height: 42px;
-  padding: 0 8px;
-  color: #000000;
-  transition: 0.3s ease-in-out;
-  font-weight: 600;
-  font-size: 13px;
-  border: 2px solid #000;
-  z-index: 1;
-  border-radius: 5px;
+  text-align: center;
   text-decoration: none;
-  box-sizing: border-box;
-  white-space: nowrap;
-}
-.button_solid016 a:before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -1;
-  border: 2px solid #000;
-  border-radius: 5px;
-  background: #e1f3ff;
-  background-image:
-  linear-gradient(45deg, #c8e4ff 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #c8e4ff 0),
-  linear-gradient(45deg, #c8e4ff 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #c8e4ff 0);
-  background-position: 0 0, 15px 15px, 15px 15px, 30px 30px;
-  background-size: 30px 30px;
-}
-.button_solid016 a:after {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  content: '';
-  transition: all .3s;
-  transform: translate3d(0,0.35rem,-1rem);
-  border: 2px solid #000;
-  border-radius: inherit;
-  background: #2b7fde;
-  box-shadow: 0 0.35rem 0 0 rgb(0 0 0 / 20%);
-  z-index: -2;
-}
-.button_solid016 a i {
-  position: absolute;
-  right: 5px;
-  font-size: 11px;
-}
-.button_solid016 a:hover {
-  transform: translate3d(0,0.15rem,-1rem);
-}
-.button_solid016 a:hover:after {
-  transform: translate3d(0,0.15rem,-1rem);
-  box-shadow: 0 0.15rem 0 0 rgb(0 0 0 / 20%);
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  background: #f7fafc;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
-/* 緑のボタン（ログイン） */
-.button_solid016.btn-green a { background: #86efac; }
-.button_solid016.btn-green a:before {
-  background: #dcfce7;
-  background-image:
-  linear-gradient(45deg, #bbf7d0 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #bbf7d0 0),
-  linear-gradient(45deg, #bbf7d0 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #bbf7d0 0);
-}
-.button_solid016.btn-green a:after { background: #22c55e; }
-
-/* 赤のボタン（ログアウト） */
-.button_solid016.btn-red a { background: #fca5a5; }
-.button_solid016.btn-red a:before {
-  background: #fee2e2;
-  background-image:
-  linear-gradient(45deg, #fecaca 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #fecaca 0),
-  linear-gradient(45deg, #fecaca 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #fecaca 0);
-}
-.button_solid016.btn-red a:after { background: #ef4444; }
-
-/* 紫のボタン（管理ページ） */
-.button_solid016.btn-purple a { background: #d8b4fe; }
-.button_solid016.btn-purple a:before {
-  background: #f3e8ff;
-  background-image:
-  linear-gradient(45deg, #e9d5ff 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #e9d5ff 0),
-  linear-gradient(45deg, #e9d5ff 25%, transparent 0),
-  linear-gradient(45deg, transparent 75%, #e9d5ff 0);
-}
-.button_solid016.btn-purple a:after { background: #a855f7; }
-
-
-/* --- 時計のスタイル --- */
-.clock-container {
-  border: 2px solid #333;
-  border-radius: 8px;
-  padding: 10px 12px;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-  align-items: baseline;
-  gap: 5px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.date-time {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-  white-space: nowrap;
-}
-.seconds {
-  font-size: 12px;
-  color: #666;
-  font-weight: normal;
-  white-space: nowrap;
+.link-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-/* スマホ・タブレット表示用の微調整 */
+.link-item.study { background: #ebf8ff; border-color: #bee3f8; }
+.link-item.tool { background: #faf5ff; border-color: #e9d8fd; }
+.link-item.media { background: #fff5f5; border-color: #fed7d7; }
+.link-item.local { background: #f0fff4; border-color: #c6f6d5; }
+.link-item.dev { background: #edf2f7; border-color: #e2e8f0; }
+
 @media (max-width: 1024px) {
-  body {
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 90px;
-  }
-  .flex-wrapper {
-    flex-direction: column;
-    align-items: center;
-    margin-left: 0;
-    gap: 40px;
-  }
-  .left-container {
-    max-width: 280px;
-  }
-  .right-container {
-    width: 100%;
-  }
-  .top-controls {
-    justify-content: center;
-  }
+  .grid-container { display: flex; flex-direction: column; }
+  .photo-panel { min-height: 300px; }
+  .calendar-panel { min-height: 400px; }
 }
