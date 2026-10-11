@@ -182,13 +182,14 @@ header {
   background-color: #fffde7;
 }
 
+.col-4 { grid-column: span 4; }
 .col-5 { grid-column: span 5; }
-.col-6 { grid-column: span 6; }
 .col-7 { grid-column: span 7; }
+.col-8 { grid-column: span 8; }
 .col-12 { grid-column: span 12; }
 
 @media (max-width: 1024px) {
-  .col-5, .col-6, .col-7 { grid-column: span 12; }
+  .col-4, .col-5, .col-7, .col-8 { grid-column: span 12; }
 }
 
 h2 {
@@ -205,20 +206,22 @@ h2 {
   background-color: #1a1a1a;
   border-radius: 12px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .slide-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: none;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
 }
 
 .slide-img.active {
-  display: block;
+  opacity: 1;
+  z-index: 1;
 }
 
 .slide-btn {
@@ -230,13 +233,16 @@ h2 {
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #000;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 0;
+  z-index: 2;
+  padding-bottom: 2px;
 }
 
 .slide-btn.prev { left: 10px; }
@@ -247,6 +253,13 @@ h2 {
   grid-template-columns: 1fr 1.2fr;
   gap: 20px;
   height: calc(100% - 40px);
+}
+
+.transit-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-sub);
+  margin-bottom: 4px;
 }
 
 .transit-form select, .transit-form button {
@@ -265,6 +278,7 @@ h2 {
   font-weight: bold;
   cursor: pointer;
   box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
+  margin-top: 5px;
 }
 
 .transit-form button:active {
@@ -288,7 +302,7 @@ h2 {
 
 .calendar-wrapper {
   width: 100%;
-  height: 520px;
+  height: 400px;
   border-radius: 12px;
   overflow: hidden;
   border: 2px solid #333;
@@ -306,12 +320,8 @@ h2 {
 
 .todo-input-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.todo-input-row:last-child {
-  margin-bottom: 0;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .todo-input-row input, .todo-input-row select, .todo-input-row button {
@@ -319,19 +329,7 @@ h2 {
   border: 2px solid #333;
   border-radius: 8px;
   font-family: inherit;
-  font-size: 14px;
-}
-
-#todo-date {
-  width: 140px;
-}
-
-#todo-subject {
-  width: 110px;
-}
-
-#todo-text {
-  flex-grow: 1;
+  font-size: 13px;
 }
 
 .todo-input-row button {
@@ -339,19 +337,18 @@ h2 {
   color: #fff;
   font-weight: bold;
   cursor: pointer;
-  min-width: 70px;
 }
 
 .todo-list {
-  max-height: 420px;
+  max-height: 280px;
   overflow-y: auto;
   padding-right: 5px;
 }
 
 .todo-category-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
-  margin: 15px 0 5px 0;
+  margin: 12px 0 5px 0;
   color: var(--text-sub);
   border-bottom: 2px solid #eee;
   padding-bottom: 3px;
@@ -360,10 +357,10 @@ h2 {
 
 .todo-item {
   display: grid;
-  grid-template-columns: 30px 60px 1fr 30px;
-  gap: 10px;
+  grid-template-columns: 24px 50px 1fr 24px;
+  gap: 8px;
   align-items: center;
-  padding: 8px 10px;
+  padding: 6px 8px;
   margin-bottom: 5px;
   border-radius: 8px;
   border: 1px solid #ddd;
@@ -376,15 +373,15 @@ h2 {
 }
 
 .todo-item input[type="checkbox"] {
-  transform: scale(1.6);
+  transform: scale(1.4);
   cursor: pointer;
-  margin-left: 5px;
+  margin-left: 3px;
 }
 
 .todo-subject {
-  padding: 4px 0;
+  padding: 3px 0;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 10px;
   text-align: center;
   font-weight: bold;
   color: #333;
@@ -397,13 +394,13 @@ h2 {
 [data-subject="英語"] .todo-subject { background-color: #e1bee7; color: #6a1b9a; }
 [data-subject="その他"] .todo-subject { background-color: #eeeeee; color: #424242; }
 
-.todo-text { font-size: 14px; }
-.todo-date-inline { font-weight: bold; font-size: 12px; margin-right: 8px; color: #555; }
+.todo-text { font-size: 13px; line-height: 1.4; }
+.todo-date-inline { font-weight: bold; font-size: 11px; margin-right: 6px; color: #555; display: inline-block;}
 .todo-del { 
   cursor: pointer; 
   color: var(--accent-red); 
   font-weight: bold; 
-  font-size: 20px; 
+  font-size: 18px; 
   border: none; 
   background: none; 
   display: flex;
@@ -453,9 +450,9 @@ h2 {
 
 <div class="top-nav">
   <div class="nav-links">
-    <a href="javascript:void(0)" onclick="scrollToSection('sec-gallery-transit')">ギャラリー・乗換案内</a>
-    <a href="javascript:void(0)" onclick="scrollToSection('sec-calendar-todo')">カレンダー・ToDoリスト</a>
-    <a href="javascript:void(0)" onclick="scrollToSection('sec-links')">リンク集</a>
+    <a href="javascript:void(0)" onclick="scrollToSections(['sec-gallery', 'sec-transit'])">ギャラリー・乗換案内</a>
+    <a href="javascript:void(0)" onclick="scrollToSections(['sec-calendar', 'sec-todo'])">カレンダー・ToDoリスト</a>
+    <a href="javascript:void(0)" onclick="scrollToSections(['sec-links'])">リンク集</a>
   </div>
   <div class="auth-links">
     <a href="https://accounts.google.com/AccountChooser" target="_blank">ログイン中のアカウント</a>
@@ -493,7 +490,7 @@ h2 {
 
 <div class="dashboard-grid">
 
-  <div class="card col-5" id="sec-gallery-transit">
+  <div class="card col-5" id="sec-gallery">
     <h2>ギャラリー</h2>
     <div class="slideshow-container">
       <img src="fire/001.jpg" class="slide-img active">
@@ -514,13 +511,14 @@ h2 {
     </div>
   </div>
 
-  <div class="card col-7">
+  <div class="card col-7" id="sec-transit">
     <h2>乗換案内</h2>
     <div class="transit-container">
       <div class="transit-form">
+        <div class="transit-label">▼ 出発</div>
         <select id="transit-from">
-          <option value="home">【出発】自宅</option>
-          <option value="school">【出発】学校</option>
+          <option value="home">自宅</option>
+          <option value="school">学校</option>
           <option value="takaoka_higashi">高丘東小学校前</option>
           <option value="chuo_center">中央センター前</option>
           <option value="takaoka_nishi">高丘西口</option>
@@ -531,9 +529,10 @@ h2 {
           <option value="nozaki">野崎通5丁目</option>
           <option value="aotani">青谷</option>
         </select>
+        <div class="transit-label">▼ 到着</div>
         <select id="transit-to">
-          <option value="school">【到着】学校</option>
-          <option value="home">【到着】自宅</option>
+          <option value="school">学校</option>
+          <option value="home">自宅</option>
           <option value="takaoka_higashi">高丘東小学校前</option>
           <option value="chuo_center">中央センター前</option>
           <option value="takaoka_nishi">高丘西口</option>
@@ -552,19 +551,19 @@ h2 {
     </div>
   </div>
 
-  <div class="card col-6" id="sec-calendar-todo">
+  <div class="card col-8" id="sec-calendar">
     <h2>カレンダー</h2>
     <div class="calendar-wrapper">
       <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
   </div>
 
-  <div class="card col-6">
+  <div class="card col-4" id="sec-todo">
     <h2>ToDoリスト</h2>
     <div class="todo-input-container">
       <div class="todo-input-row">
-        <input type="date" id="todo-date">
-        <select id="todo-subject">
+        <input type="date" id="todo-date" style="flex: 3;">
+        <select id="todo-subject" style="flex: 2;">
           <option value="国語">国語</option>
           <option value="数学">数学</option>
           <option value="英語">英語</option>
@@ -574,8 +573,8 @@ h2 {
         </select>
       </div>
       <div class="todo-input-row">
-        <input type="text" id="todo-text" placeholder="課題内容">
-        <button onclick="addTodo()">追加</button>
+        <input type="text" id="todo-text" placeholder="課題内容" style="flex: 1;">
+        <button onclick="addTodo()" style="min-width: 60px;">追加</button>
       </div>
     </div>
     <div class="todo-list" id="todo-list-container"></div>
@@ -594,7 +593,6 @@ h2 {
         <a href="https://learn.studysapuri.jp/ja/login" target="_blank" class="link-btn">スタサプ</a>
         <a href="https://ja.duolingo.com/" target="_blank" class="link-btn">Duolingo</a>
         <a href="https://www.aozora.gr.jp/" target="_blank" class="link-btn">青空文庫</a>
-        <a href="https://www.jorudan.co.jp/" target="_blank" class="link-btn">ジョルダン</a>
       </div>
     </div>
 
@@ -616,6 +614,7 @@ h2 {
       <div class="link-grid">
         <a href="https://ebwebreserve4.tackport.co.jp/eboothweb_akss/areainfo/login" target="_blank" class="link-btn">座席予約</a>
         <a href="https://www.akashi-lib.jp/WebOpac/webopac/usermenu.do" target="_blank" class="link-btn">利用紹介</a>
+        <a href="https://www.jorudan.co.jp/" target="_blank" class="link-btn">ジョルダン</a>
         <a href="https://www.instagram.com/?hl=ja" target="_blank" class="link-btn">Instagram</a>
         <a href="https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DR7OMMtYlocZCwAh2lVlWiD1i0_Q7xDp30WXJ4mWj9ho%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DrGz8BS9WaOC41A913bhuB6cCK5nBgzDh" target="_blank" class="link-btn">LINE公式</a>
       </div>
@@ -625,16 +624,25 @@ h2 {
 </div>
 
 <script>
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if(el) {
-    const yOffset = -20; 
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-    el.classList.add('highlight');
-    setTimeout(() => {
-      el.classList.remove('highlight');
-    }, 800);
+function scrollToSections(ids) {
+  let topY = Infinity;
+  const yOffset = -20;
+  
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      if (y < topY) topY = y;
+      
+      el.classList.add('highlight');
+      setTimeout(() => {
+        el.classList.remove('highlight');
+      }, 800);
+    }
+  });
+
+  if (topY !== Infinity) {
+    window.scrollTo({top: topY, behavior: 'smooth'});
   }
 }
 
@@ -751,7 +759,7 @@ function loadTodos() {
           <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${todo.originalIndex})">
           <div class="todo-subject">${todo.subject}</div>
           <div class="todo-text">
-            ${dateStr ? `<span class="todo-date-inline">${dateStr}</span>` : ''}${todo.text}
+            ${dateStr ? `<span class="todo-date-inline">${dateStr}</span><br>` : ''}${todo.text}
           </div>
           <button class="todo-del" onclick="deleteTodo(${todo.originalIndex})">×</button>
         `;
@@ -791,74 +799,151 @@ function deleteTodo(index) {
 }
 loadTodos();
 
+
+// 路線の所要時間グラフ（分）
+const transitGraph = {
+  home: { takaoka_higashi: 2, chuo_center: 5, takaoka_nishi: 10 },
+  school: { nozaki: 2, aotani: 2 },
+  takaoka_higashi: { home: 2, chuo_center: 2, okubo: 13 },
+  chuo_center: { home: 5, takaoka_nishi: 3, takaoka_higashi: 2, okubo: 15 },
+  takaoka_nishi: { home: 10, chuo_center: 3, okubo: 18 },
+  okubo: { takaoka_higashi: 13, chuo_center: 15, takaoka_nishi: 18, akashi: 5, sannomiya: 25 },
+  akashi: { okubo: 5, sannomiya: 15 },
+  sannomiya: { okubo: 25, akashi: 15, subway_sannomiya: 5 },
+  subway_sannomiya: { sannomiya: 5, nozaki: 18, aotani: 20 },
+  nozaki: { subway_sannomiya: 18, school: 2 },
+  aotani: { subway_sannomiya: 20, school: 2 }
+};
+
+const stationNames = {
+  home: "自宅", school: "学校", takaoka_higashi: "高丘東小学校前",
+  chuo_center: "中央センター前", takaoka_nishi: "高丘西口", okubo: "大久保駅",
+  akashi: "明石駅", sannomiya: "三ノ宮駅", subway_sannomiya: "地下鉄三宮",
+  nozaki: "野崎通5丁目", aotani: "青谷"
+};
+
+function findShortestPath(start, end) {
+  const nodes = Object.keys(transitGraph);
+  const distances = {};
+  const previous = {};
+  const unvisited = new Set(nodes);
+
+  nodes.forEach(n => distances[n] = Infinity);
+  distances[start] = 0;
+
+  while(unvisited.size > 0) {
+    let curr = null;
+    unvisited.forEach(n => {
+      if (curr === null || distances[n] < distances[curr]) curr = n;
+    });
+    if (distances[curr] === Infinity || curr === end) break;
+    unvisited.delete(curr);
+
+    for (let neighbor in transitGraph[curr]) {
+      let alt = distances[curr] + transitGraph[curr][neighbor];
+      if (curr !== start && neighbor !== end) alt += 5; // 乗り換えペナルティ
+      if (alt < distances[neighbor]) {
+        distances[neighbor] = alt;
+        previous[neighbor] = curr;
+      }
+    }
+  }
+
+  let path = [];
+  let u = end;
+  while(u) {
+    path.unshift(u);
+    u = previous[u];
+  }
+  return path[0] === start ? path : null;
+}
+
 function calculateTransit() {
-  const fromSel = document.getElementById('transit-from');
-  const toSel = document.getElementById('transit-to');
-  const from = fromSel.value;
-  const to = toSel.value;
-  const fromName = fromSel.options[fromSel.selectedIndex].text.replace('【出発】','');
-  const toName = toSel.options[toSel.selectedIndex].text.replace('【到着】','');
+  const from = document.getElementById('transit-from').value;
+  const to = document.getElementById('transit-to').value;
   const res = document.getElementById('transit-result');
   const now = new Date();
   
-  const addMin = (m) => {
-    const d = new Date(now.getTime() + m * 60000);
-    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-  };
+  const addMin = (d, m) => new Date(d.getTime() + m * 60000);
+  const formatTime = (d) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
   if (from === to) {
     res.innerHTML = "出発地と目的地の組み合わせが同じです。";
     return;
   }
 
+  // 自宅⇔学校の特殊ルール（前回ご要望のロジック）
   if (from === 'home' && to === 'school') {
-    res.innerHTML = `
-      <strong>${addMin(7)} 高丘東小学校前 発</strong> (神姫バス)<br>
-      ↓<br>
-      <strong>${addMin(20)} 大久保駅 着</strong><br>
-      <br>
-      <strong>${addMin(25)} 大久保駅 発</strong> (JR)<br>
-      ↓<br>
-      <strong>${addMin(55)} 三ノ宮駅 着</strong><br>
-      <br>
-      <strong>${addMin(62)} 地下鉄三宮C街東口 発</strong> (市バス)<br>
-      ↓<br>
-      <strong>${addMin(80)} 野崎通5丁目 着</strong>
-    `;
-  } else if (from === 'school' && to === 'home') {
+    let html = `<strong>${formatTime(addMin(now, 7))} 高丘東小学校前 発</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ 神姫バス (13分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 20))} 大久保駅 経由</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ JR線・乗り換え (35分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 55))} 三ノ宮駅 経由</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ 徒歩・待ち (7分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 62))} 地下鉄三宮C街東口 経由</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ 市バス (18分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 80))} 野崎通5丁目 着</strong><br>`;
+    html += `<br><span style="font-size:12px; color:#666;">※正しくはジョルダンで調べるじょ！</span>`;
+    res.innerHTML = html;
+    return;
+  } 
+  
+  if (from === 'school' && to === 'home') {
     const r = Math.random();
     let arriveBus = "高丘東小学校前";
     let busWait = 5;
-    if(r > 0.8) {
-      arriveBus = "高丘西口";
-      busWait = 35;
-    }
-    res.innerHTML = `
-      <strong>${addMin(4)} 青谷 発</strong> (市バス)<br>
-      ↓<br>
-      <strong>${addMin(22)} 三宮 着</strong><br>
-      <br>
-      <strong>${addMin(28)} 三ノ宮駅 発</strong> (JR)<br>
-      ↓<br>
-      <strong>${addMin(58)} 大久保駅 着</strong><br>
-      <br>
-      <strong>${addMin(58 + busWait)} 大久保駅 発</strong> (神姫バス)<br>
-      ↓<br>
-      <strong>${addMin(58 + busWait + 15)} ${arriveBus} 着</strong>
-    `;
-  } else {
-    res.innerHTML = `
-      <strong>${addMin(5)} ${fromName} 発</strong><br>
-      ↓<br>
-      <strong>${addMin(25)} (経由地) 着</strong><br>
-      <br>
-      <strong>${addMin(32)} (経由地) 発</strong><br>
-      ↓<br>
-      <strong>${addMin(50)} ${toName} 着</strong><br>
-      <br>
-      <span style="font-size:12px; color:#666;">※概算ルートです。正確な時刻はジョルダン等でご確認ください。</span>
-    `;
+    if(r > 0.8) { arriveBus = "高丘西口"; busWait = 35; }
+    
+    let html = `<strong>${formatTime(addMin(now, 4))} 青谷 発</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ 市バス (18分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 22))} 地下鉄三宮 経由</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ 徒歩・待ち (6分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 28))} 三ノ宮駅 経由</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ JR線 (30分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 58))} 大久保駅 経由</strong><br>`;
+    html += `<span style="color:#666; font-size:12px;">↓ 神姫バス待ち (${busWait}分) + 移動 (15分)</span><br>`;
+    html += `<strong>${formatTime(addMin(now, 58 + busWait + 15))} ${arriveBus} 着</strong><br>`;
+    html += `<br><span style="font-size:12px; color:#666;">※正しくはジョルダンで調べるじょ！</span>`;
+    res.innerHTML = html;
+    return;
   }
+
+  // 汎用ルート探索
+  const path = findShortestPath(from, to);
+  if (!path) {
+    res.innerHTML = "ルートが見つかりませんでした。";
+    return;
+  }
+
+  let html = "";
+  let currentTime = new Date(now.getTime() + 2 * 60000); // 検索時刻から2分後を出発とする
+
+  for(let i=0; i<path.length; i++) {
+    const node = path[i];
+    const nodeName = stationNames[node];
+    
+    if(i === 0) {
+      html += `<strong>${formatTime(currentTime)} ${nodeName} 発</strong><br>`;
+    } else if (i === path.length - 1) {
+      html += `<strong>${formatTime(currentTime)} ${nodeName} 着</strong><br>`;
+    } else {
+      html += `<strong>${formatTime(currentTime)} ${nodeName} 経由</strong><br>`;
+    }
+    
+    if(i < path.length - 1) {
+      const travelTime = transitGraph[node][path[i+1]];
+      const waitTime = (i === 0 || node === 'home' || node === 'school') ? 0 : 5;
+      
+      let moveType = "移動";
+      if(travelTime <= 10 && (node === 'home' || path[i+1] === 'home' || node === 'school' || path[i+1] === 'school')) moveType = "徒歩";
+      else if(travelTime > 10) moveType = "乗車";
+      
+      html += `<span style="color:#666; font-size:12px;">↓ ${waitTime > 0 ? `待ち${waitTime}分 + ` : ''}${moveType}${travelTime}分</span><br>`;
+      currentTime = addMin(currentTime, travelTime + waitTime);
+    }
+  }
+  html += `<br><span style="font-size:12px; color:#666;">※正しくはジョルダンで調べるじょ！</span>`;
+  res.innerHTML = html;
 }
 </script>
 </body>
