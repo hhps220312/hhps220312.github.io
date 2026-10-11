@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>はじめシステム</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234a90e2'/><text x='50' y='68' font-size='60' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'>は</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234a90e2'/><text x='50' y='68' font-size='60' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'>は</text></svg>">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&display=swap');
 
@@ -54,6 +56,7 @@ body {
   display: inline-block;
   box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
   transition: transform 0.1s, box-shadow 0.1s;
+  white-space: nowrap;
 }
 
 .nav-links a:active, .auth-links a:active {
@@ -72,7 +75,7 @@ header {
   align-items: center;
   margin-bottom: 30px;
   background: var(--card-bg);
-  padding: 15px 30px;
+  padding: 15px 25px;
   border-radius: var(--border-radius);
   border: var(--border-line);
 }
@@ -82,6 +85,7 @@ header {
   font-weight: 700;
   letter-spacing: 2px;
   margin-right: 20px;
+  white-space: nowrap;
 }
 
 .header-center {
@@ -89,7 +93,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 30px;
+  gap: 25px;
 }
 
 .stamp-buttons-mini {
@@ -108,6 +112,7 @@ header {
   background: var(--card-bg);
   transition: transform 0.1s, box-shadow 0.1s;
   box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+  white-space: nowrap;
 }
 
 .stamp-btn-mini:active {
@@ -134,6 +139,7 @@ header {
   padding: 5px 10px;
   border-radius: 8px;
   transition: background-color 0.2s;
+  min-width: 140px;
 }
 
 .weather-container:hover {
@@ -147,6 +153,7 @@ header {
 .weather-text {
   font-size: 13px;
   line-height: 1.3;
+  white-space: nowrap;
 }
 
 .header-right {
@@ -157,6 +164,7 @@ header {
 #clock {
   font-size: 22px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 #seconds {
@@ -166,7 +174,7 @@ header {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(24, 1fr);
   gap: 25px;
 }
 
@@ -176,27 +184,26 @@ header {
   border: var(--border-line);
   padding: 20px;
   transition: background-color 0.5s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .card.highlight {
   background-color: #fffde7;
 }
 
-.col-4 { grid-column: span 4; }
-.col-5 { grid-column: span 5; }
-.col-7 { grid-column: span 7; }
-.col-8 { grid-column: span 8; }
-.col-12 { grid-column: span 12; }
-
-@media (max-width: 1024px) {
-  .col-4, .col-5, .col-7, .col-8 { grid-column: span 12; }
-}
+.col-10 { grid-column: span 10; } 
+.col-14 { grid-column: span 14; } 
+.col-15 { grid-column: span 15; } 
+.col-9  { grid-column: span 9; }  
+.col-24 { grid-column: span 24; }
 
 h2 {
   font-size: 18px;
   margin-bottom: 15px;
   padding-bottom: 8px;
   border-bottom: 2px dashed #ccc;
+  flex: none;
 }
 
 .slideshow-container {
@@ -206,22 +213,43 @@ h2 {
   background-color: #1a1a1a;
   border-radius: 12px;
   overflow: hidden;
+  flex: none;
 }
 
-.slide-img {
+.slide-wrap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
   opacity: 0;
   transition: opacity 0.8s ease-in-out;
 }
 
-.slide-img.active {
+.slide-wrap.active {
   opacity: 1;
   z-index: 1;
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  color: #333;
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .slide-btn {
@@ -248,11 +276,54 @@ h2 {
 .slide-btn.prev { left: 10px; }
 .slide-btn.next { right: 10px; }
 
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0,0,0,0.85); 
+  justify-content: center; 
+  align-items: center;
+}
+.modal-content {
+  max-width: 95%; 
+  max-height: 95%; 
+  border-radius: 12px;
+  animation: zoomIn 0.3s ease;
+  object-fit: contain;
+}
+.modal-close {
+  position: absolute; 
+  top: 15px; 
+  right: 25px; 
+  color: #fff; 
+  font-size: 40px; 
+  font-weight: bold; 
+  cursor: pointer;
+}
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 .transit-container {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 20px;
-  height: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
+.transit-form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.transit-form-col {
+  flex: 1;
 }
 
 .transit-label {
@@ -262,26 +333,25 @@ h2 {
   margin-bottom: 4px;
 }
 
-.transit-form select, .transit-form button {
+.transit-container select, .transit-container button {
   width: 100%;
   padding: 10px;
-  margin-bottom: 12px;
   border: 2px solid #333;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
 }
 
-.transit-form button {
+.transit-container button {
   background: var(--text-main);
   color: #fff;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
-  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
-.transit-form button:active {
+.transit-container button:active {
   transform: translate(3px, 3px);
   box-shadow: none;
 }
@@ -292,8 +362,8 @@ h2 {
   border: 2px solid #ddd;
   overflow-y: auto;
   padding: 15px;
-  height: 100%;
-  max-height: 250px;
+  flex: 1;
+  min-height: 150px; 
 }
 
 #transit-result {
@@ -302,10 +372,11 @@ h2 {
 
 .calendar-wrapper {
   width: 100%;
-  height: 400px;
+  height: 480px; 
   border-radius: 12px;
   overflow: hidden;
   border: 2px solid #333;
+  flex: 1;
 }
 
 .calendar-wrapper iframe {
@@ -316,6 +387,7 @@ h2 {
 
 .todo-input-container {
   margin-bottom: 15px;
+  flex: none;
 }
 
 .todo-input-row {
@@ -332,7 +404,17 @@ h2 {
   font-size: 13px;
 }
 
-.todo-input-row button {
+.todo-input-row input[type="date"], #todo-text {
+  flex: 1;
+  min-width: 0;
+}
+
+#todo-subject, .todo-add-btn {
+  width: 90px; 
+  flex: none;
+}
+
+.todo-add-btn {
   background: var(--accent-blue);
   color: #fff;
   font-weight: bold;
@@ -340,9 +422,10 @@ h2 {
 }
 
 .todo-list {
-  max-height: 280px;
   overflow-y: auto;
   padding-right: 5px;
+  flex: 1;
+  max-height: 380px; 
 }
 
 .todo-category-title {
@@ -394,7 +477,7 @@ h2 {
 [data-subject="英語"] .todo-subject { background-color: #e1bee7; color: #6a1b9a; }
 [data-subject="その他"] .todo-subject { background-color: #eeeeee; color: #424242; }
 
-.todo-text { font-size: 13px; line-height: 1.4; }
+.todo-text { font-size: 13px; line-height: 1.4; word-break: break-all; }
 .todo-date-inline { font-weight: bold; font-size: 11px; margin-right: 6px; color: #555; display: inline-block;}
 .todo-del { 
   cursor: pointer; 
@@ -444,6 +527,27 @@ h2 {
   box-shadow: 0px 0px 0px rgba(0,0,0,0.8);
 }
 
+@media (max-width: 900px) {
+  .dashboard-grid { display: flex; flex-direction: column; }
+  .col-10, .col-14, .col-15, .col-9, .col-24 { grid-column: span 24; }
+  
+  .top-nav { flex-direction: column; gap: 15px; align-items: stretch; }
+  .nav-links, .auth-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .nav-links a, .auth-links a { font-size: 13px; margin: 0; flex: 1; text-align: center; min-width: 120px; }
+  
+  header { flex-direction: column; gap: 20px; padding: 20px; align-items: stretch; text-align: center; }
+  .header-left h1 { margin: 0; white-space: normal; }
+  
+  .header-center { flex-direction: column; gap: 20px; align-items: stretch; }
+  .stamp-buttons-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+  .stamp-btn-mini { padding: 12px; }
+  .weather-link-wrapper { align-self: center; }
+  
+  .header-right { text-align: center; }
+  
+  .transit-form-row { flex-direction: column; gap: 10px; }
+}
+
 </style>
 </head>
 <body>
@@ -490,80 +594,72 @@ h2 {
 
 <div class="dashboard-grid">
 
-  <div class="card col-5" id="sec-gallery">
+  <div class="card col-10" id="sec-gallery">
     <h2>ギャラリー</h2>
-    <div class="slideshow-container">
-      <img src="fire/001.jpg" class="slide-img active">
-      <img src="fire/002.jpg" class="slide-img">
-      <img src="fire/003.jpg" class="slide-img">
-      <img src="fire/004.jpg" class="slide-img">
-      <img src="fire/005.jpg" class="slide-img">
-      <img src="fire/006.jpg" class="slide-img">
-      <img src="fire/007.jpg" class="slide-img">
-      <img src="fire/008.jpg" class="slide-img">
-      <img src="fire/009.jpg" class="slide-img">
-      <img src="fire/010.jpg" class="slide-img">
-      <img src="fire/011.jpg" class="slide-img">
-      <img src="fire/012.jpg" class="slide-img">
-      <img src="fire/013.jpg" class="slide-img">
+    <div class="slideshow-container" id="slideshow-container">
+      <!-- JSで画像を挿入します -->
       <button class="slide-btn prev" onclick="changeSlide(-1)">&#10094;</button>
       <button class="slide-btn next" onclick="changeSlide(1)">&#10095;</button>
     </div>
   </div>
 
-  <div class="card col-7" id="sec-transit">
+  <div class="card col-14" id="sec-transit">
     <h2>乗換案内</h2>
     <div class="transit-container">
-      <div class="transit-form">
-        <div class="transit-label">▼ 出発</div>
-        <select id="transit-from">
-          <option value="home">自宅</option>
-          <option value="school">学校</option>
-          <option value="takaoka_higashi">高丘東小学校前</option>
-          <option value="chuo_center">中央センター前</option>
-          <option value="takaoka_nishi">高丘西口</option>
-          <option value="okubo">大久保駅</option>
-          <option value="akashi">明石駅</option>
-          <option value="sannomiya">三ノ宮駅</option>
-          <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
-          <option value="nozaki">野崎通5丁目</option>
-          <option value="aotani">青谷</option>
-        </select>
-        <div class="transit-label">▼ 到着</div>
-        <select id="transit-to">
-          <option value="school">学校</option>
-          <option value="home">自宅</option>
-          <option value="takaoka_higashi">高丘東小学校前</option>
-          <option value="chuo_center">中央センター前</option>
-          <option value="takaoka_nishi">高丘西口</option>
-          <option value="okubo">大久保駅</option>
-          <option value="akashi">明石駅</option>
-          <option value="sannomiya">三ノ宮駅</option>
-          <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
-          <option value="nozaki">野崎通5丁目</option>
-          <option value="aotani">青谷</option>
-        </select>
-        <button onclick="calculateTransit()">検索</button>
+      <div class="transit-form-row">
+        <div class="transit-form-col">
+          <div class="transit-label">▼ 出発</div>
+          <select id="transit-from">
+            <option value="home">自宅</option>
+            <option value="school">学校</option>
+            <option value="takaoka_higashi">高丘東小学校前</option>
+            <option value="chuo_center">中央センター前</option>
+            <option value="takaoka_nishi">高丘西口</option>
+            <option value="okubo">大久保駅</option>
+            <option value="akashi">明石駅</option>
+            <option value="sannomiya">三ノ宮駅</option>
+            <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
+            <option value="nozaki">野崎通5丁目</option>
+            <option value="aotani">青谷</option>
+          </select>
+        </div>
+        <div class="transit-form-col">
+          <div class="transit-label">▼ 到着</div>
+          <select id="transit-to">
+            <option value="school">学校</option>
+            <option value="home">自宅</option>
+            <option value="takaoka_higashi">高丘東小学校前</option>
+            <option value="chuo_center">中央センター前</option>
+            <option value="takaoka_nishi">高丘西口</option>
+            <option value="okubo">大久保駅</option>
+            <option value="akashi">明石駅</option>
+            <option value="sannomiya">三ノ宮駅</option>
+            <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
+            <option value="nozaki">野崎通5丁目</option>
+            <option value="aotani">青谷</option>
+          </select>
+        </div>
       </div>
+      <button onclick="calculateTransit()">検索</button>
       <div class="transit-result-wrapper">
         <div id="transit-result">ルートを検索してください</div>
       </div>
     </div>
   </div>
 
-  <div class="card col-8" id="sec-calendar">
+  <div class="card col-15" id="sec-calendar">
     <h2>カレンダー</h2>
     <div class="calendar-wrapper">
       <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
   </div>
 
-  <div class="card col-4" id="sec-todo">
+  <div class="card col-9" id="sec-todo">
     <h2>ToDoリスト</h2>
     <div class="todo-input-container">
       <div class="todo-input-row">
-        <input type="date" id="todo-date" style="flex: 3;">
-        <select id="todo-subject" style="flex: 2;">
+        <input type="date" id="todo-date">
+        <select id="todo-subject">
           <option value="国語">国語</option>
           <option value="数学">数学</option>
           <option value="英語">英語</option>
@@ -573,14 +669,14 @@ h2 {
         </select>
       </div>
       <div class="todo-input-row">
-        <input type="text" id="todo-text" placeholder="課題内容" style="flex: 1;">
-        <button onclick="addTodo()" style="min-width: 60px;">追加</button>
+        <input type="text" id="todo-text" placeholder="課題内容">
+        <button onclick="addTodo()" class="todo-add-btn">追加</button>
       </div>
     </div>
     <div class="todo-list" id="todo-list-container"></div>
   </div>
 
-  <div class="card col-12" id="sec-links">
+  <div class="card col-24" id="sec-links">
     <h2>リンク集</h2>
     
     <div class="link-section">
@@ -623,7 +719,14 @@ h2 {
 
 </div>
 
+<!-- 画像拡大用モーダル -->
+<div id="imgModal" class="modal" onclick="closeModal()">
+  <span class="modal-close">&times;</span>
+  <img class="modal-content" id="modalImg">
+</div>
+
 <script>
+// --- セクションスクロール ---
 function scrollToSections(ids) {
   let topY = Infinity;
   const yOffset = -20;
@@ -646,13 +749,14 @@ function scrollToSections(ids) {
   }
 }
 
+// --- 打刻ボタン ---
 const GAS_URL = "https://script.google.com/macros/s/AKfycbw_-V9SlwCDibw7KEwNOpcNgfxIr0yydQZHFofet31fNlenf6yf2EIlip9GMOUa_bEqmg/exec";
-
 function recordWake() { fetch(GAS_URL + "?action=wake"); }
 function recordSleep() { fetch(GAS_URL + "?action=sleep"); }
 function recordGoSchool() { fetch(GAS_URL + "?action=goSchool"); }
 function recordLeaveSchool() { fetch(GAS_URL + "?action=leaveSchool"); }
 
+// --- 時計 ---
 function updateClock() {
   const now = new Date();
   const year = now.getFullYear();
@@ -667,14 +771,55 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
+// --- ギャラリー（キャプション付き） ---
+const galleryData = [
+  { src: 'fire/001.jpg', caption: 'お気に入りの文房具にて' },
+  { src: 'fire/002.jpg', caption: '朝の通学路にて' },
+  { src: 'fire/003.jpg', caption: '週末のカフェにて' },
+  { src: 'fire/004.jpg', caption: '放課後の図書室にて' },
+  { src: 'fire/005.jpg', caption: '綺麗な夕焼け空にて' },
+  { src: 'fire/006.jpg', caption: '休日に行った公園にて' },
+  { src: 'fire/007.jpg', caption: 'プログラミングの画面にて' },
+  { src: 'fire/008.jpg', caption: '友達とのランチにて' },
+  { src: 'fire/009.jpg', caption: '帰り道の駅にて' },
+  { src: 'fire/010.jpg', caption: '夜の街並みにて' },
+  { src: 'fire/011.jpg', caption: '旅行先の風景にて' },
+  { src: 'fire/012.jpg', caption: '最近買った本にて' },
+  { src: 'fire/013.jpg', caption: 'お出かけ先のイベントにて' }
+];
+
+const slideshowContainer = document.getElementById('slideshow-container');
+let slideElements = [];
+
+// JSでHTML要素を生成
+galleryData.forEach((item, index) => {
+  const wrap = document.createElement('div');
+  wrap.className = `slide-wrap ${index === 0 ? 'active' : ''}`;
+  
+  const img = document.createElement('img');
+  img.src = item.src;
+  img.className = 'slide-img';
+  img.onclick = () => openModal(item.src);
+  
+  const cap = document.createElement('div');
+  cap.className = 'slide-caption';
+  cap.textContent = item.caption;
+  
+  wrap.appendChild(img);
+  wrap.appendChild(cap);
+  
+  // ボタンの手前に挿入
+  slideshowContainer.insertBefore(wrap, slideshowContainer.querySelector('.prev'));
+  slideElements.push(wrap);
+});
+
 let slideIndex = 0;
-const slides = document.querySelectorAll('.slide-img');
 let slideInterval;
 
 function showSlide(n) {
-  slides.forEach(s => s.classList.remove('active'));
-  slideIndex = (n + slides.length) % slides.length;
-  slides[slideIndex].classList.add('active');
+  slideElements.forEach(s => s.classList.remove('active'));
+  slideIndex = (n + slideElements.length) % slideElements.length;
+  slideElements[slideIndex].classList.add('active');
 }
 
 function changeSlide(n) {
@@ -690,6 +835,19 @@ function startSlideShow() {
 }
 startSlideShow();
 
+// モーダル操作
+function openModal(src) {
+  document.getElementById('imgModal').style.display = "flex";
+  document.getElementById('modalImg').src = src;
+  clearInterval(slideInterval);
+}
+
+function closeModal() {
+  document.getElementById('imgModal').style.display = "none";
+  startSlideShow();
+}
+
+// --- ToDoリスト ---
 function getDayOfWeek(dateString) {
   const days = ['日', '月', '火', '水', '木', '金', '土'];
   const d = new Date(dateString);
@@ -800,7 +958,7 @@ function deleteTodo(index) {
 loadTodos();
 
 
-// 路線の所要時間グラフ（分）
+// --- 乗換案内アルゴリズム ---
 const transitGraph = {
   home: { takaoka_higashi: 2, chuo_center: 5, takaoka_nishi: 10 },
   school: { nozaki: 2, aotani: 2 },
@@ -872,7 +1030,6 @@ function calculateTransit() {
     return;
   }
 
-  // 自宅⇔学校の特殊ルール（前回ご要望のロジック）
   if (from === 'home' && to === 'school') {
     let html = `<strong>${formatTime(addMin(now, 7))} 高丘東小学校前 発</strong><br>`;
     html += `<span style="color:#666; font-size:12px;">↓ 神姫バス (13分)</span><br>`;
@@ -908,7 +1065,6 @@ function calculateTransit() {
     return;
   }
 
-  // 汎用ルート探索
   const path = findShortestPath(from, to);
   if (!path) {
     res.innerHTML = "ルートが見つかりませんでした。";
@@ -916,7 +1072,7 @@ function calculateTransit() {
   }
 
   let html = "";
-  let currentTime = new Date(now.getTime() + 2 * 60000); // 検索時刻から2分後を出発とする
+  let currentTime = new Date(now.getTime() + 2 * 60000);
 
   for(let i=0; i<path.length; i++) {
     const node = path[i];
