@@ -17,7 +17,6 @@
   --accent-red: #ff5a5f;
   --accent-yellow: #f5a623;
   --border-radius: 16px;
-  --shadow: 6px 6px 0px rgba(0,0,0,0.8);
   --border-line: 3px solid #000;
 }
 
@@ -32,8 +31,40 @@ body {
   background-color: var(--bg-color);
   color: var(--text-main);
   line-height: 1.6;
-  padding: 20px;
+  padding: 10px 20px 30px;
 }
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.nav-links a, .auth-links a {
+  text-decoration: none;
+  color: var(--text-main);
+  background: var(--card-bg);
+  border: 2px solid #000;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-right: 8px;
+  display: inline-block;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.nav-links a:active, .auth-links a:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px rgba(0,0,0,0.8);
+}
+
+.auth-links {
+  text-align: right;
+}
+.auth-links a:last-child { margin-right: 0; }
 
 header {
   display: flex;
@@ -44,30 +75,31 @@ header {
   padding: 15px 30px;
   border-radius: var(--border-radius);
   border: var(--border-line);
-  box-shadow: var(--shadow);
 }
 
 .header-left h1 {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: 2px;
+  margin-right: 20px;
 }
 
 .header-center {
   flex-grow: 1;
   display: flex;
-  justify-content: center;
-  margin: 0 20px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
 }
 
 .stamp-buttons-mini {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
 .stamp-btn-mini {
-  padding: 10px 16px;
-  font-size: 15px;
+  padding: 10px 14px;
+  font-size: 14px;
   font-weight: 700;
   border: 2px solid #000;
   border-radius: 8px;
@@ -87,6 +119,22 @@ header {
 .btn-school { background-color: #e0ffff; }
 .btn-leave { background-color: #ffe4e1; }
 
+.weather-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.weather-icon {
+  font-size: 32px;
+}
+
+.weather-text {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
 .header-right {
   text-align: right;
   min-width: 140px;
@@ -102,13 +150,6 @@ header {
   color: var(--text-sub);
 }
 
-@media (max-width: 850px) {
-  header {
-    flex-direction: column;
-    gap: 15px;
-  }
-}
-
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -119,21 +160,26 @@ header {
   background: var(--card-bg);
   border-radius: var(--border-radius);
   border: var(--border-line);
-  box-shadow: var(--shadow);
   padding: 20px;
+  transition: background-color 0.5s ease;
 }
 
-.col-4 { grid-column: span 4; }
+.card.highlight {
+  background-color: #fffde7;
+}
+
+.col-5 { grid-column: span 5; }
+.col-7 { grid-column: span 7; }
 .col-12 { grid-column: span 12; }
 
 @media (max-width: 1024px) {
-  .col-4 { grid-column: span 12; }
+  .col-5, .col-7 { grid-column: span 12; }
 }
 
 h2 {
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom: 2px dashed #ccc;
 }
 
@@ -171,6 +217,7 @@ h2 {
   height: 40px;
   font-size: 20px;
   font-weight: bold;
+  color: #000;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -180,27 +227,20 @@ h2 {
 .slide-btn.prev { left: 10px; }
 .slide-btn.next { right: 10px; }
 
-.weather-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 10px 0;
-  height: 100%;
-}
-
-.weather-icon {
-  font-size: 48px;
+.transit-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 20px;
+  height: calc(100% - 40px);
 }
 
 .transit-form select, .transit-form button {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
+  padding: 10px;
+  margin-bottom: 12px;
   border: 2px solid #333;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-family: inherit;
 }
 
@@ -217,27 +257,40 @@ h2 {
   box-shadow: none;
 }
 
-#transit-result {
+.transit-result-wrapper {
   background: #f8f9fa;
-  padding: 15px;
   border-radius: 8px;
   border: 2px solid #ddd;
-  min-height: 80px;
+  overflow-y: auto;
+  padding: 15px;
+  height: 100%;
+  max-height: 250px;
+}
+
+#transit-result {
   font-size: 14px;
 }
 
 .todo-input-group {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr 1fr;
+  display: flex;
   gap: 10px;
   margin-bottom: 15px;
 }
 
+#todo-date {
+  width: 110px;
+}
+
 .todo-input-group input, .todo-input-group select, .todo-input-group button {
-  padding: 10px;
+  padding: 8px;
   border: 2px solid #333;
   border-radius: 8px;
   font-family: inherit;
+  font-size: 14px;
+}
+
+#todo-text {
+  flex-grow: 1;
 }
 
 .todo-input-group button {
@@ -248,74 +301,58 @@ h2 {
 }
 
 .todo-list {
-  max-height: 250px;
+  max-height: 480px;
   overflow-y: auto;
+  padding-right: 5px;
 }
 
 .todo-item {
   display: grid;
-  grid-template-columns: 40px 100px 80px 1fr 30px;
+  grid-template-columns: 40px 70px 60px 1fr 40px;
   gap: 10px;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
+
+.todo-item[data-subject="国語"] { background-color: #ffe4e1; }
+.todo-item[data-subject="数学"] { background-color: #e0ffff; }
+.todo-item[data-subject="理科"] { background-color: #e0f8e0; }
+.todo-item[data-subject="社会"] { background-color: #fffacd; }
+.todo-item[data-subject="英語"] { background-color: #e6e6fa; }
+.todo-item[data-subject="その他"] { background-color: #f4f1ea; }
 
 .todo-item.completed {
   opacity: 0.5;
   text-decoration: line-through;
 }
 
-.todo-date { font-weight: bold; font-size: 14px; }
-.todo-subject { background: #eee; padding: 2px 8px; border-radius: 12px; font-size: 12px; text-align: center; }
-.todo-text { font-size: 15px; }
-.todo-del { cursor: pointer; color: var(--accent-red); font-weight: bold; border: none; background: none; }
-
-.link-section {
-  margin-bottom: 20px;
+.todo-item input[type="checkbox"] {
+  transform: scale(1.6);
+  cursor: pointer;
+  margin-left: 10px;
 }
 
-.link-section h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: var(--text-sub);
-}
-
-.link-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 15px;
-}
-
-.link-btn {
-  display: block;
-  text-decoration: none;
-  color: var(--text-main);
-  background: #f8f9fa;
-  padding: 12px;
-  text-align: center;
-  border-radius: 8px;
-  border: 2px solid #333;
-  font-weight: bold;
-  font-size: 14px;
-  transition: all 0.2s;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
-}
-
-.link-btn:hover {
-  background: #e9ecef;
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 0px rgba(0,0,0,0.8);
-}
-
-.link-btn.auth-btn {
-  background: var(--text-main);
-  color: #fff;
+.todo-date { font-weight: bold; font-size: 12px; }
+.todo-subject { background: rgba(255,255,255,0.7); padding: 2px 0; border-radius: 6px; font-size: 11px; text-align: center; font-weight: bold; }
+.todo-text { font-size: 14px; }
+.todo-del { 
+  cursor: pointer; 
+  color: var(--accent-red); 
+  font-weight: bold; 
+  font-size: 24px; 
+  border: none; 
+  background: none; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .calendar-wrapper {
   width: 100%;
-  height: 400px;
+  height: 520px;
   border-radius: 12px;
   overflow: hidden;
   border: 2px solid #333;
@@ -326,9 +363,59 @@ h2 {
   height: 100%;
   border: none;
 }
+
+.link-section {
+  margin-bottom: 25px;
+}
+
+.link-section h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--text-sub);
+}
+
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 15px;
+}
+
+.link-btn {
+  display: block;
+  text-decoration: none;
+  color: var(--text-main);
+  background: #f8f9fa;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  border: 2px solid #333;
+  font-weight: bold;
+  font-size: 13px;
+  transition: all 0.1s;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+}
+
+.link-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px rgba(0,0,0,0.8);
+}
+
 </style>
 </head>
 <body>
+
+<div class="top-nav">
+  <div class="nav-links">
+    <a href="javascript:void(0)" onclick="scrollToSection('sec-gallery-transit')">ギャラリー・乗換案内</a>
+    <a href="javascript:void(0)" onclick="scrollToSection('sec-todo-calendar')">ToDoリスト・カレンダー</a>
+    <a href="javascript:void(0)" onclick="scrollToSection('sec-links')">リンク集</a>
+  </div>
+  <div class="auth-links">
+    <a href="https://accounts.google.com/AccountChooser" target="_blank">ログイン中のアカウント</a>
+    <a href="https://accounts.google.com/v3/signin/identifier?authuser=0&continue=https://myaccount.google.com/?pli%3D1&dsh=S-635098599:1786517646601416&ec=GAlAwAE&hl=ja&flowName=GlifWebSignIn&flowEntry=AddSession" target="_blank">ログイン</a>
+    <a href="https://accounts.google.com/logout" target="_blank" style="background:var(--accent-red); color:white;">ログアウト</a>
+  </div>
+</div>
 
 <header>
   <div class="header-left">
@@ -341,6 +428,13 @@ h2 {
       <button class="stamp-btn-mini btn-school" onclick="recordGoSchool()">登校</button>
       <button class="stamp-btn-mini btn-leave" onclick="recordLeaveSchool()">下校</button>
     </div>
+    <div class="weather-container">
+      <div class="weather-icon">☀️</div>
+      <div class="weather-text">
+        <div style="color:var(--text-sub);">明石市</div>
+        <div>24°C / 18°C</div>
+      </div>
+    </div>
   </div>
   <div class="header-right clock-container">
     <div id="clock"></div>
@@ -350,7 +444,7 @@ h2 {
 
 <div class="dashboard-grid">
 
-  <div class="card col-4">
+  <div class="card col-5" id="sec-gallery-transit">
     <h2>ギャラリー</h2>
     <div class="slideshow-container">
       <img src="fire/001.jpg" class="slide-img active">
@@ -371,35 +465,46 @@ h2 {
     </div>
   </div>
 
-  <div class="card col-4">
-    <h2>天気</h2>
-    <div class="weather-container">
-      <div class="weather-icon">☀️</div>
-      <div>
-        <div style="font-size:18px; color:var(--text-sub);">明石市</div>
-        <div>24°C / 18°C</div>
+  <div class="card col-7">
+    <h2>乗換案内</h2>
+    <div class="transit-container">
+      <div class="transit-form">
+        <select id="transit-from">
+          <option value="home">【出発】自宅</option>
+          <option value="school">【出発】学校</option>
+          <option value="takaoka_higashi">高丘東小学校前</option>
+          <option value="chuo_center">中央センター前</option>
+          <option value="takaoka_nishi">高丘西口</option>
+          <option value="okubo">大久保駅</option>
+          <option value="akashi">明石駅</option>
+          <option value="sannomiya">三ノ宮駅</option>
+          <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
+          <option value="nozaki">野崎通5丁目</option>
+          <option value="aotani">青谷</option>
+        </select>
+        <select id="transit-to">
+          <option value="school">【到着】学校</option>
+          <option value="home">【到着】自宅</option>
+          <option value="takaoka_higashi">高丘東小学校前</option>
+          <option value="chuo_center">中央センター前</option>
+          <option value="takaoka_nishi">高丘西口</option>
+          <option value="okubo">大久保駅</option>
+          <option value="akashi">明石駅</option>
+          <option value="sannomiya">三ノ宮駅</option>
+          <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
+          <option value="nozaki">野崎通5丁目</option>
+          <option value="aotani">青谷</option>
+        </select>
+        <button onclick="calculateTransit()">検索</button>
+      </div>
+      <div class="transit-result-wrapper">
+        <div id="transit-result">ルートを検索してください</div>
       </div>
     </div>
   </div>
 
-  <div class="card col-4">
-    <h2>乗換案内</h2>
-    <div class="transit-form">
-      <select id="transit-from">
-        <option value="home">【出発】自宅</option>
-        <option value="school">【出発】学校</option>
-      </select>
-      <select id="transit-to">
-        <option value="school">【到着】学校</option>
-        <option value="home">【到着】自宅</option>
-      </select>
-      <button onclick="calculateTransit()">直近のルートを検索</button>
-    </div>
-    <div id="transit-result">ルートを検索してください</div>
-  </div>
-
-  <div class="card col-12">
-    <h2>ToDoカレンダー</h2>
+  <div class="card col-5" id="sec-todo-calendar">
+    <h2>ToDoリスト</h2>
     <div class="todo-input-group">
       <input type="date" id="todo-date">
       <select id="todo-subject">
@@ -416,7 +521,14 @@ h2 {
     <div class="todo-list" id="todo-list-container"></div>
   </div>
 
-  <div class="card col-12">
+  <div class="card col-7">
+    <h2>カレンダー</h2>
+    <div class="calendar-wrapper">
+      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTz=0&showTitle=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4ZDE4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+  </div>
+
+  <div class="card col-12" id="sec-links">
     <h2>リンク集</h2>
     
     <div class="link-section">
@@ -429,52 +541,50 @@ h2 {
         <a href="https://learn.studysapuri.jp/ja/login" target="_blank" class="link-btn">スタサプ</a>
         <a href="https://ja.duolingo.com/" target="_blank" class="link-btn">Duolingo</a>
         <a href="https://www.aozora.gr.jp/" target="_blank" class="link-btn">青空文庫</a>
+        <a href="https://www.jorudan.co.jp/" target="_blank" class="link-btn">ジョルダン</a>
       </div>
     </div>
 
     <div class="link-section">
-      <h3>Googleサービス</h3>
+      <h3>Google・エンタメ</h3>
       <div class="link-grid">
         <a href="https://mail.google.com/" target="_blank" class="link-btn">Gmail</a>
         <a href="https://drive.google.com/" target="_blank" class="link-btn">Googleドライブ</a>
         <a href="https://gemini.google.com/app" target="_blank" class="link-btn">Gemini</a>
         <a href="https://calendar.google.com/calendar" target="_blank" class="link-btn">カレンダー</a>
+        <a href="https://www.youtube.com/" target="_blank" class="link-btn" style="background:#fff0f0; border-color:#d32f2f;">YouTube</a>
+        <a href="https://awakest.net/youtube-video-downloader/" target="_blank" class="link-btn">YouTube保存</a>
+        <a href="https://abema.tv/" target="_blank" class="link-btn" style="background:#f0fae6; border-color:#33691e;">ABEMA</a>
       </div>
     </div>
 
     <div class="link-section">
-      <h3>生活・エンタメ</h3>
+      <h3>生活・その他</h3>
       <div class="link-grid">
         <a href="https://ebwebreserve4.tackport.co.jp/eboothweb_akss/areainfo/login" target="_blank" class="link-btn">座席予約</a>
         <a href="https://www.akashi-lib.jp/WebOpac/webopac/usermenu.do" target="_blank" class="link-btn">利用紹介</a>
-        <a href="https://www.youtube.com/" target="_blank" class="link-btn">YouTube</a>
-        <a href="https://awakest.net/youtube-video-downloader/" target="_blank" class="link-btn">YouTube保存</a>
-        <a href="https://abema.tv/" target="_blank" class="link-btn">ABEMA</a>
         <a href="https://www.instagram.com/?hl=ja" target="_blank" class="link-btn">Instagram</a>
         <a href="https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DR7OMMtYlocZCwAh2lVlWiD1i0_Q7xDp30WXJ4mWj9ho%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DrGz8BS9WaOC41A913bhuB6cCK5nBgzDh" target="_blank" class="link-btn">LINE公式</a>
       </div>
-    </div>
-
-    <div class="link-section">
-      <h3>アカウント管理</h3>
-      <div class="link-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
-        <a href="https://accounts.google.com/AccountChooser" target="_blank" class="link-btn auth-btn" style="background:var(--accent-blue);">ログイン中のアカウント確認</a>
-        <a href="https://accounts.google.com/v3/signin/identifier?authuser=0&continue=https://myaccount.google.com/?pli%3D1&dsh=S-635098599:1786517646601416&ec=GAlAwAE&hl=ja&flowName=GlifWebSignIn&flowEntry=AddSession" target="_blank" class="link-btn auth-btn">Google 別アカウントログイン</a>
-        <a href="https://accounts.google.com/logout" target="_blank" class="link-btn auth-btn" style="background:var(--accent-red);">Google 全てログアウト</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="card col-12">
-    <h2>Googleカレンダー</h2>
-    <div class="calendar-wrapper">
-      <iframe src="https://calendar.google.com/calendar/embed?src=ja.japanese%23holiday%40group.v.calendar.google.com&ctz=Asia%2FTokyo" scrolling="no"></iframe>
     </div>
   </div>
 
 </div>
 
 <script>
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if(el) {
+    const yOffset = -20; 
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({top: y, behavior: 'smooth'});
+    el.classList.add('highlight');
+    setTimeout(() => {
+      el.classList.remove('highlight');
+    }, 800);
+  }
+}
+
 const GAS_URL = "https://script.google.com/macros/s/AKfycbw_-V9SlwCDibw7KEwNOpcNgfxIr0yydQZHFofet31fNlenf6yf2EIlip9GMOUa_bEqmg/exec";
 
 function recordWake() { fetch(GAS_URL + "?action=wake"); }
@@ -533,6 +643,7 @@ function loadTodos() {
   todos.sort((a, b) => new Date(a.date) - new Date(b.date)).forEach((todo, index) => {
     const div = document.createElement('div');
     div.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+    div.setAttribute('data-subject', todo.subject);
     
     const rawDate = new Date(todo.date);
     const dateStr = Number.isNaN(rawDate.getTime()) ? '' : `${rawDate.getMonth()+1}/${rawDate.getDate()}${getDayOfWeek(todo.date)}`;
@@ -579,8 +690,12 @@ function deleteTodo(index) {
 loadTodos();
 
 function calculateTransit() {
-  const from = document.getElementById('transit-from').value;
-  const to = document.getElementById('transit-to').value;
+  const fromSel = document.getElementById('transit-from');
+  const toSel = document.getElementById('transit-to');
+  const from = fromSel.value;
+  const to = toSel.value;
+  const fromName = fromSel.options[fromSel.selectedIndex].text.replace('【出発】','');
+  const toName = toSel.options[toSel.selectedIndex].text.replace('【到着】','');
   const res = document.getElementById('transit-result');
   const now = new Date();
   
@@ -589,14 +704,21 @@ function calculateTransit() {
     return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   };
 
+  if (from === to) {
+    res.innerHTML = "出発地と目的地の組み合わせが同じです。";
+    return;
+  }
+
   if (from === 'home' && to === 'school') {
     res.innerHTML = `
       <strong>${addMin(7)} 高丘東小学校前 発</strong> (神姫バス)<br>
       ↓<br>
       <strong>${addMin(20)} 大久保駅 着</strong><br>
+      <br>
       <strong>${addMin(25)} 大久保駅 発</strong> (JR)<br>
       ↓<br>
       <strong>${addMin(55)} 三ノ宮駅 着</strong><br>
+      <br>
       <strong>${addMin(62)} 地下鉄三宮C街東口 発</strong> (市バス)<br>
       ↓<br>
       <strong>${addMin(80)} 野崎通5丁目 着</strong>
@@ -609,20 +731,31 @@ function calculateTransit() {
       arriveBus = "高丘西口";
       busWait = 35;
     }
-    
     res.innerHTML = `
       <strong>${addMin(4)} 青谷 発</strong> (市バス)<br>
       ↓<br>
       <strong>${addMin(22)} 三宮 着</strong><br>
+      <br>
       <strong>${addMin(28)} 三ノ宮駅 発</strong> (JR)<br>
       ↓<br>
       <strong>${addMin(58)} 大久保駅 着</strong><br>
+      <br>
       <strong>${addMin(58 + busWait)} 大久保駅 発</strong> (神姫バス)<br>
       ↓<br>
       <strong>${addMin(58 + busWait + 15)} ${arriveBus} 着</strong>
     `;
   } else {
-    res.innerHTML = "出発地と目的地の組み合わせが同じです。";
+    res.innerHTML = `
+      <strong>${addMin(5)} ${fromName} 発</strong><br>
+      ↓<br>
+      <strong>${addMin(25)} (経由地) 着</strong><br>
+      <br>
+      <strong>${addMin(32)} (経由地) 発</strong><br>
+      ↓<br>
+      <strong>${addMin(50)} ${toName} 着</strong><br>
+      <br>
+      <span style="font-size:12px; color:#666;">※概算ルートです。正確な時刻はジョルダン等でご確認ください。</span>
+    `;
   }
 }
 </script>
