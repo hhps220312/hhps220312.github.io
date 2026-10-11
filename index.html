@@ -101,6 +101,7 @@ header {
   padding: 10px 14px;
   font-size: 14px;
   font-weight: 700;
+  color: #000;
   border: 2px solid #000;
   border-radius: 8px;
   cursor: pointer;
@@ -119,20 +120,33 @@ header {
 .btn-school { background-color: #e0ffff; }
 .btn-leave { background-color: #ffe4e1; }
 
+.weather-link-wrapper {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .weather-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.weather-container:hover {
+  background-color: #f0f0f0;
 }
 
 .weather-icon {
-  font-size: 32px;
+  font-size: 28px;
 }
 
 .weather-text {
-  font-size: 14px;
-  line-height: 1.2;
+  font-size: 13px;
+  line-height: 1.3;
 }
 
 .header-right {
@@ -169,11 +183,12 @@ header {
 }
 
 .col-5 { grid-column: span 5; }
+.col-6 { grid-column: span 6; }
 .col-7 { grid-column: span 7; }
 .col-12 { grid-column: span 12; }
 
 @media (max-width: 1024px) {
-  .col-5, .col-7 { grid-column: span 12; }
+  .col-5, .col-6, .col-7 { grid-column: span 12; }
 }
 
 h2 {
@@ -271,85 +286,6 @@ h2 {
   font-size: 14px;
 }
 
-.todo-input-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-#todo-date {
-  width: 110px;
-}
-
-.todo-input-group input, .todo-input-group select, .todo-input-group button {
-  padding: 8px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 14px;
-}
-
-#todo-text {
-  flex-grow: 1;
-}
-
-.todo-input-group button {
-  background: var(--accent-blue);
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.todo-list {
-  max-height: 480px;
-  overflow-y: auto;
-  padding-right: 5px;
-}
-
-.todo-item {
-  display: grid;
-  grid-template-columns: 40px 70px 60px 1fr 40px;
-  gap: 10px;
-  align-items: center;
-  padding: 12px 10px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.todo-item[data-subject="国語"] { background-color: #ffe4e1; }
-.todo-item[data-subject="数学"] { background-color: #e0ffff; }
-.todo-item[data-subject="理科"] { background-color: #e0f8e0; }
-.todo-item[data-subject="社会"] { background-color: #fffacd; }
-.todo-item[data-subject="英語"] { background-color: #e6e6fa; }
-.todo-item[data-subject="その他"] { background-color: #f4f1ea; }
-
-.todo-item.completed {
-  opacity: 0.5;
-  text-decoration: line-through;
-}
-
-.todo-item input[type="checkbox"] {
-  transform: scale(1.6);
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.todo-date { font-weight: bold; font-size: 12px; }
-.todo-subject { background: rgba(255,255,255,0.7); padding: 2px 0; border-radius: 6px; font-size: 11px; text-align: center; font-weight: bold; }
-.todo-text { font-size: 14px; }
-.todo-del { 
-  cursor: pointer; 
-  color: var(--accent-red); 
-  font-weight: bold; 
-  font-size: 24px; 
-  border: none; 
-  background: none; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .calendar-wrapper {
   width: 100%;
   height: 520px;
@@ -362,6 +298,117 @@ h2 {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.todo-input-container {
+  margin-bottom: 15px;
+}
+
+.todo-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.todo-input-row:last-child {
+  margin-bottom: 0;
+}
+
+.todo-input-row input, .todo-input-row select, .todo-input-row button {
+  padding: 8px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+#todo-date {
+  width: 140px;
+}
+
+#todo-subject {
+  width: 110px;
+}
+
+#todo-text {
+  flex-grow: 1;
+}
+
+.todo-input-row button {
+  background: var(--accent-blue);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.todo-list {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.todo-category-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  color: var(--text-sub);
+  border-bottom: 2px solid #eee;
+  padding-bottom: 3px;
+}
+.todo-category-title:first-child { margin-top: 0; }
+
+.todo-item {
+  display: grid;
+  grid-template-columns: 30px 60px 1fr 30px;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.todo-item.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.todo-item input[type="checkbox"] {
+  transform: scale(1.6);
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.todo-subject {
+  padding: 4px 0;
+  border-radius: 6px;
+  font-size: 11px;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+[data-subject="国語"] .todo-subject { background-color: #ffdce0; color: #c62828; }
+[data-subject="数学"] .todo-subject { background-color: #d0e4ff; color: #1565c0; }
+[data-subject="理科"] .todo-subject { background-color: #d4f0d5; color: #2e7d32; }
+[data-subject="社会"] .todo-subject { background-color: #ffecb3; color: #f57f17; }
+[data-subject="英語"] .todo-subject { background-color: #e1bee7; color: #6a1b9a; }
+[data-subject="その他"] .todo-subject { background-color: #eeeeee; color: #424242; }
+
+.todo-text { font-size: 14px; }
+.todo-date-inline { font-weight: bold; font-size: 12px; margin-right: 8px; color: #555; }
+.todo-del { 
+  cursor: pointer; 
+  color: var(--accent-red); 
+  font-weight: bold; 
+  font-size: 20px; 
+  border: none; 
+  background: none; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .link-section {
@@ -407,7 +454,7 @@ h2 {
 <div class="top-nav">
   <div class="nav-links">
     <a href="javascript:void(0)" onclick="scrollToSection('sec-gallery-transit')">ギャラリー・乗換案内</a>
-    <a href="javascript:void(0)" onclick="scrollToSection('sec-todo-calendar')">ToDoリスト・カレンダー</a>
+    <a href="javascript:void(0)" onclick="scrollToSection('sec-calendar-todo')">カレンダー・ToDoリスト</a>
     <a href="javascript:void(0)" onclick="scrollToSection('sec-links')">リンク集</a>
   </div>
   <div class="auth-links">
@@ -428,13 +475,15 @@ h2 {
       <button class="stamp-btn-mini btn-school" onclick="recordGoSchool()">登校</button>
       <button class="stamp-btn-mini btn-leave" onclick="recordLeaveSchool()">下校</button>
     </div>
-    <div class="weather-container">
-      <div class="weather-icon">☀️</div>
-      <div class="weather-text">
-        <div style="color:var(--text-sub);">明石市</div>
-        <div>24°C / 18°C</div>
+    <a href="https://weathernews.jp/v/wl/?city=28203" target="_blank" class="weather-link-wrapper">
+      <div class="weather-container">
+        <div class="weather-icon">☀️</div>
+        <div class="weather-text">
+          <div style="color:var(--text-sub);">明石市</div>
+          <div>24°C / 18°C <span style="color:#2196f3; margin-left:4px;">☔️ 10%</span></div>
+        </div>
       </div>
-    </div>
+    </a>
   </div>
   <div class="header-right clock-container">
     <div id="clock"></div>
@@ -503,29 +552,33 @@ h2 {
     </div>
   </div>
 
-  <div class="card col-5" id="sec-todo-calendar">
-    <h2>ToDoリスト</h2>
-    <div class="todo-input-group">
-      <input type="date" id="todo-date">
-      <select id="todo-subject">
-        <option value="国語">国語</option>
-        <option value="数学">数学</option>
-        <option value="英語">英語</option>
-        <option value="理科">理科</option>
-        <option value="社会">社会</option>
-        <option value="その他">その他</option>
-      </select>
-      <input type="text" id="todo-text" placeholder="課題内容">
-      <button onclick="addTodo()">追加</button>
-    </div>
-    <div class="todo-list" id="todo-list-container"></div>
-  </div>
-
-  <div class="card col-7">
+  <div class="card col-6" id="sec-calendar-todo">
     <h2>カレンダー</h2>
     <div class="calendar-wrapper">
-      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTz=0&showTitle=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4ZDE4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
+  </div>
+
+  <div class="card col-6">
+    <h2>ToDoリスト</h2>
+    <div class="todo-input-container">
+      <div class="todo-input-row">
+        <input type="date" id="todo-date">
+        <select id="todo-subject">
+          <option value="国語">国語</option>
+          <option value="数学">数学</option>
+          <option value="英語">英語</option>
+          <option value="理科">理科</option>
+          <option value="社会">社会</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+      <div class="todo-input-row">
+        <input type="text" id="todo-text" placeholder="課題内容">
+        <button onclick="addTodo()">追加</button>
+      </div>
+    </div>
+    <div class="todo-list" id="todo-list-container"></div>
   </div>
 
   <div class="card col-12" id="sec-links">
@@ -552,9 +605,9 @@ h2 {
         <a href="https://drive.google.com/" target="_blank" class="link-btn">Googleドライブ</a>
         <a href="https://gemini.google.com/app" target="_blank" class="link-btn">Gemini</a>
         <a href="https://calendar.google.com/calendar" target="_blank" class="link-btn">カレンダー</a>
-        <a href="https://www.youtube.com/" target="_blank" class="link-btn" style="background:#fff0f0; border-color:#d32f2f;">YouTube</a>
+        <a href="https://www.youtube.com/" target="_blank" class="link-btn">YouTube</a>
         <a href="https://awakest.net/youtube-video-downloader/" target="_blank" class="link-btn">YouTube保存</a>
-        <a href="https://abema.tv/" target="_blank" class="link-btn" style="background:#f0fae6; border-color:#33691e;">ABEMA</a>
+        <a href="https://abema.tv/" target="_blank" class="link-btn">ABEMA</a>
       </div>
     </div>
 
@@ -640,23 +693,72 @@ function loadTodos() {
   const container = document.getElementById('todo-list-container');
   container.innerHTML = '';
   
-  todos.sort((a, b) => new Date(a.date) - new Date(b.date)).forEach((todo, index) => {
-    const div = document.createElement('div');
-    div.className = `todo-item ${todo.completed ? 'completed' : ''}`;
-    div.setAttribute('data-subject', todo.subject);
-    
-    const rawDate = new Date(todo.date);
-    const dateStr = Number.isNaN(rawDate.getTime()) ? '' : `${rawDate.getMonth()+1}/${rawDate.getDate()}${getDayOfWeek(todo.date)}`;
-    
-    div.innerHTML = `
-      <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${index})">
-      <div class="todo-date">${dateStr}</div>
-      <div class="todo-subject">${todo.subject}</div>
-      <div class="todo-text">${todo.text}</div>
-      <button class="todo-del" onclick="deleteTodo(${index})">×</button>
-    `;
-    container.appendChild(div);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  const currentDay = today.getDay();
+  const daysToSunday = currentDay === 0 ? 0 : 7 - currentDay;
+  const endOfWeek = new Date(today);
+  endOfWeek.setDate(today.getDate() + daysToSunday);
+
+  const groups = {
+    today: { title: '今日まで', items: [] },
+    tomorrow: { title: '明日まで', items: [] },
+    thisWeek: { title: '今週中', items: [] },
+    nextWeek: { title: '来週以降・未定', items: [] }
+  };
+
+  todos.forEach((todo, index) => {
+    todo.originalIndex = index;
+    if(!todo.date) {
+      groups.nextWeek.items.push(todo);
+      return;
+    }
+    const d = new Date(todo.date);
+    const dateOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    if(dateOnly <= today) {
+      groups.today.items.push(todo);
+    } else if (dateOnly.getTime() === tomorrow.getTime()) {
+      groups.tomorrow.items.push(todo);
+    } else if (dateOnly <= endOfWeek) {
+      groups.thisWeek.items.push(todo);
+    } else {
+      groups.nextWeek.items.push(todo);
+    }
   });
+
+  for (const key in groups) {
+    if (groups[key].items.length > 0) {
+      groups[key].items.sort((a, b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
+      
+      const header = document.createElement('div');
+      header.className = 'todo-category-title';
+      header.textContent = groups[key].title;
+      container.appendChild(header);
+
+      groups[key].items.forEach(todo => {
+        const div = document.createElement('div');
+        div.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+        div.setAttribute('data-subject', todo.subject);
+        
+        const rawDate = new Date(todo.date);
+        const dateStr = Number.isNaN(rawDate.getTime()) ? '' : `${rawDate.getMonth()+1}/${rawDate.getDate()}${getDayOfWeek(todo.date)}`;
+        
+        div.innerHTML = `
+          <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${todo.originalIndex})">
+          <div class="todo-subject">${todo.subject}</div>
+          <div class="todo-text">
+            ${dateStr ? `<span class="todo-date-inline">${dateStr}</span>` : ''}${todo.text}
+          </div>
+          <button class="todo-del" onclick="deleteTodo(${todo.originalIndex})">×</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+  }
 }
 
 function addTodo() {
