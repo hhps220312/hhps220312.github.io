@@ -91,3 +91,51 @@ function startSlideShow() {
   }
 }
 startSlideShow();
+
+function updateWeatherUI(city, weatherCode, maxTemp, minTemp, precip) {
+  const iconMap = {
+    0: '☀️', 1: '⛅️', 2: '⛅️', 3: '☁️',
+    45: '🌫️', 48: '🌫️', 51: '🌧️', 53: '🌧️', 55: '🌧️',
+    56: '🌧️', 57: '🌧️', 61: '☔️', 63: '☔️', 65: '☔️',
+    66: '☔️', 67: '☔️', 71: '⛄️', 73: '⛄️', 75: '⛄️',
+    77: '⛄️', 80: '🌧️', 81: '🌧️', 82: '🌧️', 95: '⛈️',
+    96: '⛈️', 99: '⛈️'
+  };
+  const icon = iconMap[weatherCode] || '🌤️';
+  document.getElementById('weather-icon').textContent = icon;
+  document.getElementById('weather-city').textContent = city;
+  document.getElementById('weather-info').innerHTML = `${maxTemp}°C / ${minTemp}°C <span style="color:#2196f3; margin-left:4px;">☔️ ${precip}%</span>`;
+  document.getElementById('weather-link').href = `https://www.google.com/search?q=${city}+天気`;
+}
+
+async function fetchWeatherData(lat, lon, city) {
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo`);
+    const data = await res.json();
+    const cw = data.current_weather;
+    const daily = data.daily;
+    updateWeatherUI(city, cw.weathercode, Math.round(daily.temperature_2m_max[0]), Math.round(daily.temperature_2m_min[0]), daily.precipitation_probability_max[0]);
+  } catch(e) {}
+}
+
+function initWeather() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      try {
+        const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ja`);
+        const data = await res.json();
+        const city = data.locality || data.city || '現在地';
+        fetchWeatherData(lat, lon, city);
+      } catch(e) {
+        fetchWeatherData(lat, lon, '現在地');
+      }
+    }, () => {
+      fetchWeatherData(34.6431, 134.9976, '明石市');
+    });
+  } else {
+    fetchWeatherData(34.6431, 134.9976, '明石市');
+  }
+}
+initWeather();
