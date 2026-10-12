@@ -15,13 +15,13 @@ window.closeModal = function(event) {
 window.scrollToSections = function(ids) {
   let topY = Infinity;
   const yOffset = -20;
-  
+
   ids.forEach(id => {
     const el = document.getElementById(id);
     if(el) {
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       if (y < topY) topY = y;
-      
+
       el.classList.add('highlight');
       setTimeout(() => {
         el.classList.remove('highlight');
@@ -55,6 +55,67 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
+window.updateTimeDisplay = function() {
+  const input = document.getElementById('transit-time');
+  const display = document.getElementById('transit-time-display');
+  if (input && display && input.value) {
+    const d = new Date(input.value);
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    const h = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    display.textContent = `${m}/${day} ${h}:${min}`;
+  }
+};
+
+let currentBulletinDate = new Date();
+let isEditingBulletin = false;
+
+window.changeDate = function(offset) {
+  if (isEditingBulletin) return;
+  currentBulletinDate.setDate(currentBulletinDate.getDate() + offset);
+  window.updateBulletinUI();
+};
+
+window.updateBulletinUI = function() {
+  const y = currentBulletinDate.getFullYear();
+  const m = currentBulletinDate.getMonth() + 1;
+  const d = currentBulletinDate.getDate();
+  const days = ['日','月','火','水','木','金','土'];
+  const dayStr = days[currentBulletinDate.getDay()];
+  
+  const titleEl = document.getElementById('bulletin-date-title');
+  if(titleEl) titleEl.textContent = `${m}月${d}日(${dayStr})`;
+  
+  const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  
+  if (window.loadBulletin) {
+    window.loadBulletin(dateStr);
+  }
+};
+
+window.toggleEditBulletin = async function() {
+  const textarea = document.getElementById('bulletin-textarea');
+  const btn = document.getElementById('bulletin-edit-btn');
+  const m = currentBulletinDate.getMonth() + 1;
+  const d = currentBulletinDate.getDate();
+  const dateStr = `${currentBulletinDate.getFullYear()}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+  if (isEditingBulletin) {
+    textarea.disabled = true;
+    btn.textContent = '編集';
+    isEditingBulletin = false;
+    if (window.saveBulletin) {
+      await window.saveBulletin(dateStr, textarea.value);
+    }
+  } else {
+    textarea.disabled = false;
+    textarea.focus();
+    btn.textContent = '保存';
+    isEditingBulletin = true;
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const now = new Date();
   const tzOffset = now.getTimezoneOffset() * 60000;
@@ -62,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const transitTimeInput = document.getElementById('transit-time');
   if(transitTimeInput) {
     transitTimeInput.value = localISOTime;
+    window.updateTimeDisplay();
   }
 });
 
