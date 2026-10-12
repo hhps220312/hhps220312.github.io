@@ -74,9 +74,9 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   background: var(--card-bg);
-  padding: 15px 30px;
+  padding: 10px 20px;
   border-radius: var(--border-radius);
   border: var(--border-line);
 }
@@ -161,6 +161,12 @@ header {
   white-space: nowrap;
 }
 
+.clock-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
 #clock {
   font-size: 22px;
   font-weight: 700;
@@ -169,6 +175,7 @@ header {
 #seconds {
   font-size: 14px;
   color: var(--text-sub);
+  margin-left: 4px;
 }
 
 .dashboard-grid {
@@ -312,14 +319,9 @@ h2 {
   height: calc(100% - 40px);
 }
 
-.transit-label {
-  font-size: 13px;
-  font-weight: bold;
-  color: var(--text-sub);
-  margin-bottom: 4px;
-}
-
-.transit-form select, .transit-form button {
+.transit-form .transit-time-input,
+.transit-form select,
+.transit-form button {
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
@@ -706,33 +708,32 @@ h2 {
     <h2>乗換案内</h2>
     <div class="transit-container">
       <div class="transit-form">
-        <div class="transit-label">▼ 出発</div>
+        <input type="datetime-local" id="transit-time" class="transit-time-input">
         <select id="transit-from">
-          <option value="home">自宅</option>
-          <option value="school">学校</option>
-          <option value="takaoka_higashi">高丘東小学校前</option>
-          <option value="chuo_center">中央センター前</option>
-          <option value="takaoka_nishi">高丘西口</option>
-          <option value="okubo">大久保駅</option>
-          <option value="akashi">明石駅</option>
-          <option value="sannomiya">三ノ宮駅</option>
-          <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
-          <option value="nozaki">野崎通5丁目</option>
-          <option value="aotani">青谷</option>
+          <option value="home">【出発】自宅</option>
+          <option value="school">【出発】学校</option>
+          <option value="takaoka_higashi">【出発】高丘東小学校前</option>
+          <option value="chuo_center">【出発】中央センター前</option>
+          <option value="takaoka_nishi">【出発】高丘西口</option>
+          <option value="okubo">【出発】大久保駅</option>
+          <option value="akashi">【出発】明石駅</option>
+          <option value="sannomiya">【出発】三ノ宮駅</option>
+          <option value="subway_sannomiya">【出発】地下鉄三宮センター街東口</option>
+          <option value="nozaki">【出発】野崎通5丁目</option>
+          <option value="aotani">【出発】青谷</option>
         </select>
-        <div class="transit-label">▼ 到着</div>
         <select id="transit-to">
-          <option value="school">学校</option>
-          <option value="home">自宅</option>
-          <option value="takaoka_higashi">高丘東小学校前</option>
-          <option value="chuo_center">中央センター前</option>
-          <option value="takaoka_nishi">高丘西口</option>
-          <option value="okubo">大久保駅</option>
-          <option value="akashi">明石駅</option>
-          <option value="sannomiya">三ノ宮駅</option>
-          <option value="subway_sannomiya">地下鉄三宮センター街東口</option>
-          <option value="nozaki">野崎通5丁目</option>
-          <option value="aotani">青谷</option>
+          <option value="school">【到着】学校</option>
+          <option value="home">【到着】自宅</option>
+          <option value="takaoka_higashi">【到着】高丘東小学校前</option>
+          <option value="chuo_center">【到着】中央センター前</option>
+          <option value="takaoka_nishi">【到着】高丘西口</option>
+          <option value="okubo">【到着】大久保駅</option>
+          <option value="akashi">【到着】明石駅</option>
+          <option value="sannomiya">【到着】三ノ宮駅</option>
+          <option value="subway_sannomiya">【到着】地下鉄三宮センター街東口</option>
+          <option value="nozaki">【到着】野崎通5丁目</option>
+          <option value="aotani">【到着】青谷</option>
         </select>
         <button onclick="window.calculateTransit()">検索</button>
       </div>
@@ -893,6 +894,13 @@ h2 {
   setInterval(updateClock, 1000);
   updateClock();
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date();
+    const tzOffset = now.getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(now.getTime() - tzOffset)).toISOString().slice(0, 16);
+    document.getElementById('transit-time').value = localISOTime;
+  });
+
   let slideIndex = 0;
   const slides = document.querySelectorAll('.slide-item');
   let slideInterval;
@@ -1033,20 +1041,6 @@ h2 {
     await deleteDoc(doc(db, "todos", id));
   }
 
-  const transitGraph = {
-    home: { takaoka_higashi: 2, chuo_center: 5, takaoka_nishi: 10 },
-    school: { nozaki: 2, aotani: 2 },
-    takaoka_higashi: { home: 2, chuo_center: 2, okubo: 13 },
-    chuo_center: { home: 5, takaoka_nishi: 3, takaoka_higashi: 2, okubo: 15 },
-    takaoka_nishi: { home: 10, chuo_center: 3, okubo: 18 },
-    okubo: { takaoka_higashi: 13, chuo_center: 15, takaoka_nishi: 18, akashi: 5, sannomiya: 25 },
-    akashi: { okubo: 5, sannomiya: 15 },
-    sannomiya: { okubo: 25, akashi: 15, subway_sannomiya: 5 },
-    subway_sannomiya: { sannomiya: 5, nozaki: 18, aotani: 20 },
-    nozaki: { subway_sannomiya: 18, school: 2 },
-    aotani: { subway_sannomiya: 20, school: 2 }
-  };
-
   const stationNames = {
     home: "自宅", school: "学校", takaoka_higashi: "高丘東小学校前",
     chuo_center: "中央センター前", takaoka_nishi: "高丘西口", okubo: "大久保駅",
@@ -1054,14 +1048,92 @@ h2 {
     nozaki: "野崎通5丁目", aotani: "青谷"
   };
 
-  function findShortestPath(start, end) {
-    const nodes = Object.keys(transitGraph);
+  function getEdges(node, time, from, to) {
+    const h = time.getHours();
+    const edges = {};
+    
+    if (node === 'home') {
+      edges.takaoka_higashi = 5;
+      edges.chuo_center = 5;
+      edges.takaoka_nishi = 10;
+    }
+    if (node === 'takaoka_higashi') {
+      edges.home = 5;
+      edges.chuo_center = 2;
+      edges.okubo = 13;
+    }
+    if (node === 'chuo_center') {
+      edges.home = 5;
+      edges.takaoka_nishi = 3;
+      if (h >= 6 && h <= 9 && from === 'home') {
+        edges.okubo = 12;
+      } else {
+        edges.takaoka_higashi = 2;
+        edges.okubo = 15;
+      }
+    }
+    if (node === 'takaoka_nishi') {
+      edges.home = 10;
+      edges.chuo_center = 3;
+      edges.okubo = 18;
+    }
+    if (node === 'okubo') {
+      edges.takaoka_higashi = 13;
+      edges.chuo_center = 15;
+      edges.takaoka_nishi = 18;
+      edges.akashi = 5;
+      edges.sannomiya = 35;
+    }
+    if (node === 'akashi') {
+      edges.okubo = 5;
+      edges.sannomiya = 15;
+    }
+    if (node === 'sannomiya') {
+      edges.okubo = 35;
+      edges.akashi = 15;
+      edges.subway_sannomiya = 7;
+    }
+    if (node === 'subway_sannomiya') {
+      edges.sannomiya = 7;
+      if (to === 'school') {
+        edges.nozaki = 18;
+        edges.aotani = 25;
+      } else {
+        edges.nozaki = 18;
+        edges.aotani = 20;
+      }
+    }
+    if (node === 'nozaki') {
+      edges.subway_sannomiya = 18;
+      edges.school = 10;
+    }
+    if (node === 'aotani') {
+      edges.subway_sannomiya = 20;
+      edges.school = 10;
+    }
+    if (node === 'school') {
+      if (to === 'home' || from === 'school') {
+        edges.aotani = 10;
+        edges.nozaki = 15;
+      } else {
+        edges.nozaki = 10;
+        edges.aotani = 10;
+      }
+    }
+    
+    return edges;
+  }
+
+  function findShortestPath(start, end, startTime) {
+    const nodes = Object.keys(stationNames);
     const distances = {};
     const previous = {};
     const unvisited = new Set(nodes);
+    const arrivalTimes = {};
 
     nodes.forEach(n => distances[n] = Infinity);
     distances[start] = 0;
+    arrivalTimes[start] = new Date(startTime.getTime());
 
     while(unvisited.size > 0) {
       let curr = null;
@@ -1071,12 +1143,24 @@ h2 {
       if (distances[curr] === Infinity || curr === end) break;
       unvisited.delete(curr);
 
-      for (let neighbor in transitGraph[curr]) {
-        let alt = distances[curr] + transitGraph[curr][neighbor];
-        if (curr !== start && neighbor !== end) alt += 5;
+      const currTime = arrivalTimes[curr];
+      const edges = getEdges(curr, currTime, start, end);
+      
+      for (let neighbor in edges) {
+        if (!unvisited.has(neighbor)) continue;
+        
+        let travelTime = edges[neighbor];
+        let waitTime = 0;
+        
+        if (curr !== 'home' && curr !== 'school' && neighbor !== 'home' && neighbor !== 'school' && !(curr === 'sannomiya' && neighbor === 'subway_sannomiya') && !(curr === 'subway_sannomiya' && neighbor === 'sannomiya')) {
+          waitTime = 4;
+        }
+
+        let alt = distances[curr] + travelTime + waitTime;
         if (alt < distances[neighbor]) {
           distances[neighbor] = alt;
           previous[neighbor] = curr;
+          arrivalTimes[neighbor] = new Date(currTime.getTime() + (travelTime + waitTime) * 60000);
         }
       }
     }
@@ -1094,7 +1178,7 @@ h2 {
     const from = document.getElementById('transit-from').value;
     const to = document.getElementById('transit-to').value;
     const res = document.getElementById('transit-result');
-    const now = new Date();
+    const timeInput = document.getElementById('transit-time').value;
     
     const addMin = (d, m) => new Date(d.getTime() + m * 60000);
     const formatTime = (d) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -1104,49 +1188,35 @@ h2 {
       return;
     }
 
-    if (from === 'home' && to === 'school') {
-      let html = `<strong>${formatTime(addMin(now, 7))} 高丘東小学校前 発</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ 神姫バス (13分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 20))} 大久保駅 経由</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ JR線・乗り換え (35分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 55))} 三ノ宮駅 経由</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ 徒歩・待ち (7分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 62))} 地下鉄三宮C街東口 経由</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ 市バス (18分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 80))} 野崎通5丁目 着</strong><br>`;
-      html += `<br><span style="font-size:12px; color:#666;">※正しくはジョルダンで調べるじょ！</span>`;
-      res.innerHTML = html;
-      return;
-    } 
+    let startTime = new Date();
+    if (timeInput) {
+      startTime = new Date(timeInput);
+    }
     
-    if (from === 'school' && to === 'home') {
-      const r = Math.random();
-      let arriveBus = "高丘東小学校前";
-      let busWait = 5;
-      if(r > 0.8) { arriveBus = "高丘西口"; busWait = 35; }
-      
-      let html = `<strong>${formatTime(addMin(now, 4))} 青谷 発</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ 市バス (18分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 22))} 地下鉄三宮 経由</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ 徒歩・待ち (6分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 28))} 三ノ宮駅 経由</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ JR線 (30分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 58))} 大久保駅 経由</strong><br>`;
-      html += `<span style="color:#666; font-size:12px;">↓ 神姫バス待ち (${busWait}分) + 移動 (15分)</span><br>`;
-      html += `<strong>${formatTime(addMin(now, 58 + busWait + 15))} ${arriveBus} 着</strong><br>`;
-      html += `<br><span style="font-size:12px; color:#666;">※正しくはジョルダンで調べるじょ！</span>`;
-      res.innerHTML = html;
-      return;
+    let isMidnight = false;
+    const h = startTime.getHours();
+    if (h >= 0 && h < 5 || (h === 23 && startTime.getMinutes() >= 30)) {
+      isMidnight = true;
+      if (h >= 0 && h < 5) {
+        startTime.setHours(5, 30, 0, 0);
+      } else {
+        startTime.setDate(startTime.getDate() + 1);
+        startTime.setHours(5, 30, 0, 0);
+      }
     }
 
-    const path = findShortestPath(from, to);
+    const path = findShortestPath(from, to, startTime);
     if (!path) {
       res.innerHTML = "ルートが見つかりませんでした。";
       return;
     }
 
     let html = "";
-    let currentTime = new Date(now.getTime() + 2 * 60000);
+    if (isMidnight) {
+      html += `<div style="color:var(--accent-red); font-size:12px; margin-bottom:8px;">※深夜帯のため翌朝の始発時刻で検索しました</div>`;
+    }
+
+    let currentTime = new Date(startTime.getTime());
 
     for(let i=0; i<path.length; i++) {
       const node = path[i];
@@ -1161,12 +1231,19 @@ h2 {
       }
       
       if(i < path.length - 1) {
-        const travelTime = transitGraph[node][path[i+1]];
-        const waitTime = (i === 0 || node === 'home' || node === 'school') ? 0 : 5;
+        const nextNode = path[i+1];
+        const travelTime = getEdges(node, currentTime, from, to)[nextNode];
         
-        let moveType = "移動";
-        if(travelTime <= 10 && (node === 'home' || path[i+1] === 'home' || node === 'school' || path[i+1] === 'school')) moveType = "徒歩";
-        else if(travelTime > 10) moveType = "乗車";
+        let waitTime = 0;
+        if (node !== 'home' && node !== 'school' && nextNode !== 'home' && nextNode !== 'school' && !(node === 'sannomiya' && nextNode === 'subway_sannomiya') && !(node === 'subway_sannomiya' && nextNode === 'sannomiya')) {
+          waitTime = 4;
+        }
+        
+        let moveType = "乗車";
+        if (node === 'home' || nextNode === 'home' || node === 'school' || nextNode === 'school' || (node === 'sannomiya' && nextNode === 'subway_sannomiya') || (node === 'subway_sannomiya' && nextNode === 'sannomiya')) {
+          moveType = "徒歩";
+          waitTime = 0;
+        }
         
         html += `<span style="color:#666; font-size:12px;">↓ ${waitTime > 0 ? `待ち${waitTime}分 + ` : ''}${moveType}${travelTime}分</span><br>`;
         currentTime = addMin(currentTime, travelTime + waitTime);
