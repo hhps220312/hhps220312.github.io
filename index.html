@@ -2,7 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f4f1ea">
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
 <meta http-equiv="Pragma" content="no-cache">
@@ -11,13 +14,13 @@
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="shortcut icon" href="icon.png">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
 <div class="top-nav">
   <div class="nav-links">
-    <a href="javascript:void(0)" onclick="window.scrollToSections(['sec-gallery', 'sec-transit'])">ギャラリー・乗換案内</a>
+    <a href="javascript:void(0)" onclick="window.scrollToSections(['sec-gallery', 'sec-transit', 'sec-bulletin'])">ギャラリー・乗換・予定</a>
     <a href="javascript:void(0)" onclick="window.scrollToSections(['sec-calendar', 'sec-todo'])">カレンダー・ToDoリスト</a>
     <a href="javascript:void(0)" onclick="window.scrollToSections(['sec-links'])">リンク集</a>
   </div>
@@ -112,55 +115,73 @@
         <img src="fire/013.jpg" class="slide-img">
         <div class="slide-caption">ねてる</div>
       </div>
-      
+
       <button class="slide-btn prev" onclick="window.changeSlide(-1); event.stopPropagation();">&#10094;</button>
       <button class="slide-btn next" onclick="window.changeSlide(1); event.stopPropagation();">&#10095;</button>
     </div>
   </div>
 
-  <div class="card col-8" id="sec-transit">
+  <div class="card col-5" id="sec-transit">
     <h2>乗換案内</h2>
     <div class="transit-container">
-      <div class="transit-form">
-        <input type="datetime-local" id="transit-time" class="transit-time-input">
-        <select id="transit-from">
-          <option value="home">【出発】自宅</option>
-          <option value="school">【出発】学校</option>
-          <option value="takaoka_higashi">【出発】高丘東小学校前</option>
-          <option value="chuo_center">【出発】中央センター前</option>
-          <option value="takaoka_nishi">【出発】高丘西口</option>
-          <option value="okubo">【出発】大久保駅</option>
-          <option value="akashi">【出発】明石駅</option>
-          <option value="sannomiya">【出発】三ノ宮駅</option>
-          <option value="subway_sannomiya">【出発】地下鉄三宮センター街東口</option>
-          <option value="nozaki">【出発】野崎通5丁目</option>
-          <option value="aotani">【出発】青谷</option>
+      <div class="transit-inputs-row">
+        <div class="transit-time-box">
+          <div id="transit-time-display" onclick="document.getElementById('transit-time').showPicker()">--/-- --:--</div>
+          <input type="datetime-local" id="transit-time" onchange="window.updateTimeDisplay(); window.calculateTransit();">
+        </div>
+        <select id="transit-from" onchange="window.calculateTransit()">
+          <option value="" disabled selected>▼出発</option>
+          <option value="home">自宅</option>
+          <option value="school">学校</option>
+          <option value="takaoka_higashi">高丘東小学校前</option>
+          <option value="chuo_center">中央センター前</option>
+          <option value="takaoka_nishi">高丘西口</option>
+          <option value="okubo">大久保駅</option>
+          <option value="akashi">明石駅</option>
+          <option value="sannomiya">三ノ宮駅</option>
+          <option value="subway_sannomiya">地下鉄三宮駅前</option>
+          <option value="nozaki">野崎通5丁目</option>
+          <option value="aotani">青谷</option>
         </select>
-        <select id="transit-to">
-          <option value="school">【到着】学校</option>
-          <option value="home">【到着】自宅</option>
-          <option value="takaoka_higashi">【到着】高丘東小学校前</option>
-          <option value="chuo_center">【到着】中央センター前</option>
-          <option value="takaoka_nishi">【到着】高丘西口</option>
-          <option value="okubo">【到着】大久保駅</option>
-          <option value="akashi">【到着】明石駅</option>
-          <option value="sannomiya">【到着】三ノ宮駅</option>
-          <option value="subway_sannomiya">【到着】地下鉄三宮センター街東口</option>
-          <option value="nozaki">【到着】野崎通5丁目</option>
-          <option value="aotani">【到着】青谷</option>
+        <select id="transit-to" onchange="window.calculateTransit()">
+          <option value="" disabled selected>▼到着</option>
+          <option value="home">自宅</option>
+          <option value="school">学校</option>
+          <option value="takaoka_higashi">高丘東小学校前</option>
+          <option value="chuo_center">中央センター前</option>
+          <option value="takaoka_nishi">高丘西口</option>
+          <option value="okubo">大久保駅</option>
+          <option value="akashi">明石駅</option>
+          <option value="sannomiya">三ノ宮駅</option>
+          <option value="subway_sannomiya">地下鉄三宮駅前</option>
+          <option value="nozaki">野崎通5丁目</option>
+          <option value="aotani">青谷</option>
         </select>
-        <button onclick="window.calculateTransit()">検索</button>
       </div>
       <div class="transit-result-wrapper">
-        <div id="transit-result">ルートを検索してください</div>
+        <div id="transit-result">出発地点と到着地点を選択してください</div>
       </div>
+    </div>
+  </div>
+
+  <div class="card col-3" id="sec-bulletin">
+    <div class="bulletin-header">
+      <button onclick="window.changeDate(-1)">◀</button>
+      <h2 id="bulletin-date-title">--月--日(-)</h2>
+      <button onclick="window.changeDate(1)">▶</button>
+    </div>
+    <div class="bulletin-content">
+      <textarea id="bulletin-textarea" disabled></textarea>
+    </div>
+    <div class="bulletin-footer">
+      <button id="bulletin-edit-btn" onclick="window.toggleEditBulletin()">編集</button>
     </div>
   </div>
 
   <div class="card col-7" id="sec-calendar">
     <h2>カレンダー</h2>
     <div class="calendar-wrapper">
-      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4MjBiMDQyNmNlM2JjNWQ4ZjRjZTcwNDQwZmJhMGJiZTRhZDg2ZjQ1OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FTokyo&showPrint=0&showTitle=0&showTz=0&mode=WEEK&src=aG9udGFuaWhhamltZTIyMDMxMkBnbWFpbC5jb20&src=NTRjODI5YWZkNTJlOWZhNTEyZjYyOWM4NGU2YjQxY2YwZjZjMzM1MGNlZTE2MjExZGJlNTk2YmFiMzBjYjM5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTFiZDc4YWNhOTFhYzBkMjM1MzhhZTk1YjZlMzg4NjU3NzgwOTAyZmRlYTc2NjlkMDAxYWZhMDEyYzZlY2VkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDdhZTY1MWQ4NWU3NGI1ZTBlYzM2Y2Y5ZGNjOTEzODRkZjBjNmRlYmEyOGMxOGVkMjNkNTA0Mjc1YzYxYWVhNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=N2FlNzg3ODczZWVlMzU4YmYyZjdlMzkyYmQ4NzhkYzZjYzliOWU2MGI3MzQ5YTFlYjhiODY3M2ZmMzNhNThiN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZjMzMDA0OWQ0ZmMyNDQzMTI4ZmM4NDQyZmU4ZDI0ZjUzNzhkMjA2MmU2NjczMjJjYjc2YTE4YWYxNGEyNTdmZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NDk4ZjU1YTlmZDMwODQ0M2Q0ZDE1ZGE2YWZmM2MxMjhlNDViNTg4NjJjZmZkNDdiM2Y1OWE0Y2JmZGU2MTlmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YWM0NWE5ZDBlZGE1NTJlYTE2MjE1NDAxMzkxNDM2NzUyOWU4MjMzZWNkYTk0ODcyYjI2Y2UyZjJiMTEyMTdhM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZGI3Y2E2Yzg5NGQzY2M0ZDJkMmE4ZGU4ZDIwYjA0MjZjZTNiYzVkOGY0Y2U3MDQ0MGZiYTBiYmU0YWQ4NmY0NTlAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&src=MDM1MzE2NjZmZDNkZDY1NWViZDdhZmYwOTA5MzAxOTk0ODRmMjE5OTkyOGQyZmFkNWI1MmUxNjUwYzVmYWRmN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YzNmOGRmN2Q3YmI4ZWQxZmY4ZDg3NTg1ZGVjMzBkNDdmNGRmOGZjYWVmZmU1YzRiNjI5NGE5YzJiNmYzNDgzN0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=MTAyMWU2ODQyYTUyMWRiN2M5Njg4Y2Q3Yjg3YjVhZjdkODRkMzBjZDY1OGYxNjk2NGU5ZDI4MDZjNjhhYWJmY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%233f51b5&color=%23d81b60&color=%234285f4&color=%237cb342&color=%23f6bf26&color=%239e69af&color=%23009688&color=%23e67c73&color=%23a79b8e&color=%230b8043&color=%23795548&color=%23f09300" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
   </div>
 
@@ -188,7 +209,7 @@
 
   <div class="card col-12" id="sec-links">
     <h2>リンク集</h2>
-    
+
     <div class="link-section">
       <h3>学習・開発ツール</h3>
       <div class="link-grid">
@@ -235,9 +256,9 @@
   <div id="modal-caption"></div>
 </div>
 
-<script src="main.js?v=1"></script>
-<script src="transit.js?v=1"></script>
-<script type="module" src="todo.js?v=1"></script>
+<script src="main.js?v=2"></script>
+<script src="transit.js?v=2"></script>
+<script type="module" src="todo.js?v=2"></script>
 
 </body>
 </html>
