@@ -174,6 +174,7 @@ header {
   color: var(--text-sub);
 }
 
+/* PC向けグリッドレイアウト */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(24, 1fr);
@@ -313,9 +314,7 @@ h2 {
 }
 
 .transit-container {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  display: block; /* 枠が下に伸びるのを防ぐためblockに固定 */
 }
 
 .transit-inputs-row {
@@ -357,6 +356,7 @@ h2 {
   appearance: none;
   flex: 1;
   min-width: 0;
+  width: 100%; /* スマホでの横幅あふれを防止 */
   box-sizing: border-box !important;
   padding: 8px 20px 8px 4px !important;
   margin: 0 !important;
@@ -379,21 +379,31 @@ h2 {
   border: 2px solid #ddd;
   overflow-y: auto;
   padding: 15px;
-  flex-grow: 1;
-  min-height: 100px;
+  height: 160px; /* ★ここを固定の高さにして枠内スクロールにしました */
 }
 
 #transit-result {
   font-size: 14px;
 }
 
+/* 掲示板のヘッダー：高さを固定して入力欄が下がらないように調整 */
 .bulletin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 36px;
   margin-bottom: 10px;
   padding-bottom: 8px;
   border-bottom: 2px dashed #ccc;
+  box-sizing: border-box;
+}
+
+#bulletin-title-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 #bulletin-title-container h2 {
@@ -401,23 +411,24 @@ h2 {
   margin: 0;
   border: none;
   padding: 0;
-  display: inline-block;
+  line-height: 1;
 }
 
 #bulletin-save-btn {
   background: var(--accent-red);
   color: white;
-  border: none;
+  border: 2px solid #000;
   border-radius: 8px;
-  padding: 4px 20px;
-  font-size: 14px;
+  padding: 4px 16px;
+  font-size: 13px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 #bulletin-save-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: none;
+  box-shadow: 0px 0px 0px rgba(0,0,0,0.8);
 }
 
 .bulletin-header button {
@@ -634,8 +645,25 @@ h2 {
   box-shadow: 0px 0px 0px rgba(0,0,0,0.8);
 }
 
+
+/* -------------------------------------
+  スマホ版（1024px以下）で重ならないようにする神対応
+------------------------------------- */
 @media (max-width: 1024px) {
-  .col-7, .col-8, .col-9, .col-10, .col-14, .col-24 { grid-column: span 24; }
+  /* グリッドを一旦解除して、縦に並べる（フレキシブルボックス） */
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .card {
+    width: 100%;
+  }
+
+  .slideshow-container {
+    height: auto;
+  }
 }
 
 @media (max-width: 850px) {
