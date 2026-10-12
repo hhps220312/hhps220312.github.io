@@ -41,6 +41,15 @@ window.recordSleep = function() { fetch(GAS_URL + "?action=sleep"); }
 window.recordGoSchool = function() { fetch(GAS_URL + "?action=goSchool"); }
 window.recordLeaveSchool = function() { fetch(GAS_URL + "?action=leaveSchool"); }
 
+let holidays = {};
+fetch('https://holidays-jp.github.io/api/v1/date.json')
+  .then(res => res.json())
+  .then(data => {
+    holidays = data;
+    updateClock();
+  })
+  .catch(() => {});
+
 function updateClock() {
   const now = new Date();
   const year = now.getFullYear();
@@ -49,7 +58,21 @@ function updateClock() {
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
-  document.getElementById('clock').textContent = `${year}年${month}月${date}日 ${hours}:${minutes}`;
+  
+  const days = ['日', '月', '火', '水', '木', '金', '土'];
+  const dayOfWeek = now.getDay();
+  const dateStrYYYYMMDD = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+  
+  let dayColor = 'inherit';
+  if (holidays[dateStrYYYYMMDD]) {
+    dayColor = 'var(--accent-red)';
+  } else if (dayOfWeek === 0) {
+    dayColor = 'var(--accent-red)';
+  } else if (dayOfWeek === 6) {
+    dayColor = 'var(--accent-blue)';
+  }
+
+  document.getElementById('clock').innerHTML = `${year}年${month}月${date}日 <span style="color:${dayColor};">(${days[dayOfWeek]})</span> ${hours}:${minutes}`;
   document.getElementById('seconds').textContent = `${seconds}秒`;
 }
 setInterval(updateClock, 1000);
@@ -94,25 +117,35 @@ window.updateBulletinUI = function() {
   }
 };
 
-window.toggleEditBulletin = async function() {
-  const textarea = document.getElementById('bulletin-textarea');
-  const btn = document.getElementById('bulletin-edit-btn');
+window.startEditBulletin = function() {
+  if (isEditingBulletin) return;
+  isEditingBulletin = true;
+  document.getElementById('bulletin-date-title').style.display = 'none';
+  document.getElementById('bulletin-save-btn').style.display = 'inline-block';
+  document.getElementById('bulletin-prev-btn').style.visibility = 'hidden';
+  document.getElementById('bulletin-next-btn').style.visibility = 'hidden';
+  
+  const ta = document.getElementById('bulletin-textarea');
+  ta.removeAttribute('readonly');
+  ta.focus();
+};
+
+window.saveBulletinAction = async function() {
+  isEditingBulletin = false;
+  document.getElementById('bulletin-date-title').style.display = 'inline-block';
+  document.getElementById('bulletin-save-btn').style.display = 'none';
+  document.getElementById('bulletin-prev-btn').style.visibility = 'visible';
+  document.getElementById('bulletin-next-btn').style.visibility = 'visible';
+  
+  const ta = document.getElementById('bulletin-textarea');
+  ta.setAttribute('readonly', 'true');
+  
   const m = currentBulletinDate.getMonth() + 1;
   const d = currentBulletinDate.getDate();
   const dateStr = `${currentBulletinDate.getFullYear()}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-
-  if (isEditingBulletin) {
-    textarea.disabled = true;
-    btn.textContent = '編集';
-    isEditingBulletin = false;
-    if (window.saveBulletin) {
-      await window.saveBulletin(dateStr, textarea.value);
-    }
-  } else {
-    textarea.disabled = false;
-    textarea.focus();
-    btn.textContent = '保存';
-    isEditingBulletin = true;
+  
+  if (window.saveBulletin) {
+    await window.saveBulletin(dateStr, ta.value);
   }
 };
 
