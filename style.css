@@ -332,6 +332,7 @@ h2 {
   font-size: 14px;
   font-family: inherit;
   background-color: #fff;
+  color: #333;
 }
 
 .transit-form select {
@@ -605,5 +606,8 @@ h2 {
   }
   .header-right {
     text-align: center;
+  }
+  .clock-container {
+    justify-content: center;
   }
 }
