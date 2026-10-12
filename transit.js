@@ -1,8 +1,15 @@
 const stationNames = {
-  home: "自宅", school: "学校", takaoka_higashi: "高丘東小学校前",
-  chuo_center: "中央センター前", takaoka_nishi: "高丘西口", okubo: "大久保駅",
-  akashi: "明石駅", sannomiya: "三ノ宮駅", subway_sannomiya: "地下鉄三宮",
-  nozaki: "野崎通5丁目", aotani: "青谷"
+  home: "自宅",
+  school: "学校",
+  takaoka_higashi: "高丘東小学校前",
+  chuo_center: "中央センター前",
+  takaoka_nishi: "高丘西口",
+  okubo: "大久保駅",
+  akashi: "明石駅",
+  sannomiya: "三ノ宮駅",
+  subway_sannomiya: "地下鉄三宮駅前",
+  nozaki: "野崎通5丁目",
+  aotani: "青谷"
 };
 
 function getEdges(node, time, from, to) {
@@ -137,6 +144,11 @@ window.calculateTransit = function() {
   const res = document.getElementById('transit-result');
   const timeInput = document.getElementById('transit-time').value;
   
+  if (!from || !to) {
+    res.innerHTML = "出発地点と到着地点を選択してください";
+    return;
+  }
+
   const addMin = (d, m) => new Date(d.getTime() + m * 60000);
   const formatTime = (d) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
