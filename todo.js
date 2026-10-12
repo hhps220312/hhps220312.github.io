@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, serverTimestamp, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyIm_ng794iUZPm6O0QTFrPt5y6f2MeQc",
@@ -129,4 +129,33 @@ window.toggleTodo = async function(id) {
 
 window.deleteTodo = async function(id) {
   await deleteDoc(doc(db, "todos", id));
+}
+
+window.loadBulletin = async function(dateStr) {
+  const textarea = document.getElementById('bulletin-textarea');
+  if(!textarea) return;
+  textarea.value = '読み込み中...';
+  try {
+    const docRef = doc(db, "bulletinBoards", dateStr);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      textarea.value = docSnap.data().text || '';
+    } else {
+      textarea.value = '';
+    }
+  } catch(e) {
+    textarea.value = '';
+  }
+};
+
+window.saveBulletin = async function(dateStr, text) {
+  try {
+    await setDoc(doc(db, "bulletinBoards", dateStr), { text: text }, { merge: true });
+  } catch(e) {
+    console.error("保存失敗", e);
+  }
+};
+
+if (window.updateBulletinUI) {
+  window.updateBulletinUI();
 }
