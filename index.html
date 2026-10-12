@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>はじめシステム</title>
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
@@ -36,12 +39,12 @@
       <button class="stamp-btn-mini btn-school" onclick="window.recordGoSchool()">登校</button>
       <button class="stamp-btn-mini btn-leave" onclick="window.recordLeaveSchool()">下校</button>
     </div>
-    <a href="https://weathernews.jp/v/wl/?city=28203" target="_blank" class="weather-link-wrapper">
+    <a href="https://www.google.com/search?q=天気" target="_blank" class="weather-link-wrapper" id="weather-link">
       <div class="weather-container">
-        <div class="weather-icon">☀️</div>
+        <div class="weather-icon" id="weather-icon">--</div>
         <div class="weather-text">
-          <div style="color:var(--text-sub);">明石市</div>
-          <div>24°C / 18°C <span style="color:#2196f3; margin-left:4px;">☔️ 10%</span></div>
+          <div style="color:var(--text-sub);" id="weather-city">取得中...</div>
+          <div id="weather-info">-°C / -°C <span style="color:#2196f3; margin-left:4px;">☔️ -%</span></div>
         </div>
       </div>
     </a>
