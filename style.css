@@ -311,24 +311,34 @@ h2 {
 }
 
 .transit-form {
-  display: flex;
-  flex-direction: column;
+  display: block;
+  width: 100%;
+  overflow: hidden;
 }
 
 .transit-form .transit-time-input,
 .transit-form select,
 .transit-form button {
+  -webkit-appearance: none;
+  appearance: none;
   display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
   padding: 10px;
-  margin-bottom: 12px;
+  margin: 0 0 12px 0;
   border: 2px solid #333;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
+  background-color: #fff;
+}
+
+.transit-form select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='%23333' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 30px;
 }
 
 .transit-form button {
