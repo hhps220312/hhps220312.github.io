@@ -1,1 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro City Timepiece</title>
+    
+    <!-- Requested Meta Icons -->
+    <link rel="icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="shortcut icon" href="icon.png">
+    <meta name="theme-color" content="#2c3e50">
 
+    <style>
+        /* CSS Reset & Base Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html {
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Sky & Background */
+        #sky {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            transition: background 2s ease-in-out;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        /* Celestial Bodies (Sun / Moon) */
+        #celestial-container {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            width: 80vw;
+            height: 80vw;
+            max-width: 800px;
+            max-height: 800px;
+            transform: translateX(-50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        #sun, #moon {
+            position: absolute;
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            top: 50%; left: -40px;
+            transform-origin: calc(40vw + 40px) center; /* Rotate around center of container */
+            transition: transform 1s linear;
+        }
+        @media (min-width: 800px) {
+            #sun, #moon { transform-origin: 440px center; }
+        }
+        
+        #sun { background: #FFD700; box-shadow: 0 0 40px #FF8C00; display: none; }
+        #moon { background: #FFFACD; box-shadow: 0 0 20px #FFF; display: none; }
+
+        /* Weather elements (Stars / Clouds) */
+        #weather-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+        .cloud {
+            position: absolute;
+            background: #fff;
+            border-radius: 50px;
+            animation: drift linear infinite;
+            opacity: 0.8;
+        }
+        .cloud::before, .cloud::after {
+            content: ''; position: absolute; background: #fff; border-radius: 50%;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes drift {
+            from { transform: translateX(-150px); }
+            to { transform: translateX(110vw); }
+        }
+
+        /* Cityscape Silhouette */
+        #cityscape {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 25vh;
+            display: flex;
+            align-items: flex-end;
+            z-index: 2;
+        }
+        .building {
+            background-color: #111;
+            flex-grow: 1;
+            border-top: 2px solid #333;
+            border-right: 2px solid #222;
+            position: relative;
+        }
+        /* Windows */
+        .building::after {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10%; width: 80%; height: calc(100% - 20px);
+            background-image: 
+                linear-gradient(to bottom, transparent 80%, rgba(255, 255, 150, 0.4) 80%),
+                linear-gradient(to right, transparent 70%, rgba(255, 255, 150, 0.4) 70%);
+            background-size: 15px 20px;
+        }
+        /* Red warning lights on tall buildings */
+        .building.tall::before {
+            content: ''; position: absolute; top: -4px; right: -4px; width: 8px; height: 8px;
+            background: #ff3333; border-radius: 50%; box-shadow: 0 0 5px red;
+        }
+
+        /* Main UI Container */
+        #ui-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding-bottom: 5vh;
+        }
+
+        /* Analog Clock */
+        #analog-clock {
+            width: 240px; height: 240px;
+            background: #dcd0c0;
+            border: 16px solid #6b4c3a; /* Wood-like border */
+            border-radius: 12px; /* Slightly rounded square */
+            position: relative;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        
+        /* Clock Face Details */
+        .clock-center {
+            position: absolute; top: 50%; left: 50%;
+            width: 16px; height: 16px;
+            background: #222; border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+        .clock-ring {
+            position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 4px solid #555; border-radius: 50%;
+            background: #9fa8a3;
+        }
+        
+        .number {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Clock Hands */
+        .hand {
+            position: absolute; bottom: 50%; left: 50%;
+            transform-origin: bottom center;
+            background: #111;
+            z-index: 4;
+            border-radius: 4px 4px 0 0;
+        }
+        #hour-hand { width: 8px; height: 50px; margin-left: -4px; border: 2px solid #fff; }
+        #min-hand { width: 6px; height: 75px; margin-left: -3px; border: 2px solid #fff; }
+        #sec-hand { width: 2px; height: 85px; margin-left: -1px; background: #e74c3c; z-index: 6; }
+
+        /* Digital Clock */
+        #digital-clock {
+            background: #34495e;
+            color: #ecf0f1;
+            border: 4px solid #2c3e50;
+            padding: 10px 30px;
+            font-size: 3.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            letter-spacing: 5px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+        }
+
+        /* Controls (Stopwatch & Timer) */
+        .tools-container {
+            display: flex; gap: 10px;
+        }
+        .panel {
+            background: #e6e6e6;
+            border: 4px solid #555;
+            padding: 15px;
+            width: 200px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .panel h3 { font-size: 1rem; color: #333; border-bottom: 2px solid #999; margin-bottom: 10px; padding-bottom: 5px; }
+        .display-screen {
+            background: #1a1a1a; color: #0f0;
+            font-size: 1.5rem; padding: 5px; margin-bottom: 10px;
+            border: 2px inset #555;
+        }
+        .btn-group { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+        button {
+            background: #bdc3c7; border: 2px solid #7f8c8d; border-bottom: 4px solid #7f8c8d;
+            padding: 5px 10px; font-weight: bold; cursor: pointer; color: #222; font-family: inherit;
+        }
+        button:active { transform: translateY(2px); border-bottom-width: 2px; margin-top: 2px; }
+        
+        .timer-inputs { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+        .timer-inputs input { width: 40px; text-align: center; background: #fff; border: 2px solid #999; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Sky Background -->
+    <div id="sky"></div>
+
+    <!-- Weather Layer (Stars / Clouds) -->
+    <div id="weather-layer"></div>
+
+    <!-- Sun and Moon -->
+    <div id="celestial-container">
+        <div id="sun"></div>
+        <div id="moon"></div>
+    </div>
+
+    <!-- City Silhouette -->
+    <div id="cityscape">
+        <!-- Generated by JS -->
+    </div>
+
+    <!-- Main UI Container -->
+    <div id="ui-container">
+        
+        <!-- Analog Clock -->
+        <div id="analog-clock">
+            <div class="clock-ring"></div>
+            <!-- Numbers will be injected by JS -->
+            <div id="hour-hand" class="hand"></div>
+            <div id="min-hand" class="hand"></div>
+            <div id="sec-hand" class="hand"></div>
+            <div class="clock-center"></div>
+        </div>
+
+        <!-- Digital Clock -->
+        <div id="digital-clock">00:00:00</div>
+
+        <!-- Tools (Stopwatch & Timer) -->
+        <div class="tools-container">
+            
+            <!-- Stopwatch -->
+            <div class="panel">
+                <h3>STOPWATCH</h3>
+                <div id="sw-display" class="display-screen">00:00.0</div>
+                <div class="btn-group">
+                    <button onclick="swStart()">START</button>
+                    <button onclick="swStop()">STOP</button>
+                    <button onclick="swReset()">RESET</button>
+                </div>
+            </div>
+
+            <!-- Timer -->
+            <div class="panel">
+                <h3>TIMER</h3>
+                <div id="tm-display" class="display-screen">00:00</div>
+                <div class="timer-inputs">
+                    <input type="number" id="tm-min" min="0" max="99" value="3" placeholder="M">
+                    <input type="number" id="tm-sec" min="0" max="59" value="0" placeholder="S">
+                </div>
+                <div class="btn-group">
+                    <button onclick="tmStart()">START</button>
+                    <button onclick="tmStop()">STOP</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Initialization and Layout ---
+        
+        // Generate Clock Numbers
+        const clock = document.getElementById('analog-clock');
+        for (let i = 1; i <= 12; i++) {
+            const num = document.createElement('div');
+            num.className = 'number';
+            num.innerText = i;
+            // Calculate position (polar to cartesian)
+            const angle = (i * 30 - 90) * (Math.PI / 180);
+            const radius = 100;
+            const x = 120 + radius * Math.cos(angle);
+            const y = 120 + radius * Math.sin(angle);
+            num.style.left = `${x}px`;
+            num.style.top = `${y}px`;
+            clock.appendChild(num);
+        }
+
+        // Generate Cityscape
+        const cityscape = document.getElementById('cityscape');
+        const numBuildings = Math.floor(window.innerWidth / 30);
+        for(let i=0; i<numBuildings; i++) {
+            const b = document.createElement('div');
+            b.className = 'building';
+            let height = 30 + Math.random() * 60; // 30% to 90% of container height
+            let width = 20 + Math.random() * 40;
+            b.style.height = `${height}%`;
+            b.style.width = `${width}px`;
+            if(height > 75) b.classList.add('tall'); // add red light to tall buildings
+            cityscape.appendChild(b);
+        }
+
+        // --- 2. Clock & Environment Logic ---
+
+        const hourHand = document.getElementById('hour-hand');
+        const minHand = document.getElementById('min-hand');
+        const secHand = document.getElementById('sec-hand');
+        const digitalClock = document.getElementById('digital-clock');
+        const sky = document.getElementById('sky');
+        const sun = document.getElementById('sun');
+        const moon = document.getElementById('moon');
+        const weatherLayer = document.getElementById('weather-layer');
+
+        let lastHourState = -1;
+
+        function updateClock() {
+            const now = new Date();
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
+            const ms = now.getMilliseconds();
+
+            // Analog Rotation
+            const secDeg = (s + ms/1000) * 6;
+            const minDeg = (m + s/60) * 6;
+            const hourDeg = ((h % 12) + m/60) * 30;
+
+            secHand.style.transform = `rotate(${secDeg}deg)`;
+            minHand.style.transform = `rotate(${minDeg}deg)`;
+            hourHand.style.transform = `rotate(${hourDeg}deg)`;
+
+            // Digital Display
+            const hh = String(h).padStart(2, '0');
+            const mm = String(m).padStart(2, '0');
+            const ss = String(s).padStart(2, '0');
+            
+            // Blink colon every second
+            const colon = (s % 2 === 0) ? ':' : ' ';
+            digitalClock.innerText = `${hh}${colon}${mm}`;
+
+            // Update Environment
+            updateEnvironment(h, m, s);
+
+            requestAnimationFrame(updateClock);
+        }
+
+        function updateEnvironment(h, m, s) {
+            // Time expressed as decimal hour (e.g., 6.5 = 6:30 AM)
+            const timeDec = h + (m / 60) + (s / 3600); 
+            
+            // Sun/Moon arcs: 6 to 18 is Sun, 18 to 6 is Moon
+            if (timeDec >= 6 && timeDec < 18) {
+                sun.style.display = 'block';
+                moon.style.display = 'none';
+                // map 6-18 to 0-180 degrees
+                let angle = ((timeDec - 6) / 12) * 180;
+                sun.style.transform = `rotate(${angle}deg)`;
+            } else {
+                sun.style.display = 'none';
+                moon.style.display = 'block';
+                // map 18-6 to 0-180 degrees
+                let adjustedTime = timeDec >= 18 ? timeDec - 18 : timeDec + 6;
+                let angle = (adjustedTime / 12) * 180;
+                moon.style.transform = `rotate(${angle}deg)`;
+            }
+
+            // Update sky color and weather based on hour (only regenerate weather if state changes)
+            let currentHourState = h;
+            if(currentHourState !== lastHourState) {
+                lastHourState = currentHourState;
+                
+                if (h >= 5 && h < 8) { // Dawn
+                    sky.style.background = "linear-gradient(to top, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)";
+                    generateWeather('clouds', 3);
+                } else if (h >= 8 && h < 16) { // Day
+                    sky.style.background = "linear-gradient(to top, #4facfe 0%, #00f2fe 100%)";
+                    generateWeather('clouds', 6);
+                } else if (h >= 16 && h < 19) { // Dusk
+                    sky.style.background = "linear-gradient(to top, #fa709a 0%, #fee140 100%)";
+                    generateWeather('clouds', 3);
+                } else { // Night
+                    sky.style.background = "linear-gradient(to top, #0f2027, #203a43, #2c5364)";
+                    generateWeather('stars', 50);
+                }
+            }
+        }
+
+        function generateWeather(type, count) {
+            weatherLayer.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                const el = document.createElement('div');
+                if(type === 'stars') {
+                    el.className = 'star';
+                    el.style.width = el.style.height = (Math.random() * 3 + 1) + 'px';
+                    el.style.top = Math.random() * 70 + '%';
+                    el.style.left = Math.random() * 100 + '%';
+                    el.style.animationDuration = (Math.random() * 3 + 1) + 's';
+                    el.style.animationDelay = (Math.random() * 2) + 's';
+                } else if (type === 'clouds') {
+                    el.className = 'cloud';
+                    let scale = Math.random() * 0.5 + 0.5;
+                    el.style.width = (100 * scale) + 'px';
+                    el.style.height = (30 * scale) + 'px';
+                    el.style.top = Math.random() * 40 + '%';
+                    el.style.left = -200 + 'px';
+                    el.style.animationDuration = (Math.random() * 20 + 20) + 's';
+                    el.style.animationDelay = -(Math.random() * 20) + 's';
+                    
+                    // Cloud bumps
+                    el.innerHTML = `
+                        <style>
+                            .cloud:nth-child(${i+1})::before { width: ${40*scale}px; height: ${40*scale}px; top: -${20*scale}px; left: ${15*scale}px; }
+                            .cloud:nth-child(${i+1})::after { width: ${60*scale}px; height: ${60*scale}px; top: -${30*scale}px; right: ${15*scale}px; }
+                        </style>
+                    `;
+                }
+                weatherLayer.appendChild(el);
+            }
+        }
+
+        // --- 3. Stopwatch Logic ---
+        
+        let swInterval = null;
+        let swTime = 0; // in tenths of seconds
+        const swDisplay = document.getElementById('sw-display');
+
+        function updateSwDisplay() {
+            let mins = Math.floor(swTime / 600);
+            let secs = Math.floor((swTime % 600) / 10);
+            let tenths = swTime % 10;
+            swDisplay.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${tenths}`;
+        }
+        function swStart() {
+            if(!swInterval) swInterval = setInterval(() => { swTime++; updateSwDisplay(); }, 100);
+        }
+        function swStop() {
+            clearInterval(swInterval);
+            swInterval = null;
+        }
+        function swReset() {
+            swStop();
+            swTime = 0;
+            updateSwDisplay();
+        }
+
+        // --- 4. Timer Logic ---
+
+        let tmInterval = null;
+        let tmSeconds = 0;
+        const tmDisplay = document.getElementById('tm-display');
+        const tmInMin = document.getElementById('tm-min');
+        const tmInSec = document.getElementById('tm-sec');
+
+        function updateTmDisplay() {
+            let m = Math.floor(tmSeconds / 60);
+            let s = tmSeconds % 60;
+            tmDisplay.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+        function tmStart() {
+            if(tmInterval) return;
+            
+            // If starting from 0, read inputs
+            if(tmSeconds <= 0) {
+                let m = parseInt(tmInMin.value) || 0;
+                let s = parseInt(tmInSec.value) || 0;
+                tmSeconds = (m * 60) + s;
+                if(tmSeconds <= 0) return;
+            }
+
+            tmInterval = setInterval(() => {
+                if(tmSeconds > 0) {
+                    tmSeconds--;
+                    updateTmDisplay();
+                } else {
+                    tmStop();
+                    // Optional: Visual beep
+                    tmDisplay.style.color = '#f00';
+                    setTimeout(() => tmDisplay.style.color = '#0f0', 500);
+                    setTimeout(() => tmDisplay.style.color = '#f00', 1000);
+                    setTimeout(() => tmDisplay.style.color = '#0f0', 1500);
+                }
+            }, 1000);
+        }
+        function tmStop() {
+            clearInterval(tmInterval);
+            tmInterval = null;
+        }
+
+        // Initialize clock loop
+        requestAnimationFrame(updateClock);
+
+        // Handle Window Resize for Cityscape redraw
+        window.addEventListener('resize', () => {
+            cityscape.innerHTML = '';
+            const numBuildings = Math.floor(window.innerWidth / 30);
+            for(let i=0; i<numBuildings; i++) {
+                const b = document.createElement('div');
+                b.className = 'building';
+                let height = 30 + Math.random() * 60;
+                let width = 20 + Math.random() * 40;
+                b.style.height = `${height}%`;
+                b.style.width = `${width}px`;
+                if(height > 75) b.classList.add('tall');
+                cityscape.appendChild(b);
+            }
+        });
+
+    </script>
+</body>
+</html>
