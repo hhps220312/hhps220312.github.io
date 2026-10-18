@@ -65,7 +65,7 @@ async function loadDataFromFirebase() {
       linesData = data.lines || [];
     }
   } catch (e) {
-    console.error(e);
+    console.error("データの読み込みに失敗しました", e);
   }
   renderWalkInputs();
   updateLineSelect();
@@ -187,7 +187,7 @@ function renderEntriesList(line) {
   line.entries.forEach((entry, idx) => {
     const timesStr = line.stops.map(s => entry.times[s] || "--").join(" → ");
     const typeStr = entry.trainType ? `[${entry.trainType}] ` : "";
-    list.innerHTML += `<li style="font-size:13px; margin-bottom:5px;">${typeStr}${timesStr} <button onclick="deleteEntry(${linesData.indexOf(line)}, ${idx})" style="padding:2px 5px; background:red; font-size:10px;">削除</button></li>`;
+    list.innerHTML += `<li style="font-size:13px; margin-bottom:5px;">${typeStr}${timesStr} <button onclick="deleteEntry(${linesData.indexOf(line)}, ${idx})" style="padding:2px 5px; background:red; font-size:10px; color:white; border:none; border-radius:3px; cursor:pointer;">削除</button></li>`;
   });
 }
 
@@ -298,16 +298,16 @@ function getEdges(node, currentTime, from, to) {
 
 // 最短経路探索アルゴリズム (ダイクストラ法)
 function findShortestPath(start, end, startTime) {
-  // ※既存の findShortestPath 関数と同じロジックが入ります
-  return null; // プレースホルダー
+  // ※実際のtransit.js組み込み時に実装
+  return null;
 }
 
 window.calculateTransit = function() {
-  // ※既存の calculateTransit 関数と同じロジックが入ります
+  // ※実際のtransit.js組み込み時に実装
 };
 `;
 
   document.getElementById('output-code').value = jsCode;
 };
 
-loadDataFromFirebase();
+document.addEventListener('DOMContentLoaded', loadDataFromFirebase);
